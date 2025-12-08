@@ -214,34 +214,31 @@
       gap: 8px;
     }
 
-    /* FUT Card Look */
+    /* FUT Card mit PNG Template */
     .fut-card {
       position: relative;
-      padding: 10px 10px 12px;
-      border-radius: 26px;
-      background: radial-gradient(circle at 0 0, #fff9d6 0%, #f5d77a 35%, #c7922a 100%);
-      box-shadow:
-        0 12px 30px rgba(0,0,0,0.45),
-        inset 0 0 0 1px rgba(255,255,255,0.4);
-      overflow: hidden;
-    }
-    .fut-card::before {
-      content: "";
-      position: absolute;
-      inset: -40% -60%;
-      background:
-        radial-gradient(circle at 0 0, rgba(255,255,255,0.75), transparent 55%),
-        radial-gradient(circle at 100% 10%, rgba(255,255,255,0.25), transparent 60%);
-      opacity: 0.6;
-      pointer-events: none;
+      width: 100%;
+      aspect-ratio: 3 / 4;             /* FUT-ähnliches Format */
+      background-image: url("fut-template.png"); /* <-- Datei ins Repo legen */
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      filter: drop-shadow(0 14px 24px rgba(0,0,0,0.7));
     }
     .fut-card-inner {
       position: relative;
       z-index: 1;
+      /* Innenabstände so wählen, dass es in dein Template passt */
+      padding: 10% 9% 13%;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: stretch;
       gap: 6px;
+      color: #111827; /* dunkle Schrift auf Gold */
+      text-shadow: 0 1px 2px rgba(255,255,255,0.6);
     }
 
     .fut-top {
@@ -256,13 +253,13 @@
       gap: 2px;
     }
     .fut-ovr {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 800;
       line-height: 1;
     }
     .fut-pos {
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.08em;
     }
     .fut-nation-club {
@@ -274,7 +271,7 @@
     }
 
     .fut-photo-wrap {
-      margin: 4px auto 0;
+      margin: 6px auto 0;
       width: 80px;
       height: 80px;
       border-radius: 999px;
@@ -295,7 +292,7 @@
     .fut-name {
       text-align: center;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       margin-top: 2px;
     }
 
@@ -304,8 +301,7 @@
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      color: #111827;
-      opacity: 0.85;
+      opacity: 0.8;
     }
 
     .fut-stats {
@@ -335,7 +331,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 4px;
+      margin-top: 6px;
       font-size: 0.7rem;
     }
     .badge {
@@ -388,7 +384,7 @@
 
     /* Votes unter der Karte */
     .card-votes {
-      background: rgba(15,23,42,0.9);
+      background: rgba(15,23,42,0.95);
       border-radius: 16px;
       padding: 8px 10px;
       border: 1px solid rgba(148,163,184,0.45);
@@ -500,8 +496,7 @@
   <div class="container">
     <h1>Karten Creator – FUT Style</h1>
     <p class="subtitle">
-      Erstelle FUT-ähnliche Karten für deine Freunde. Alle können unten drunter über die Stats abstimmen.
-      Nur der Admin darf Karten erstellen, löschen und die Grundwerte bearbeiten.
+      FUT-ähnliche Karten für deine Freunde. Auf der Karte siehst du nur die Grundwerte, darunter stimmen alle über Änderungen ab.
     </p>
 
     <!-- Admin Login -->
@@ -753,10 +748,10 @@
               <div class="fut-photo-initials">${escapeHtml(initialsFromName(name))}</div>
             </div>
             <div class="fut-name">${escapeHtml(name)}</div>
-            <div class="fut-meta">COMMUNITY RATING</div>
+            <div class="fut-meta">Grundwerte</div>
             <div class="fut-stats"></div>
             <div class="fut-controls">
-              <span class="badge">Community Stats</span>
+              <span class="badge">Stats auf Karte = Basis</span>
               <div class="card-meta-buttons">
                 <button type="button" class="small-btn edit-btn" title="Stats bearbeiten">Bearbeiten</button>
                 <button type="button" class="small-btn delete-btn" title="Karte löschen">Löschen</button>
@@ -766,7 +761,7 @@
         </div>
         <div class="card-votes">
           <div class="card-votes-header">
-            <span>Votes pro Stat</span>
+            <span>Voting pro Stat</span>
             <span>↑ hoch / ↓ runter</span>
           </div>
           <div class="votes-list"></div>
@@ -788,16 +783,16 @@
         else if (net < 0) trendLabel = "Tendenz: ↓ runter";
         else trendLabel = "Tendenz: ± neutral";
 
-        // FUT-Stats in der Karte (Community-Wert anzeigen)
+        // AUF DER KARTE: nur Grundwert!
         const statDiv = document.createElement("div");
         statDiv.className = "fut-stat";
         statDiv.innerHTML = `
-          <span class="fut-stat-value">${community}</span>
+          <span class="fut-stat-value">${base}</span>
           <span class="fut-stat-label">${key}</span>
         `;
         futStatsContainer.appendChild(statDiv);
 
-        // Votes darunter
+        // Votes unten drunter
         const voteRow = document.createElement("div");
         voteRow.className = "vote-row";
         voteRow.innerHTML = `
@@ -847,7 +842,7 @@
           return;
         }
 
-        // Bearbeiten
+        // Bearbeiten der Grundwerte
         if (edit) {
           if (!isAdmin) {
             alert("Nur der Admin kann Stats bearbeiten.");
@@ -857,7 +852,7 @@
           return;
         }
 
-        // Voten
+        // Voting
         if (!voteBtn) return;
         const statKey = voteBtn.getAttribute("data-stat");
         const isUpVote = voteBtn.classList.contains("up");
@@ -879,7 +874,7 @@
       cardsContainer.appendChild(card);
     }
 
-    // Admin-Stat-Editor (simple Prompts)
+    // Admin-Stat-Editor (Grundwerte ändern)
     async function editCardStats(cardId) {
       try {
         const docSnap = await cardsRef.doc(cardId).get();
@@ -890,7 +885,7 @@
 
         for (const key of STAT_KEYS) {
           const current = stats[key] ?? 0;
-          const input = prompt(`Neuer Wert für ${key} (0–99):`, current);
+          const input = prompt(`Neuer Grundwert für ${key} (0–99):`, current);
           if (input === null) {
             return; // abgebrochen
           }
