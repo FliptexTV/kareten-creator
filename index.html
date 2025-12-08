@@ -495,17 +495,35 @@
       font-size: 0.7rem;
     }
 
-    @media (max-width: 800px) {
-      .layout {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      .card-form {
-        margin-bottom: 16px;
-      }
-      .admin-box {
-        flex-wrap: wrap;
-      }
-    }
+	@media (max-width: 480px) {
+	  /* OVR etwas höher */
+	  .fut-top {
+	  	top: 9%;
+	  }
+	  
+	  /* Name kleiner und etwas tiefer */
+	  .fut-name {
+	  	font-size: 1.1rem;
+	  	top: 59%;
+	  }
+	  
+	  /* Stats weiter runter setzen */
+	  .fut-stats {
+	  	bottom: 10%;
+	  }
+	  
+	  /* Stat-Zahlen etwas kleiner machen */
+	  .fut-stats-row.values span {
+	  	font-size: 1.1rem !important;
+	  	top: 2px !important;
+	  }
+	  
+	  /* Stat-Labels kleiner */
+	  .fut-stats-row.labels span {
+	  	font-size: 0.7rem !important;
+	  }
+	}
+
   </style>
 </head>
 <body>
