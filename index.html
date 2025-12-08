@@ -29,8 +29,56 @@
     }
     .subtitle {
       color: #9ca3af;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       font-size: 0.95rem;
+    }
+
+    .admin-box {
+      background: rgba(15,23,42,0.9);
+      border-radius: 14px;
+      padding: 10px 12px;
+      border: 1px dashed rgba(148,163,184,0.6);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+    .admin-box label {
+      font-size: 0.8rem;
+      color: #cbd5f5;
+    }
+    .admin-box input {
+      padding: 5px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 0.8rem;
+      outline: none;
+    }
+    .admin-box input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.3);
+    }
+    .admin-box button {
+      border-radius: 999px;
+      border: none;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: rgba(56,189,248,0.2);
+      color: #e0f2fe;
+    }
+    .admin-box button:hover {
+      background: rgba(56,189,248,0.35);
+    }
+    .admin-status {
+      margin-left: auto;
+      font-size: 0.8rem;
+    }
+    .admin-status span {
+      font-weight: 600;
     }
 
     .layout {
@@ -259,12 +307,16 @@
       border: 1px solid rgba(248,113,113,0.7);
       transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
     }
-    .delete-btn:hover {
+    .delete-btn[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .delete-btn:hover:not([disabled]) {
       background: rgba(248,113,113,0.3);
       transform: translateY(-0.5px);
       box-shadow: 0 0 0 1px rgba(248,113,113,0.3);
     }
-    .delete-btn:active {
+    .delete-btn:active:not([disabled]) {
       transform: translateY(0.5px) scale(0.97);
       box-shadow: none;
     }
@@ -333,31 +385,22 @@
     .stat-value {
       font-variant-numeric: tabular-nums;
       font-size: 0.75rem;
-      min-width: 20px;
+      min-width: 40px;
       text-align: center;
     }
-
-    .vote-counts {
-      position: absolute;
-      right: 8px;
-      bottom: 6px;
-      z-index: 1;
-      font-size: 0.6rem;
+    .stat-delta {
+      font-size: 0.7rem;
+      margin-left: 4px;
+    }
+    .stat-votes {
+      font-size: 0.7rem;
       color: #9ca3af;
       display: flex;
-      gap: 6px;
-      opacity: 0.9;
+      flex-direction: column;
+      gap: 1px;
     }
-    .vote-counts span {
-      display: inline-flex;
-      align-items: center;
-      gap: 2px;
-    }
-    .vote-counts .up-total {
-      color: #4ade80;
-    }
-    .vote-counts .down-total {
-      color: #f97373;
+    .trend {
+      font-size: 0.7rem;
     }
 
     @media (max-width: 800px) {
@@ -367,6 +410,9 @@
       .card-form {
         position: static;
       }
+      .admin-box {
+        flex-wrap: wrap;
+      }
     }
   </style>
 </head>
@@ -375,14 +421,24 @@
     <h1>Karten Creator mit Online-Stats-Voting</h1>
     <p class="subtitle">
       Erstelle Karten für deine Freunde mit Nation, Verein & Position.
-      Alle stimmen dann ab, ob die Werte eher hoch oder runter gehen sollen – ohne die Grundwerte direkt zu verändern.
+      Alle stimmen ab, ob Werte eher hoch oder runter gehen sollen – die Grundwerte bleiben als Basis erhalten.
     </p>
+
+    <!-- Admin Login -->
+    <div class="admin-box">
+      <label for="adminPassword">Admin-Passwort:</label>
+      <input type="password" id="adminPassword" placeholder="Passwort eingeben" />
+      <button type="button" id="adminLoginBtn">Login</button>
+      <div class="admin-status">
+        Status: <span id="adminStatusText">nicht eingeloggt</span>
+      </div>
+    </div>
 
     <div class="layout">
       <!-- Formular -->
       <section class="card-form">
         <h2>Neue Karte erstellen</h2>
-        <small>Alle Werte 0–99. Der Gesamtwert (OVR) wird aus dem Durchschnitt berechnet.</small>
+        <small>Nur Admin kann Karten erstellen. Werte 0–99, OVR ist der Durchschnitt der Grundwerte.</small>
 
         <form id="cardForm">
           <div class="field">
@@ -392,21 +448,7 @@
 
           <div class="field">
             <label for="nation">Nation</label>
-            <select id="nation" name="nation">
-              <option value="">– wählen –</option>
-              <option value="Deutschland">Deutschland</option>
-              <option value="Österreich">Österreich</option>
-              <option value="Schweiz">Schweiz</option>
-              <option value="Italien">Italien</option>
-              <option value="Frankreich">Frankreich</option>
-              <option value="Spanien">Spanien</option>
-              <option value="Portugal">Portugal</option>
-              <option value="England">England</option>
-              <option value="Niederlande">Niederlande</option>
-              <option value="Türkei">Türkei</option>
-              <option value="Polen">Polen</option>
-              <option value="Andere">Andere</option>
-            </select>
+            <input id="nation" name="nation" type="text" placeholder="z.B. Deutschland, Türkei, Brasilien ..." />
           </div>
 
           <div class="field">
@@ -417,7 +459,7 @@
           <div class="field">
             <label for="position">Position</label>
             <select id="position" name="position">
-              <option value="">– wählen –</option>
+              <option value="">– Position wählen –</option>
               <option value="TW">TW (Torwart)</option>
               <option value="AV">AV (Außenverteidiger)</option>
               <option value="IV">IV (Innenverteidiger)</option>
@@ -467,7 +509,7 @@
       <section class="cards-wrapper">
         <div class="cards-header">
           <h2>Erstellte Karten (online)</h2>
-          <span>Alle Karten & Votes werden in Firebase gespeichert.</span>
+          <span>Alle Karten & Votes werden in Firebase gespeichert. Jeder kann voten, nur Admin kann erstellen/löschen.</span>
         </div>
         <div id="cardsContainer" class="cards-grid"></div>
       </section>
@@ -482,6 +524,34 @@
     const STAT_KEYS = ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"];
     const form = document.getElementById("cardForm");
     const cardsContainer = document.getElementById("cardsContainer");
+    const adminPasswordInput = document.getElementById("adminPassword");
+    const adminLoginBtn = document.getElementById("adminLoginBtn");
+    const adminStatusText = document.getElementById("adminStatusText");
+
+    // ❗ HIER DEIN ADMIN-PASSWORT FESTLEGEN
+    const ADMIN_PASSWORD = "eierlecken"; // <-- ändere das!
+
+    let isAdmin = false;
+
+    function updateAdminUI() {
+      adminStatusText.textContent = isAdmin ? "Admin" : "nicht eingeloggt";
+
+      // Löschen-Buttons updaten
+      document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.disabled = !isAdmin;
+      });
+    }
+
+    adminLoginBtn.addEventListener("click", () => {
+      const entered = adminPasswordInput.value;
+      if (entered === ADMIN_PASSWORD) {
+        isAdmin = true;
+        updateAdminUI();
+        alert("Admin-Login erfolgreich.");
+      } else {
+        alert("Falsches Admin-Passwort.");
+      }
+    });
 
     // Deine Firebase-Konfiguration
     const firebaseConfig = {
@@ -511,12 +581,23 @@
       return Math.round(sum / STAT_KEYS.length);
     }
 
-    // Neue Karte speichern
+    function emptyVotes() {
+      const obj = {};
+      STAT_KEYS.forEach((k) => { obj[k] = 0; });
+      return obj;
+    }
+
+    // Neue Karte speichern – nur Admin
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
+      if (!isAdmin) {
+        alert("Nur der Admin kann Karten erstellen.");
+        return;
+      }
+
       const playerName = form.playerName.value.trim() || "Unbekannt";
-      const nation = form.nation.value || "";
+      const nation = form.nation.value.trim() || "";
       const team = form.team.value.trim() || "";
       const position = form.position.value || "";
 
@@ -535,8 +616,8 @@
           team,
           position,
           stats,
-          upVotes: 0,
-          downVotes: 0,
+          votesUp: emptyVotes(),
+          votesDown: emptyVotes(),
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
       } catch (err) {
@@ -552,21 +633,20 @@
     cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
       cardsContainer.innerHTML = "";
       snapshot.forEach((doc) => {
-        const data = doc.data();
-        addCardToDOM(
-          doc.id,
-          data.name,
-          data.stats || {},
-          data.upVotes || 0,
-          data.downVotes || 0,
-          data.nation || "",
-          data.team || "",
-          data.position || ""
-        );
+        addCardToDOM(doc.id, doc.data());
       });
+      updateAdminUI();
     });
 
-    function addCardToDOM(id, name, stats, upVotes, downVotes, nation, team, position) {
+    function addCardToDOM(id, data) {
+      const name = data.name || "Unbekannt";
+      const nation = data.nation || "";
+      const team = data.team || "";
+      const position = data.position || "";
+      const stats = data.stats || {};
+      const votesUp = data.votesUp || {};
+      const votesDown = data.votesDown || {};
+
       const card = document.createElement("article");
       card.className = "card";
       card.dataset.id = id;
@@ -578,7 +658,11 @@
           <div class="player-main">
             <div class="overall">${overall}</div>
             <div class="name">${escapeHtml(name)}</div>
-            <div class="tagline">${escapeHtml(position || "Position")} • ${escapeHtml(team || "ohne Verein")}</div>
+            <div class="tagline">
+              ${escapeHtml(position || "Position?")}
+              •
+              ${escapeHtml(team || "ohne Verein")}
+            </div>
           </div>
           <div class="card-meta">
             <div class="badge nation-badge">${escapeHtml(nation || "Nation")}</div>
@@ -587,36 +671,60 @@
           </div>
         </header>
         <div class="stats"></div>
-        <div class="vote-counts">
-          <span class="up-total">▲ <span class="up-value">${upVotes}</span></span>
-          <span class="down-total">▼ <span class="down-value">${downVotes}</span></span>
-        </div>
       `;
 
       const statsContainer = card.querySelector(".stats");
 
       STAT_KEYS.forEach((key) => {
+        const base = stats[key] ?? 0;
+        const up = votesUp[key] ?? 0;
+        const down = votesDown[key] ?? 0;
+        const net = up - down;
+        const community = Math.max(0, Math.min(99, base + net));
+
+        let trendLabel;
+        if (net > 0) {
+          trendLabel = "Tendenz: ↑ hoch";
+        } else if (net < 0) {
+          trendLabel = "Tendenz: ↓ runter";
+        } else {
+          trendLabel = "Tendenz: ± neutral";
+        }
+
         const row = document.createElement("div");
         row.className = "stat-row";
-        const value = stats[key] ?? 0;
 
         row.innerHTML = `
           <div class="stat-row-main">
             <span class="stat-label">${key}</span>
             <div class="stat-controls">
               <button type="button" class="vote-btn down" data-stat="${key}">−</button>
-              <span class="stat-value" data-stat="${key}">${value}</span>
+              <span class="stat-value">
+                ${base}${net !== 0 ? ` → ${community}` : ""}
+              </span>
+              ${net !== 0 ? `<span class="stat-delta">${net > 0 ? "+" + net : net}</span>` : ""}
               <button type="button" class="vote-btn up" data-stat="${key}">+</button>
             </div>
+          </div>
+          <div class="stat-votes">
+            <span>Votes: ▲${up} / ▼${down}${net !== 0 ? ` (Netto ${net > 0 ? "+" + net : net})` : ""}</span>
+            <span class="trend">${trendLabel}</span>
           </div>
         `;
         statsContainer.appendChild(row);
       });
 
+      const deleteBtn = card.querySelector(".delete-btn");
+      deleteBtn.disabled = !isAdmin;
+
+      // Klick-Handler (Vote + Löschen)
       card.addEventListener("click", async (e) => {
-        // Löschen
-        const deleteBtn = e.target.closest(".delete-btn");
-        if (deleteBtn) {
+        const delBtn = e.target.closest(".delete-btn");
+        if (delBtn) {
+          if (!isAdmin) {
+            alert("Nur der Admin kann Karten löschen.");
+            return;
+          }
           const really = confirm("Willst du diese Karte wirklich löschen?");
           if (!really) return;
           try {
@@ -628,26 +736,22 @@
           return;
         }
 
-        // Vote
         const btn = e.target.closest(".vote-btn");
         if (!btn) return;
 
-        const isUp = btn.classList.contains("up");
+        const statKey = btn.getAttribute("data-stat");
+        const isUpVote = btn.classList.contains("up");
 
-        // Nur Votes zählen – Stats selbst bleiben unverändert!
-        const upEl = card.querySelector(".up-value");
-        const downEl = card.querySelector(".down-value");
-        let up = Number(upEl.textContent) || 0;
-        let down = Number(downEl.textContent) || 0;
-        if (isUp) up++; else down++;
-        upEl.textContent = up;
-        downEl.textContent = down;
+        // Nur Votes speichern, Grundwerte bleiben unverändert
+        const updateData = {};
+        if (isUpVote) {
+          updateData[`votesUp.${statKey}`] = firebase.firestore.FieldValue.increment(1);
+        } else {
+          updateData[`votesDown.${statKey}`] = firebase.firestore.FieldValue.increment(1);
+        }
 
         try {
-          await cardsRef.doc(card.dataset.id).update({
-            upVotes: up,
-            downVotes: down
-          });
+          await cardsRef.doc(card.dataset.id).update(updateData);
         } catch (err) {
           console.error("Fehler beim Updaten der Votes:", err);
         }
@@ -655,6 +759,9 @@
 
       cardsContainer.appendChild(card);
     }
+
+    // Initial UI
+    updateAdminUI();
   </script>
 </body>
 </html>
