@@ -214,34 +214,30 @@
       gap: 8px;
     }
 
-    /* FUT Card mit PNG Template */
+    /* FUT Card mit PNG Template – jetzt alles absolut positioniert */
     .fut-card {
       position: relative;
       width: 100%;
-      aspect-ratio: 3 / 4;             /* FUT-ähnliches Format */
-      background-image: url("fut-template.png"); /* <-- Datei ins Repo legen */
+      aspect-ratio: 3 / 4;
+      background-image: url("fut-template.png"); /* <-- Name anpassen falls nötig */
       background-size: cover;
       background-position: center;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
       filter: drop-shadow(0 14px 24px rgba(0,0,0,0.7));
     }
     .fut-card-inner {
-      position: relative;
-      z-index: 1;
-      /* Innenabstände so wählen, dass es in dein Template passt */
-      padding: 10% 9% 13%;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 6px;
-      color: #111827; /* dunkle Schrift auf Gold */
+      position: absolute;
+      inset: 0;             /* komplett über der Karte */
+      color: #111827;
       text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+      font-smoothing: antialiased;
     }
 
+    /* Rating + Position + Nation/Verein */
     .fut-top {
+      position: absolute;
+      top: 8%;
+      left: 10%;
+      right: 10%;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -258,7 +254,7 @@
       line-height: 1;
     }
     .fut-pos {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 700;
       letter-spacing: 0.08em;
     }
@@ -270,8 +266,12 @@
       max-width: 90px;
     }
 
+    /* Kreis mit Initialen */
     .fut-photo-wrap {
-      margin: 6px auto 0;
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
       width: 80px;
       height: 80px;
       border-radius: 999px;
@@ -289,23 +289,33 @@
       color: #111827;
     }
 
+    /* Name + Untertitel */
     .fut-name {
-      text-align: center;
+      position: absolute;
+      top: 58%;
+      left: 50%;
+      transform: translateX(-50%);
       font-weight: 700;
       font-size: 0.95rem;
-      margin-top: 2px;
-    }
-
-    .fut-meta {
       text-align: center;
-      font-size: 0.7rem;
+    }
+    .fut-meta {
+      position: absolute;
+      top: 63%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      opacity: 0.8;
+      opacity: 0.9;
     }
 
+    /* Stats im unteren Bereich der Karte – Grundwerte ONLY */
     .fut-stats {
-      margin-top: 4px;
+      position: absolute;
+      left: 19%;
+      right: 19%;
+      bottom: 17%;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       row-gap: 3px;
@@ -327,22 +337,27 @@
       font-size: 0.68rem;
     }
 
+    /* Balken unten: Stats auf Karte = Basis + Buttons rechts */
     .fut-controls {
+      position: absolute;
+      left: 14%;
+      right: 14%;
+      bottom: 9%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 6px;
       font-size: 0.7rem;
     }
     .badge {
-      padding: 2px 6px;
+      padding: 3px 8px;
       border-radius: 999px;
       border: 1px solid rgba(15,23,42,0.25);
       font-size: 0.6rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      background: rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.75);
       color: #111827;
+      white-space: nowrap;
     }
     .card-meta-buttons {
       display: flex;
