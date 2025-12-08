@@ -602,7 +602,7 @@
       <!-- Formular -->
       <section class="card-form">
         <h2>Neue Karte erstellen</h2>
-        <small>Nur Admin kann Karten erstellen. Werte 0–99, OVR ist der Durchschnitt der Grundwerte.</small>
+        <small>Nur Admin kann Karten erstellen. Werte 0–99, OVR wird positionsabhängig aus den Grundwerten berechnet.</small>
 
         <form id="cardForm">
           <div class="field">
@@ -762,10 +762,67 @@
         .replace(/'/g, "&#039;");
     }
 
-    function calculateOverall(stats) {
-      const sum = STAT_KEYS.reduce((acc, key) => acc + (stats[key] || 0), 0);
-      return Math.round(sum / STAT_KEYS.length);
-    }
+	function calculateOverall(stats, position) {
+	const s = {
+		PAC: Number(stats.PAC) || 0,
+		SHO: Number(stats.SHO) || 0,
+		PAS: Number(stats.PAS) || 0,
+		DRI: Number(stats.DRI) || 0,
+		DEF: Number(stats.DEF) || 0,
+		PHY: Number(stats.PHY) || 0,
+	};
+	
+	const pos = String(position || "").toUpperCase();
+	
+	let ovr;
+	
+	// ST / Flügel – sehr offensiv
+	if (pos === "ST" || pos === "LF" || pos === "RF") {
+		ovr =
+		0.40 * s.SHO +
+		0.25 * s.PAC +
+		0.20 * s.DRI +
+		0.10 * s.PHY +
+		0.05 * s.PAS;
+	}
+	
+	// OM / LM / RM / ZM – Mittelfeld allround
+	else if (pos === "OM" || pos === "LM" || pos === "RM" || pos === "ZM") {
+		ovr =
+		0.30 * s.PAS +
+		0.25 * s.DRI +
+		0.20 * s.PAC +
+		0.15 * s.SHO +
+		0.10 * s.DEF;
+	}
+	
+	// DM / IV / AV – defensiv
+	else if (pos === "DM" || pos === "IV" || pos === "AV") {
+		ovr =
+		0.35 * s.DEF +
+		0.25 * s.PHY +
+		0.20 * s.PAC +
+		0.10 * s.PAS +
+		0.10 * s.DRI;
+	}
+	
+	// TW – „FUT-mäßig“ auf DEF/PHY/PAC gemappt
+	else if (pos === "TW") {
+		ovr =
+		0.40 * s.DEF +
+		0.30 * s.PHY +
+		0.20 * s.PAC +
+		0.10 * s.DRI;
+	}
+	
+	// Fallback: einfacher Durchschnitt, falls Position unbekannt
+	else {
+		const sum = STAT_KEYS.reduce((acc, key) => acc + (s[key] || 0), 0);
+		ovr = sum / STAT_KEYS.length;
+	}
+	
+	return Math.round(ovr);
+	}
 
     function emptyVotes() {
       const obj = {};
@@ -845,7 +902,7 @@
       card.className = "card";
       card.dataset.id = id;
 
-      const overall = calculateOverall(stats);
+      const overall = calculateOverall(stats, position);
 
       card.innerHTML = `
         <div class="fut-card">
