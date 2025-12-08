@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <title>Karten Creator – FUT Style Voting</title>
   <style>
@@ -234,7 +235,7 @@
     /* Rating + Position + Nation/Verein (etwas tiefer) */
     .fut-top {
       position: absolute;
-      top: 11%; /* war 8%, jetzt etwas runter */
+      top: 20%; /* war 8%, jetzt etwas runter */
       left: 10%;
       right: 10%;
       display: flex;
@@ -249,14 +250,20 @@
       gap: 2px;
     }
     .fut-ovr {
-      font-size: 1.7rem;
-      font-weight: 900;
+	  font-family: "Bebas Neue", sans-serif;
+      font-size: 3rem;
+      font-weight: 350;
       line-height: 1;
+	  letter-spacing: 0.04em;
     }
     .fut-pos {
-      font-size: 0.9rem;
-      font-weight: 800;
+	  font-family: "Bebas Neue", sans-serif;
+      font-size: 1.8rem;
+      font-weight: 500;
       letter-spacing: 0.08em;
+	  margin-left: 12px;
+	  margin-top: -8px;
+
     }
     .fut-nation-club {
       font-size: 0.6rem;
@@ -294,11 +301,11 @@
     /* Name + Untertitel */
     .fut-name {
       position: absolute;
-      top: 58%;
+      top: 70%;
       left: 50%;
       transform: translateX(-50%);
-      font-weight: 800;
-      font-size: 1rem;
+      font-weight: 200;
+      font-size: 1.6rem;
       text-align: center;
       font-family: "Arial Black", Impact, system-ui, sans-serif;
     }
@@ -319,7 +326,7 @@
       position: absolute;
       left: 10%;
       right: 10%;
-      bottom: 16%;
+      bottom: 10%;
       display: grid;
       grid-auto-rows: auto;
       row-gap: 2px;
@@ -331,13 +338,18 @@
       text-align: center;
     }
     .fut-stats-row.labels {
-      font-size: 0.55rem;
+	  font-family: "Bebas Neue", sans-serif;
+      font-size: 0.80rem;
+	  font-weight: 900;
       letter-spacing: 0.12em;
       text-transform: uppercase;
+	  letter-spacing: 1px;
     }
     .fut-stats-row.values {
-      font-size: 1.05rem;  /* größer */
-      font-weight: 900;
+	  font-family: "Bebas Neue", sans-serif;
+      font-size: 1.6rem;  /* größer */
+      font-weight: 1000;
+	  letter-spacing: 1px;
     }
 
     /* Buttons UNTER der Karte */
@@ -747,7 +759,6 @@
               <div class="fut-photo-initials">${escapeHtml(initialsFromName(name))}</div>
             </div>
             <div class="fut-name">${escapeHtml(name)}</div>
-            <div class="fut-meta">Grundwerte</div>
             <div class="fut-stats"></div>
           </div>
         </div>
