@@ -978,8 +978,8 @@
 		
 		  try {
 			await cardsRef.doc(card.dataset.id).update({
-			votesUp: emptyVotes(),
-			votesDown: emptyVotes()
+			  votesUp: emptyVotes(),
+			  votesDown: emptyVotes()
 			});
 		  } catch (err) {
 			console.error("Fehler beim Zurücksetzen der Votes:", err);
