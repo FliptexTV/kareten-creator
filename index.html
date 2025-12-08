@@ -231,10 +231,10 @@
       font-smoothing: antialiased;
     }
 
-    /* Rating + Position + Nation/Verein */
+    /* Rating + Position + Nation/Verein (etwas tiefer) */
     .fut-top {
       position: absolute;
-      top: 8%;
+      top: 11%; /* war 8%, jetzt etwas runter */
       left: 10%;
       right: 10%;
       display: flex;
@@ -314,12 +314,12 @@
       font-weight: 600;
     }
 
-    /* Stats wie FUT: 2 Zeilen Labels, 2 Zeilen Werte */
+    /* Stats: eine Reihe Labels, eine Reihe Zahlen (PAC SHO PAS DRI DEF PHY) */
     .fut-stats {
       position: absolute;
-      left: 13%;
-      right: 13%;
-      bottom: 17%;
+      left: 10%;
+      right: 10%;
+      bottom: 16%;
       display: grid;
       grid-auto-rows: auto;
       row-gap: 2px;
@@ -327,7 +327,7 @@
     }
     .fut-stats-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       text-align: center;
     }
     .fut-stats-row.labels {
@@ -336,32 +336,8 @@
       text-transform: uppercase;
     }
     .fut-stats-row.values {
-      font-size: 0.9rem;
+      font-size: 1.05rem;  /* größer */
       font-weight: 900;
-    }
-
-    /* Balken unten: Hinweis */
-    .fut-controls {
-      position: absolute;
-      left: 14%;
-      right: 14%;
-      bottom: 9%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.7rem;
-    }
-    .badge {
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(15,23,42,0.25);
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      background: rgba(255,255,255,0.75);
-      color: #111827;
-      white-space: nowrap;
-      font-weight: 700;
     }
 
     /* Buttons UNTER der Karte */
@@ -773,9 +749,6 @@
             <div class="fut-name">${escapeHtml(name)}</div>
             <div class="fut-meta">Grundwerte</div>
             <div class="fut-stats"></div>
-            <div class="fut-controls">
-              <span class="badge">Stats auf Karte = Basis</span>
-            </div>
           </div>
         </div>
         <div class="card-actions">
@@ -794,20 +767,15 @@
       const futStatsContainer = card.querySelector(".fut-stats");
       const votesList = card.querySelector(".votes-list");
 
-      // FUT-Style: Reihen bauen
-      const row1Labels = ["PAC","SHO","PAS"];
-      const row2Labels = ["DRI","DEF","PHY"];
+      // Reihenfolge für Anzeige unten
+      const orderedStats = ["PAC","SHO","PAS","DRI","DEF","PHY"];
 
-      const row1LabelHTML = row1Labels.map(k => `<span>${k}</span>`).join("");
-      const row1ValueHTML = row1Labels.map(k => `<span>${stats[k] ?? 0}</span>`).join("");
-      const row2LabelHTML = row2Labels.map(k => `<span>${k}</span>`).join("");
-      const row2ValueHTML = row2Labels.map(k => `<span>${stats[k] ?? 0}</span>`).join("");
+      const labelsHTML = orderedStats.map(k => `<span>${k}</span>`).join("");
+      const valuesHTML = orderedStats.map(k => `<span>${stats[k] ?? 0}</span>`).join("");
 
       futStatsContainer.innerHTML = `
-        <div class="fut-stats-row labels">${row1LabelHTML}</div>
-        <div class="fut-stats-row values">${row1ValueHTML}</div>
-        <div class="fut-stats-row labels">${row2LabelHTML}</div>
-        <div class="fut-stats-row values">${row2ValueHTML}</div>
+        <div class="fut-stats-row labels">${labelsHTML}</div>
+        <div class="fut-stats-row values">${valuesHTML}</div>
       `;
 
       // Votes unten drunter
