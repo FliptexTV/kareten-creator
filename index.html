@@ -4,9 +4,12 @@
   <meta charset="UTF-8" />
   <title>Karten Creator – Stats Voting (mit Firebase)</title>
   <style>
-    /* ==== STYLES (wie vorher) ==== */
-    * { box-sizing: border-box; margin: 0; padding: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
     body {
       background: #0f172a;
       color: #e5e7eb;
@@ -15,15 +18,28 @@
       justify-content: center;
       padding: 24px;
     }
-    .container { width: 100%; max-width: 1100px; }
-    h1 { font-size: 2rem; margin-bottom: 0.5rem; font-weight: 700; }
-    .subtitle { color: #9ca3af; margin-bottom: 1.5rem; font-size: 0.95rem; }
+    .container {
+      width: 100%;
+      max-width: 1100px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .subtitle {
+      color: #9ca3af;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
 
     .layout {
       display: grid;
-      grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
       gap: 20px;
     }
+
+    /* Formular */
     .card-form {
       background: rgba(15,23,42,0.9);
       border-radius: 18px;
@@ -34,9 +50,19 @@
       top: 20px;
       align-self: flex-start;
     }
-    .card-form h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
-    .card-form small { color: #9ca3af; display: block; margin-bottom: 1rem; font-size: 0.8rem; }
-    .field { margin-bottom: 0.75rem; }
+    .card-form h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .card-form small {
+      color: #9ca3af;
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+    }
+    .field {
+      margin-bottom: 0.75rem;
+    }
     .field label {
       display: block;
       font-size: 0.8rem;
@@ -44,7 +70,8 @@
       color: #cbd5f5;
     }
     .field input[type="text"],
-    .field input[type="number"] {
+    .field input[type="number"],
+    .field select {
       width: 100%;
       padding: 7px 9px;
       border-radius: 10px;
@@ -56,17 +83,20 @@
       transition: border 0.15s, box-shadow 0.15s, background 0.15s;
     }
     .field input[type="text"]:focus,
-    .field input[type="number"]:focus {
+    .field input[type="number"]:focus,
+    .field select:focus {
       border-color: #38bdf8;
       box-shadow: 0 0 0 1px rgba(56,189,248,0.3);
       background: rgba(15,23,42,0.95);
     }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.5rem;
       margin-bottom: 0.75rem;
     }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -95,6 +125,7 @@
       box-shadow: 0 8px 24px rgba(34,197,94,0.35);
     }
 
+    /* Kartenbereich */
     .cards-wrapper {
       background: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 55%),
                   radial-gradient(circle at bottom, rgba(34,197,94,0.12), transparent 55%);
@@ -109,12 +140,17 @@
       align-items: baseline;
       margin-bottom: 12px;
     }
-    .cards-header h2 { font-size: 1rem; }
-    .cards-header span { font-size: 0.8rem; color: #9ca3af; }
+    .cards-header h2 {
+      font-size: 1rem;
+    }
+    .cards-header span {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
 
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
       gap: 14px;
     }
 
@@ -153,23 +189,92 @@
       box-shadow: 0 24px 60px rgba(15,23,42,0.95);
       border-color: rgba(250,250,250,0.16);
     }
-    .card-header, .stats { position: relative; z-index: 1; }
+
+    .card-header,
+    .stats {
+      position: relative;
+      z-index: 1;
+    }
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 6px;
+      gap: 6px;
     }
-    .player-main { display: flex; flex-direction: column; gap: 2px; }
+
+    .player-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
     .overall {
       font-size: 1.25rem;
       font-weight: 800;
       line-height: 1;
       text-shadow: 0 0 10px rgba(250,250,250,0.6);
     }
-    .name { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; }
-    .tagline { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em; color: #9ca3af; }
-    .votes-label { font-size: 0.7rem; color: #9ca3af; margin-top: 2px; text-align: right; }
+    .name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .tagline {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #9ca3af;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .badge {
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      background: rgba(15,23,42,0.85);
+    }
+    .nation-badge {
+      max-width: 110px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .delete-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 2px 6px;
+      font-size: 0.65rem;
+      cursor: pointer;
+      background: rgba(127,29,29,0.12);
+      color: #fecaca;
+      border: 1px solid rgba(248,113,113,0.7);
+      transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
+    }
+    .delete-btn:hover {
+      background: rgba(248,113,113,0.3);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(248,113,113,0.3);
+    }
+    .delete-btn:active {
+      transform: translateY(0.5px) scale(0.97);
+      box-shadow: none;
+    }
+
+    .votes-label {
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-top: 2px;
+      text-align: right;
+    }
 
     .stats {
       display: grid;
@@ -178,6 +283,11 @@
       font-size: 0.75rem;
     }
     .stat-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stat-row-main {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -226,6 +336,7 @@
       min-width: 20px;
       text-align: center;
     }
+
     .vote-counts {
       position: absolute;
       right: 8px;
@@ -237,13 +348,25 @@
       gap: 6px;
       opacity: 0.9;
     }
-    .vote-counts span { display: inline-flex; align-items: center; gap: 2px; }
-    .vote-counts .up-total { color: #4ade80; }
-    .vote-counts .down-total { color: #f97373; }
+    .vote-counts span {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .vote-counts .up-total {
+      color: #4ade80;
+    }
+    .vote-counts .down-total {
+      color: #f97373;
+    }
 
     @media (max-width: 800px) {
-      .layout { grid-template-columns: minmax(0, 1fr); }
-      .card-form { position: static; }
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .card-form {
+        position: static;
+      }
     }
   </style>
 </head>
@@ -251,18 +374,62 @@
   <div class="container">
     <h1>Karten Creator mit Online-Stats-Voting</h1>
     <p class="subtitle">
-      Erstelle Karten mit PAC / SHO / PAS / DRI / DEF / PHY. Alle Votes werden online gespeichert (Firebase).
+      Erstelle Karten für deine Freunde mit Nation, Verein & Position.
+      Alle stimmen dann ab, ob die Werte eher hoch oder runter gehen sollen – ohne die Grundwerte direkt zu verändern.
     </p>
 
     <div class="layout">
+      <!-- Formular -->
       <section class="card-form">
         <h2>Neue Karte erstellen</h2>
-        <small>Alle Werte 0–99. Der Gesamtwert (OVR) wird automatisch aus dem Durchschnitt berechnet.</small>
+        <small>Alle Werte 0–99. Der Gesamtwert (OVR) wird aus dem Durchschnitt berechnet.</small>
 
         <form id="cardForm">
           <div class="field">
             <label for="playerName">Name</label>
             <input id="playerName" name="playerName" type="text" placeholder="Spielername" required />
+          </div>
+
+          <div class="field">
+            <label for="nation">Nation</label>
+            <select id="nation" name="nation">
+              <option value="">– wählen –</option>
+              <option value="Deutschland">Deutschland</option>
+              <option value="Österreich">Österreich</option>
+              <option value="Schweiz">Schweiz</option>
+              <option value="Italien">Italien</option>
+              <option value="Frankreich">Frankreich</option>
+              <option value="Spanien">Spanien</option>
+              <option value="Portugal">Portugal</option>
+              <option value="England">England</option>
+              <option value="Niederlande">Niederlande</option>
+              <option value="Türkei">Türkei</option>
+              <option value="Polen">Polen</option>
+              <option value="Andere">Andere</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="team">Mannschaft / Verein</label>
+            <input id="team" name="team" type="text" placeholder="z.B. FC Freunde" />
+          </div>
+
+          <div class="field">
+            <label for="position">Position</label>
+            <select id="position" name="position">
+              <option value="">– wählen –</option>
+              <option value="TW">TW (Torwart)</option>
+              <option value="AV">AV (Außenverteidiger)</option>
+              <option value="IV">IV (Innenverteidiger)</option>
+              <option value="DM">DM (Defensives Mittelfeld)</option>
+              <option value="ZM">ZM (Zentrales Mittelfeld)</option>
+              <option value="OM">OM (Offensives Mittelfeld)</option>
+              <option value="LM">LM (Linkes Mittelfeld)</option>
+              <option value="RM">RM (Rechtes Mittelfeld)</option>
+              <option value="LF">LF (Linksaußen)</option>
+              <option value="RF">RF (Rechtsaußen)</option>
+              <option value="ST">ST (Stürmer)</option>
+            </select>
           </div>
 
           <div class="stats-grid">
@@ -296,10 +463,11 @@
         </form>
       </section>
 
+      <!-- Karten -->
       <section class="cards-wrapper">
         <div class="cards-header">
           <h2>Erstellte Karten (online)</h2>
-          <span>Alle Werte & Votes kommen aus der Datenbank.</span>
+          <span>Alle Karten & Votes werden in Firebase gespeichert.</span>
         </div>
         <div id="cardsContainer" class="cards-grid"></div>
       </section>
@@ -315,22 +483,22 @@
     const form = document.getElementById("cardForm");
     const cardsContainer = document.getElementById("cardsContainer");
 
-    // >>> HIER DEINE EIGENE FIREBASE CONFIG EINSETZEN <<<
+    // Deine Firebase-Konfiguration
     const firebaseConfig = {
-		apiKey: "AIzaSyDPV1BoQLODeFcJea9GJ9TQFRYv_k6Jo00",
-		authDomain: "karten-creator.firebaseapp.com",
-		projectId: "karten-creator",
-		storageBucket: "karten-creator.firebasestorage.app",
-		messagingSenderId: "653062925464",
-		appId: "1:653062925464:web:062ff9e541584a835cf4ed"
-	};
+      apiKey: "AIzaSyDPV1BoQLODeFcJea9GJ9TQFRYv_k6Jo00",
+      authDomain: "karten-creator.firebaseapp.com",
+      projectId: "karten-creator",
+      storageBucket: "karten-creator.firebasestorage.app",
+      messagingSenderId: "653062925464",
+      appId: "1:653062925464:web:062ff9e541584a835cf4ed"
+    };
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const cardsRef = db.collection("cards");
 
     function escapeHtml(str) {
-      return str
+      return String(str || "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -343,13 +511,16 @@
       return Math.round(sum / STAT_KEYS.length);
     }
 
-    // Neue Karte in Firestore speichern
+    // Neue Karte speichern
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const playerName = form.playerName.value.trim() || "Unbekannt";
-      const stats = {};
+      const nation = form.nation.value || "";
+      const team = form.team.value.trim() || "";
+      const position = form.position.value || "";
 
+      const stats = {};
       STAT_KEYS.forEach((key) => {
         const value = Number(form[key].value);
         stats[key] = Number.isFinite(value)
@@ -360,6 +531,9 @@
       try {
         await cardsRef.add({
           name: playerName,
+          nation,
+          team,
+          position,
           stats,
           upVotes: 0,
           downVotes: 0,
@@ -374,16 +548,25 @@
       STAT_KEYS.forEach((key) => { form[key].value = 80; });
     });
 
-    // Karten live aus Firestore laden & updaten
+    // Karten live laden
     cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
       cardsContainer.innerHTML = "";
       snapshot.forEach((doc) => {
         const data = doc.data();
-        addCardToDOM(doc.id, data.name, data.stats || {}, data.upVotes || 0, data.downVotes || 0);
+        addCardToDOM(
+          doc.id,
+          data.name,
+          data.stats || {},
+          data.upVotes || 0,
+          data.downVotes || 0,
+          data.nation || "",
+          data.team || "",
+          data.position || ""
+        );
       });
     });
 
-    function addCardToDOM(id, name, stats, upVotes, downVotes) {
+    function addCardToDOM(id, name, stats, upVotes, downVotes, nation, team, position) {
       const card = document.createElement("article");
       card.className = "card";
       card.dataset.id = id;
@@ -395,9 +578,13 @@
           <div class="player-main">
             <div class="overall">${overall}</div>
             <div class="name">${escapeHtml(name)}</div>
-            <div class="tagline">Community Vote</div>
+            <div class="tagline">${escapeHtml(position || "Position")} • ${escapeHtml(team || "ohne Verein")}</div>
           </div>
-          <div class="votes-label">Vote die Stats ↑ / ↓</div>
+          <div class="card-meta">
+            <div class="badge nation-badge">${escapeHtml(nation || "Nation")}</div>
+            <button type="button" class="delete-btn" title="Karte löschen">Löschen</button>
+            <div class="votes-label">Vote die Stats ↑ / ↓</div>
+          </div>
         </header>
         <div class="stats"></div>
         <div class="vote-counts">
@@ -414,46 +601,40 @@
         const value = stats[key] ?? 0;
 
         row.innerHTML = `
-          <span class="stat-label">${key}</span>
-          <div class="stat-controls">
-            <button type="button" class="vote-btn down" data-stat="${key}">−</button>
-            <span class="stat-value" data-stat="${key}">${value}</span>
-            <button type="button" class="vote-btn up" data-stat="${key}">+</button>
+          <div class="stat-row-main">
+            <span class="stat-label">${key}</span>
+            <div class="stat-controls">
+              <button type="button" class="vote-btn down" data-stat="${key}">−</button>
+              <span class="stat-value" data-stat="${key}">${value}</span>
+              <button type="button" class="vote-btn up" data-stat="${key}">+</button>
+            </div>
           </div>
         `;
         statsContainer.appendChild(row);
       });
 
       card.addEventListener("click", async (e) => {
-        const btn = e.target.closest(".vote-btn");
-        if (!btn) return;
-
-        const statKey = btn.getAttribute("data-stat");
-        const isUp = btn.classList.contains("up");
-        const valueEl = card.querySelector(`.stat-value[data-stat="${statKey}"]`);
-        let current = Number(valueEl.textContent) || 0;
-
-        if (isUp && current < 99) {
-          current++;
-        } else if (!isUp && current > 0) {
-          current--;
-        } else {
+        // Löschen
+        const deleteBtn = e.target.closest(".delete-btn");
+        if (deleteBtn) {
+          const really = confirm("Willst du diese Karte wirklich löschen?");
+          if (!really) return;
+          try {
+            await cardsRef.doc(card.dataset.id).delete();
+          } catch (err) {
+            console.error("Fehler beim Löschen:", err);
+            alert("Karte konnte nicht gelöscht werden :(");
+          }
           return;
         }
 
-        valueEl.textContent = current;
+        // Vote
+        const btn = e.target.closest(".vote-btn");
+        if (!btn) return;
 
-        // neue Gesamtwerte berechnen
-        const newStats = {};
-        STAT_KEYS.forEach((key) => {
-          newStats[key] = Number(
-            card.querySelector(`.stat-value[data-stat="${key}"]`).textContent
-          );
-        });
-        const newOverall = calculateOverall(newStats);
-        card.querySelector(".overall").textContent = newOverall;
+        const isUp = btn.classList.contains("up");
 
-        // Vote-Zähler aus DOM holen
+        // Nur Votes zählen – Stats selbst bleiben unverändert!
         const upEl = card.querySelector(".up-value");
         const downEl = card.querySelector(".down-value");
         let up = Number(upEl.textContent) || 0;
@@ -462,15 +643,13 @@
         upEl.textContent = up;
         downEl.textContent = down;
 
-        // In Firestore speichern
         try {
           await cardsRef.doc(card.dataset.id).update({
-            stats: newStats,
             upVotes: up,
             downVotes: down
           });
         } catch (err) {
-          console.error("Fehler beim Updaten:", err);
+          console.error("Fehler beim Updaten der Votes:", err);
         }
       });
 
