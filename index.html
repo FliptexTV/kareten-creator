@@ -289,10 +289,7 @@
 	  height: 200px;            /* BILD GRÖSSER */
 	  background: transparent;  
 	  border-radius: 0;         
-	  overflow: visible;        /* wichtig damit nichts abgeschnitten wird */
-	  display: flex;
-	  align-items: center;
-	  justify-content: center;
+	  overflow: hidden;        /* wichtig damit nichts abgeschnitten wird */
 	}
 
     .fut-photo-initials {
@@ -313,7 +310,9 @@
       text-align: center;
       font-family: "Oswald", sans-serif;
 	  letter-spacing: 0.05em;
+	  white-space: nowrap;
     }
+	
     .fut-meta {
       position: absolute;
       top: 63%;
@@ -576,6 +575,7 @@
         object-fit: contain;
         width: 100%;
         height: 100%;
+		display: block;
     }
 	}
 
