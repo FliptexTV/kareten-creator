@@ -398,6 +398,17 @@
       transform: translateY(-0.5px);
       box-shadow: 0 0 0 1px rgba(59,130,246,0.6);
     }
+	.reset-btn {
+	  background: rgba(202,138,4,0.15);      /* gelblich */
+	  color: #facc15;
+	  border: 1px solid rgba(234,179,8,0.8);
+	}
+	.reset-btn:hover:not([disabled]) {
+	  background: rgba(234,179,8,0.35);
+	  transform: translateY(-0.5px);
+	  box-shadow: 0 0 0 1px rgba(234,179,8,0.6);
+	}
+
 
     /* Votes unter der Karte */
     .card-votes {
@@ -701,6 +712,7 @@
       createCardBtn.disabled = !isAdmin;
       document.querySelectorAll(".delete-btn").forEach(btn => { btn.disabled = !isAdmin; });
       document.querySelectorAll(".edit-btn").forEach(btn => { btn.disabled = !isAdmin; });
+	  document.querySelectorAll(".reset-btn").forEach(btn => { btn.disabled = !isAdmin; });
     }
 
     adminLoginBtn.addEventListener("click", () => {
@@ -862,6 +874,7 @@
         </div>
         <div class="card-actions">
           <button type="button" class="small-btn edit-btn" title="Stats bearbeiten">Bearbeiten</button>
+		  <button type="button" class="small-btn reset-btn" title="Votes zurücksetzen">Votes reset</button
           <button type="button" class="small-btn delete-btn" title="Karte löschen">Löschen</button>
         </div>
         <div class="card-votes">
@@ -924,12 +937,17 @@
 
       const deleteBtn = card.querySelector(".delete-btn");
       const editBtn = card.querySelector(".edit-btn");
+	  const resetBtn = card.querySelector(".reset-btn");
+
       deleteBtn.disabled = !isAdmin;
       editBtn.disabled = !isAdmin;
+	  resetBtn.disabled = !isAdmin;
+
 
       card.addEventListener("click", async (e) => {
         const del = e.target.closest(".delete-btn");
         const edit = e.target.closest(".edit-btn");
+		const reset = e.target.closest(".reset-btn");
         const voteBtn = e.target.closest(".vote-btn");
 
         // Löschen
@@ -948,6 +966,27 @@
           }
           return;
         }
+
+		// Votes zurücksetzen
+		if (reset) {
+		  if (!isAdmin) {
+			alert("Nur der Admin kann Votes zurücksetzen.");
+			return;
+		  }
+		  const really = confirm("Willst du alle Votes für diese Karte zurücksetzen?");
+		  if (!really) return;
+		
+		  try {
+			await cardsRef.doc(card.dataset.id).update({
+			votesUp: emptyVotes(),
+			votesDown: emptyVotes()
+			});
+		  } catch (err) {
+			console.error("Fehler beim Zurücksetzen der Votes:", err);
+			alert("Votes konnten nicht zurückgesetzt werden :(");
+		  }
+		  return;
+		}
 
         // Bearbeiten der Grundwerte
         if (edit) {
