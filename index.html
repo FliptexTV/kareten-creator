@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Karten Creator – Stats Voting (mit Firebase)</title>
+  <title>Karten Creator – FUT Style Voting</title>
   <style>
     * {
       box-sizing: border-box;
@@ -96,7 +96,7 @@
       padding: 16px 18px 18px;
       border: 1px solid rgba(148,163,184,0.35);
       box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-      position: relative; /* kein sticky, weniger Überlappungs-Gefahr */
+      position: relative;
     }
     .card-form h2 {
       font-size: 1.1rem;
@@ -203,105 +203,150 @@
 
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 16px;
     }
 
     .card {
       position: relative;
-      background: linear-gradient(145deg, #020617, #111827 35%, #0b1120 100%);
-      border-radius: 20px;
-      padding: 10px 10px 12px;
-      border: 1px solid rgba(249,250,251,0.06);
-      box-shadow: 0 18px 40px rgba(15,23,42,0.85);
-      overflow: hidden;
-      transform: translateY(0);
-      transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, border 0.15s ease-out;
-    }
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at 0 0, rgba(250,204,21,0.45), transparent 60%),
-        radial-gradient(circle at 100% 0, rgba(56,189,248,0.4), transparent 60%);
-      opacity: 0.7;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 1px;
-      border-radius: 18px;
-      background: radial-gradient(circle at top, rgba(15,23,42,0.7), #020617 65%);
-      z-index: 0;
-      pointer-events: none;
-    }
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 24px 60px rgba(15,23,42,0.95);
-      border-color: rgba(250,250,250,0.16);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .card-header,
-    .stats {
+    /* FUT Card Look */
+    .fut-card {
+      position: relative;
+      padding: 10px 10px 12px;
+      border-radius: 26px;
+      background: radial-gradient(circle at 0 0, #fff9d6 0%, #f5d77a 35%, #c7922a 100%);
+      box-shadow:
+        0 12px 30px rgba(0,0,0,0.45),
+        inset 0 0 0 1px rgba(255,255,255,0.4);
+      overflow: hidden;
+    }
+    .fut-card::before {
+      content: "";
+      position: absolute;
+      inset: -40% -60%;
+      background:
+        radial-gradient(circle at 0 0, rgba(255,255,255,0.75), transparent 55%),
+        radial-gradient(circle at 100% 10%, rgba(255,255,255,0.25), transparent 60%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .fut-card-inner {
       position: relative;
       z-index: 1;
-    }
-    .card-header {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 6px;
+      flex-direction: column;
+      align-items: stretch;
       gap: 6px;
     }
 
-    .player-main {
+    .fut-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .fut-rating {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
       gap: 2px;
     }
-    .overall {
-      font-size: 1.25rem;
+    .fut-ovr {
+      font-size: 1.5rem;
       font-weight: 800;
       line-height: 1;
-      text-shadow: 0 0 10px rgba(250,250,250,0.6);
     }
-    .name {
-      font-size: 0.9rem;
+    .fut-pos {
+      font-size: 0.85rem;
       font-weight: 600;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
-    .tagline {
-      font-size: 0.65rem;
+    .fut-nation-club {
+      font-size: 0.6rem;
+      text-align: right;
       text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: #9ca3af;
+      letter-spacing: 0.12em;
+      max-width: 90px;
     }
 
-    .card-meta {
+    .fut-photo-wrap {
+      margin: 4px auto 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #f3f4f6 45%, #d4d4d8 100%);
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 2px solid rgba(249,250,251,0.9);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+    }
+    .fut-photo-initials {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #111827;
+    }
+
+    .fut-name {
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    .fut-meta {
+      text-align: center;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #111827;
+      opacity: 0.85;
+    }
+
+    .fut-stats {
+      margin-top: 4px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 3px;
+      column-gap: 12px;
+      font-size: 0.75rem;
+    }
+    .fut-stat {
+      display: flex;
+      align-items: center;
       gap: 4px;
+    }
+    .fut-stat-value {
+      font-weight: 700;
+      min-width: 20px;
+    }
+    .fut-stat-label {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.68rem;
+    }
+
+    .fut-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+      font-size: 0.7rem;
     }
     .badge {
       padding: 2px 6px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.7);
+      border: 1px solid rgba(15,23,42,0.25);
       font-size: 0.6rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      background: rgba(15,23,42,0.85);
-    }
-    .nation-badge {
-      max-width: 110px;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+      background: rgba(255,255,255,0.65);
+      color: #111827;
     }
     .card-meta-buttons {
       display: flex;
@@ -322,67 +367,85 @@
     }
     .delete-btn {
       background: rgba(127,29,29,0.12);
-      color: #fecaca;
-      border: 1px solid rgba(248,113,113,0.7);
+      color: #7f1d1d;
+      border: 1px solid rgba(127,29,29,0.35);
     }
     .delete-btn:hover:not([disabled]) {
-      background: rgba(248,113,113,0.3);
+      background: rgba(248,113,113,0.4);
       transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(248,113,113,0.3);
+      box-shadow: 0 0 0 1px rgba(127,29,29,0.5);
     }
     .edit-btn {
-      background: rgba(56,189,248,0.15);
-      color: #e0f2fe;
-      border: 1px solid rgba(56,189,248,0.7);
+      background: rgba(37,99,235,0.15);
+      color: #1d4ed8;
+      border: 1px solid rgba(37,99,235,0.55);
     }
     .edit-btn:hover:not([disabled]) {
-      background: rgba(56,189,248,0.35);
+      background: rgba(59,130,246,0.35);
       transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(56,189,248,0.3);
+      box-shadow: 0 0 0 1px rgba(37,99,235,0.6);
     }
 
-    .votes-label {
-      font-size: 0.7rem;
-      color: #9ca3af;
-      margin-top: 2px;
-      text-align: right;
-    }
-
-    /* NEUES Layout für Stats – alles untereinander, kein Überlappen */
-    .stats {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    /* Votes unter der Karte */
+    .card-votes {
+      background: rgba(15,23,42,0.9);
+      border-radius: 16px;
+      padding: 8px 10px;
+      border: 1px solid rgba(148,163,184,0.45);
+      box-shadow: 0 12px 26px rgba(15,23,42,0.8);
       font-size: 0.75rem;
     }
-    .stat-row {
+    .card-votes-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+    .votes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .vote-row {
       display: flex;
       flex-direction: column;
       gap: 2px;
+      padding-top: 2px;
+      border-top: 1px dashed rgba(55,65,81,0.7);
     }
-    .stat-row-main {
+    .vote-row:first-child { border-top: none; }
+
+    .vote-main {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
+      align-items: center;
       gap: 6px;
-      flex-wrap: wrap; /* damit es umbrechen darf */
+      flex-wrap: wrap;
     }
-    .stat-label {
+    .vote-label {
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       font-size: 0.7rem;
     }
-    .stat-controls {
+    .vote-values {
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .vote-delta {
+      margin-left: 4px;
+      white-space: nowrap;
+    }
+    .vote-controls {
       display: inline-flex;
       align-items: center;
       gap: 3px;
       padding: 2px 4px;
       border-radius: 999px;
-      background: rgba(15,23,42,0.9);
       border: 1px solid rgba(148,163,184,0.5);
-      flex-wrap: wrap;          /* +, Wert, Delta dürfen umbrechen */
-      justify-content: flex-end;
+      background: rgba(15,23,42,0.9);
     }
     .vote-btn {
       border: none;
@@ -406,24 +469,15 @@
     .vote-btn:active {
       transform: translateY(0.5px) scale(0.96);
     }
-    .stat-value {
-      font-variant-numeric: tabular-nums;
-      font-size: 0.75rem;
-      min-width: auto;
-      text-align: center;
-      white-space: nowrap;
-    }
-    .stat-delta {
-      font-size: 0.7rem;
-      margin-left: 4px;
-      white-space: nowrap;
-    }
-    .stat-votes {
+
+    .vote-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 0.7rem;
       color: #9ca3af;
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
+      flex-wrap: wrap;
+      gap: 4px;
     }
     .trend {
       font-size: 0.7rem;
@@ -434,7 +488,6 @@
         grid-template-columns: minmax(0, 1fr);
       }
       .card-form {
-        position: static;
         margin-bottom: 16px;
       }
       .admin-box {
@@ -445,10 +498,10 @@
 </head>
 <body>
   <div class="container">
-    <h1>Karten Creator mit Online-Stats-Voting</h1>
+    <h1>Karten Creator – FUT Style</h1>
     <p class="subtitle">
-      Erstelle Karten für deine Freunde mit Nation, Verein & Position.
-      Alle stimmen ab, ob Werte eher hoch oder runter gehen sollen – die Grundwerte bleiben als Basis erhalten.
+      Erstelle FUT-ähnliche Karten für deine Freunde. Alle können unten drunter über die Stats abstimmen.
+      Nur der Admin darf Karten erstellen, löschen und die Grundwerte bearbeiten.
     </p>
 
     <!-- Admin Login -->
@@ -536,7 +589,7 @@
       <section class="cards-wrapper">
         <div class="cards-header">
           <h2>Erstellte Karten (online)</h2>
-          <span>Jeder kann voten, nur Admin kann erstellen / löschen / Stats bearbeiten.</span>
+          <span>Jeder kann voten, nur Admin kann erstellen, löschen & Stats bearbeiten.</span>
         </div>
         <div id="cardsContainer" class="cards-grid"></div>
       </section>
@@ -564,7 +617,6 @@
     function updateAdminUI() {
       adminStatusText.textContent = isAdmin ? "Admin" : "nicht eingeloggt";
       createCardBtn.disabled = !isAdmin;
-
       document.querySelectorAll(".delete-btn").forEach(btn => { btn.disabled = !isAdmin; });
       document.querySelectorAll(".edit-btn").forEach(btn => { btn.disabled = !isAdmin; });
     }
@@ -613,7 +665,7 @@
       return obj;
     }
 
-    // Neue Karte – nur Admin
+    // Karte erstellen – nur Admin
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!isAdmin) {
@@ -654,7 +706,7 @@
       STAT_KEYS.forEach((key) => { form[key].value = 80; });
     });
 
-    // Karten live laden
+    // Live Karten
     cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
       cardsContainer.innerHTML = "";
       snapshot.forEach((doc) => {
@@ -662,6 +714,12 @@
       });
       updateAdminUI();
     });
+
+    function initialsFromName(name) {
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
 
     function addCardToDOM(id, data) {
       const name = data.name || "Unbekannt";
@@ -679,29 +737,44 @@
       const overall = calculateOverall(stats);
 
       card.innerHTML = `
-        <header class="card-header">
-          <div class="player-main">
-            <div class="overall">${overall}</div>
-            <div class="name">${escapeHtml(name)}</div>
-            <div class="tagline">
-              ${escapeHtml(position || "Position?")}
-              •
-              ${escapeHtml(team || "ohne Verein")}
+        <div class="fut-card">
+          <div class="fut-card-inner">
+            <div class="fut-top">
+              <div class="fut-rating">
+                <div class="fut-ovr">${overall}</div>
+                <div class="fut-pos">${escapeHtml(position || "POS")}</div>
+              </div>
+              <div class="fut-nation-club">
+                ${escapeHtml(nation || "Nation")}<br/>
+                ${escapeHtml(team || "Verein")}
+              </div>
+            </div>
+            <div class="fut-photo-wrap">
+              <div class="fut-photo-initials">${escapeHtml(initialsFromName(name))}</div>
+            </div>
+            <div class="fut-name">${escapeHtml(name)}</div>
+            <div class="fut-meta">COMMUNITY RATING</div>
+            <div class="fut-stats"></div>
+            <div class="fut-controls">
+              <span class="badge">Community Stats</span>
+              <div class="card-meta-buttons">
+                <button type="button" class="small-btn edit-btn" title="Stats bearbeiten">Bearbeiten</button>
+                <button type="button" class="small-btn delete-btn" title="Karte löschen">Löschen</button>
+              </div>
             </div>
           </div>
-          <div class="card-meta">
-            <div class="badge nation-badge">${escapeHtml(nation || "Nation")}</div>
-            <div class="card-meta-buttons">
-              <button type="button" class="small-btn edit-btn" title="Stats bearbeiten">Bearbeiten</button>
-              <button type="button" class="small-btn delete-btn" title="Karte löschen">Löschen</button>
-            </div>
-            <div class="votes-label">Vote die Stats ↑ / ↓</div>
+        </div>
+        <div class="card-votes">
+          <div class="card-votes-header">
+            <span>Votes pro Stat</span>
+            <span>↑ hoch / ↓ runter</span>
           </div>
-        </header>
-        <div class="stats"></div>
+          <div class="votes-list"></div>
+        </div>
       `;
 
-      const statsContainer = card.querySelector(".stats");
+      const futStatsContainer = card.querySelector(".fut-stats");
+      const votesList = card.querySelector(".votes-list");
 
       STAT_KEYS.forEach((key) => {
         const base = stats[key] ?? 0;
@@ -715,27 +788,36 @@
         else if (net < 0) trendLabel = "Tendenz: ↓ runter";
         else trendLabel = "Tendenz: ± neutral";
 
-        const row = document.createElement("div");
-        row.className = "stat-row";
+        // FUT-Stats in der Karte (Community-Wert anzeigen)
+        const statDiv = document.createElement("div");
+        statDiv.className = "fut-stat";
+        statDiv.innerHTML = `
+          <span class="fut-stat-value">${community}</span>
+          <span class="fut-stat-label">${key}</span>
+        `;
+        futStatsContainer.appendChild(statDiv);
 
-        row.innerHTML = `
-          <div class="stat-row-main">
-            <span class="stat-label">${key}</span>
-            <div class="stat-controls">
+        // Votes darunter
+        const voteRow = document.createElement("div");
+        voteRow.className = "vote-row";
+        voteRow.innerHTML = `
+          <div class="vote-main">
+            <span class="vote-label">${key}</span>
+            <span class="vote-values">
+              ${base}${net !== 0 ? ` → ${community}` : ""}
+              ${net !== 0 ? `<span class="vote-delta">${net > 0 ? "+" + net : net}</span>` : ""}
+            </span>
+            <div class="vote-controls">
               <button type="button" class="vote-btn down" data-stat="${key}">−</button>
-              <span class="stat-value">
-                ${base}${net !== 0 ? ` → ${community}` : ""}
-              </span>
-              ${net !== 0 ? `<span class="stat-delta">${net > 0 ? "+" + net : net}</span>` : ""}
               <button type="button" class="vote-btn up" data-stat="${key}">+</button>
             </div>
           </div>
-          <div class="stat-votes">
+          <div class="vote-info">
             <span>Votes: ▲${up} / ▼${down}${net !== 0 ? ` (Netto ${net > 0 ? "+" + net : net})` : ""}</span>
             <span class="trend">${trendLabel}</span>
           </div>
         `;
-        statsContainer.appendChild(row);
+        votesList.appendChild(voteRow);
       });
 
       const deleteBtn = card.querySelector(".delete-btn");
@@ -810,8 +892,7 @@
           const current = stats[key] ?? 0;
           const input = prompt(`Neuer Wert für ${key} (0–99):`, current);
           if (input === null) {
-            // Abgebrochen -> nichts speichern
-            return;
+            return; // abgebrochen
           }
           let num = Number(input);
           if (!Number.isFinite(num)) num = current;
