@@ -506,6 +506,24 @@
     .trend {
       font-size: 0.7rem;
     }
+	
+	.vote-tendency {
+	  font-weight: 700;
+	  margin-left: 6px;
+	}
+	
+	.vote-up {
+	  color: #22c55e;   /* grün */
+	}
+	
+	.vote-down {
+	  color: #ef4444;   /* rot */
+	}
+	
+	.vote-neutral {
+	  color: #3b82f6;   /* blau */
+	}
+
 
 	@media (max-width: 900px) {
 	
@@ -965,10 +983,19 @@
         const net = up - down;
         const community = Math.max(0, Math.min(99, base + net));
 
-        let trendLabel;
-        if (net > 0) trendLabel = "Tendenz: ↑ hoch";
-        else if (net < 0) trendLabel = "Tendenz: ↓ runter";
-        else trendLabel = "Tendenz: ± neutral";
+		let trendText;
+		let trendClass;
+		
+		if (net > 0) {
+		trendText = "↑ hoch";
+		trendClass = "vote-up";
+		} else if (net < 0) {
+		trendText = "↓ runter";
+		trendClass = "vote-down";
+		} else {
+		trendText = "± neutral";
+		trendClass = "vote-neutral";
+		}
 
         const voteRow = document.createElement("div");
         voteRow.className = "vote-row";
@@ -984,10 +1011,15 @@
               <button type="button" class="vote-btn up" data-stat="${key}">+</button>
             </div>
           </div>
-          <div class="vote-info">
-            <span>Votes: ▲${up} / ▼${down}${net !== 0 ? ` (Netto ${net > 0 ? "+" + net : net})` : ""}</span>
-            <span class="trend">${trendLabel}</span>
-          </div>
+		  <div class="vote-info">
+		  <span>
+		  	  Votes: ▲${up} / ▼${down}${net !== 0 ? ` (Netto ${net > 0 ? "+" + net : net})` : ""}
+		  </span>
+		  <span class="trend">
+			  Tendenz:
+			  <span class="vote-tendency ${trendClass}">${trendText}</span>
+		  </span>
+		  </div>
         `;
         votesList.appendChild(voteRow);
       });
