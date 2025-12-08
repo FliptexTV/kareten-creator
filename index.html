@@ -564,6 +564,12 @@
             <label for="team">Mannschaft / Verein</label>
             <input id="team" name="team" type="text" placeholder="z.B. FC Freunde" />
           </div>
+		  
+		  <div class="field">
+			<label for="imageUrl">Bild-URL (Firebase Storage)</label>
+			<input id="imageUrl" name="imageUrl" type="text" placeholder="Link zum Spielerbild" />
+		  </div>
+			
 
           <div class="field">
             <label for="position">Position</label>
@@ -628,6 +634,9 @@
   <!-- Firebase (compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-storage-compat.js"></script>
+
 
   <script>
     const STAT_KEYS = ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"];
@@ -673,6 +682,20 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const cardsRef = db.collection("cards");
+	
+	// Auth & Storage
+	const auth = firebase.auth();
+	const storage = firebase.storage();
+
+	// Anonyme Anmeldung
+	auth.signInAnonymously()
+		.then(() => {
+			console.log("Anonym angemeldet");
+		})
+		.catch((error) => {
+			console.error("Fehler bei anonymer Anmeldung:", error);
+		});
+
 
     function escapeHtml(str) {
       return String(str || "")
@@ -706,6 +729,7 @@
       const nation = form.nation.value.trim() || "";
       const team = form.team.value.trim() || "";
       const position = form.position.value || "";
+	  const imageUrl = form.imageUrl.value.trim() || "";
 
       const stats = {};
       STAT_KEYS.forEach((key) => {
@@ -721,6 +745,7 @@
           nation,
           team,
           position,
+		  imageUrl,
           stats,
           votesUp: emptyVotes(),
           votesDown: emptyVotes(),
@@ -755,6 +780,7 @@
       const nation = data.nation || "";
       const team = data.team || "";
       const position = data.position || "";
+	  const imageUrl = data.imageUrl || "";
       const stats = data.stats || {};
       const votesUp = data.votesUp || {};
       const votesDown = data.votesDown || {};
@@ -778,9 +804,14 @@
                 ${escapeHtml(team || "Verein")}
               </div>
             </div>
-            <div class="fut-photo-wrap">
-              <div class="fut-photo-initials">${escapeHtml(initialsFromName(name))}</div>
-            </div>
+			<div class="fut-photo-wrap">
+			  ${
+				imageUrl
+				  ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(name)}" style="width:100%; height:100%; object-fit:cover;" />`
+				  : `<div class="fut-photo-initials">${escapeHtml(initialsFromName(name))}</div>`
+			  }
+			</div>
+
             <div class="fut-name">${escapeHtml(name)}</div>
             <div class="fut-stats"></div>
           </div>
