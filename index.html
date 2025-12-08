@@ -282,11 +282,11 @@
     /* Kreis mit Initialen */
 	.fut-photo-wrap {
 	  position: absolute;
-	  top: 28%;                 /* BILD NACH UNTEN */
+	  top: 32%;                 /* BILD NACH UNTEN */
 	  left: 50%;
 	  transform: translateX(-50%);
-	  width: 200px;             /* BILD GRÖSSER */
-	  height: 200px;            /* BILD GRÖSSER */
+	  width: 110px;             /* BILD GRÖSSER */
+	  height: 110px;            /* BILD GRÖSSER */
 	  background: transparent;  
 	  border-radius: 0;         
 	  overflow: hidden;        /* wichtig damit nichts abgeschnitten wird */
@@ -532,8 +532,8 @@
 	
 	/* Name etwas höher & kleiner, damit er nicht in die Stats läuft */
 	.fut-name {
-		top: 65%;
-		font-size: 1.2rem;
+		top: 48%;
+		font-size: 1.1rem;
 	}
 	
 	/* Stats etwas nach unten schieben */
@@ -565,16 +565,16 @@
         font-size: 1.1rem; /* wenn du willst, dass sie kleiner ist */
     }
 	.fut-photo-wrap {
-		width: 130px;        /* kleiner als Desktop */
-		height: 130px;       /* kleiner als Desktop */
-		top: 26%;           /* weiter nach oben → kleinerer Wert */
+		top: 30%;           /* weiter nach oben → kleinerer Wert */
+		width: 90px;        /* kleiner als Desktop */
+		height: 90px;       /* kleiner als Desktop */
     }
 
     /* Bild selbst korrekt skalieren */
     .fut-photo-wrap img {
-        object-fit: contain;
         width: 100%;
         height: 100%;
+		object-fit: contain;
 		display: block;
     }
 	}
