@@ -214,7 +214,7 @@
       gap: 8px;
     }
 
-    /* FUT Card mit PNG Template – jetzt alles absolut positioniert */
+    /* FUT Card mit PNG Template – Inhalte absolut auf der Karte */
     .fut-card {
       position: relative;
       width: 100%;
@@ -226,9 +226,8 @@
     }
     .fut-card-inner {
       position: absolute;
-      inset: 0;             /* komplett über der Karte */
+      inset: 0;
       color: #111827;
-      text-shadow: 0 1px 2px rgba(255,255,255,0.6);
       font-smoothing: antialiased;
     }
 
@@ -241,6 +240,7 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      font-family: "Arial Black", Impact, system-ui, sans-serif;
     }
     .fut-rating {
       display: flex;
@@ -249,13 +249,13 @@
       gap: 2px;
     }
     .fut-ovr {
-      font-size: 1.6rem;
-      font-weight: 800;
+      font-size: 1.7rem;
+      font-weight: 900;
       line-height: 1;
     }
     .fut-pos {
       font-size: 0.9rem;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.08em;
     }
     .fut-nation-club {
@@ -264,6 +264,7 @@
       text-transform: uppercase;
       letter-spacing: 0.12em;
       max-width: 90px;
+      font-weight: 700;
     }
 
     /* Kreis mit Initialen */
@@ -284,9 +285,10 @@
       box-shadow: 0 6px 14px rgba(0,0,0,0.35);
     }
     .fut-photo-initials {
-      font-weight: 700;
+      font-weight: 800;
       font-size: 1.2rem;
       color: #111827;
+      font-family: "Arial Black", Impact, system-ui, sans-serif;
     }
 
     /* Name + Untertitel */
@@ -295,9 +297,10 @@
       top: 58%;
       left: 50%;
       transform: translateX(-50%);
-      font-weight: 700;
-      font-size: 0.95rem;
+      font-weight: 800;
+      font-size: 1rem;
       text-align: center;
+      font-family: "Arial Black", Impact, system-ui, sans-serif;
     }
     .fut-meta {
       position: absolute;
@@ -308,33 +311,37 @@
       text-transform: uppercase;
       letter-spacing: 0.15em;
       opacity: 0.9;
+      font-weight: 600;
     }
 
-    /* Stats im unteren Bereich der Karte – Grundwerte ONLY */
+    /* Stats im unteren Bereich – Kategorie über Zahl */
     .fut-stats {
       position: absolute;
-      left: 19%;
-      right: 19%;
+      left: 18%;
+      right: 18%;
       bottom: 17%;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      row-gap: 3px;
-      column-gap: 12px;
+      row-gap: 6px;
+      column-gap: 18px;
       font-size: 0.75rem;
+      font-family: "Arial Black", Impact, system-ui, sans-serif;
     }
     .fut-stat {
       display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .fut-stat-value {
-      font-weight: 700;
-      min-width: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
     }
     .fut-stat-label {
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      font-size: 0.55rem;
+    }
+    .fut-stat-value {
+      font-weight: 900;
+      font-size: 0.85rem;
+      margin-top: -1px;
     }
 
     /* Balken unten: Stats auf Karte = Basis + Buttons rechts */
@@ -358,6 +365,7 @@
       background: rgba(255,255,255,0.75);
       color: #111827;
       white-space: nowrap;
+      font-weight: 700;
     }
     .card-meta-buttons {
       display: flex;
@@ -619,8 +627,8 @@
     const adminStatusText = document.getElementById("adminStatusText");
     const createCardBtn = document.getElementById("createCardBtn");
 
-    // ❗ Admin-Passwort hier anpassen
-    const ADMIN_PASSWORD = "eierlecken"; // <-- ändere das auf dein Passwort
+    // Admin-Passwort (fest): eierlecken
+    const ADMIN_PASSWORD = "eierlecken";
 
     let isAdmin = false;
 
@@ -798,12 +806,12 @@
         else if (net < 0) trendLabel = "Tendenz: ↓ runter";
         else trendLabel = "Tendenz: ± neutral";
 
-        // AUF DER KARTE: nur Grundwert!
+        // AUF DER KARTE: Kategorie über Zahl, nur Grundwert
         const statDiv = document.createElement("div");
         statDiv.className = "fut-stat";
         statDiv.innerHTML = `
-          <span class="fut-stat-value">${base}</span>
           <span class="fut-stat-label">${key}</span>
+          <span class="fut-stat-value">${base}</span>
         `;
         futStatsContainer.appendChild(statDiv);
 
