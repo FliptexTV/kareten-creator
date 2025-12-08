@@ -280,22 +280,23 @@
     }
 
     /* Kreis mit Initialen */
-    .fut-photo-wrap {
-      position: absolute;
-      top: 30%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 80px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #ffffff, #f3f4f6 45%, #d4d4d8 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border: 2px solid rgba(249,250,251,0.9);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.35);
-    }
+	.fut-photo-wrap {
+	position: absolute;
+	top: 30%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 90px;      /* kannst anpassen */
+	height: 90px;     /* kannst anpassen */
+	background: transparent;  /* WICHTIG: kein Verlauf mehr */
+	border-radius: 0;         /* kein Kreis mehr */
+	overflow: hidden;         /* Bild wird sauber im Rahmen gehalten */
+	border: none;             /* kein weißer Rand */
+	box-shadow: none;         /* kein extra Schatten */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	}
+
     .fut-photo-initials {
       font-weight: 800;
       font-size: 1.2rem;
