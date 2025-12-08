@@ -497,33 +497,49 @@
       font-size: 0.7rem;
     }
 
-	@media (max-width: 480px) {
-	  /* OVR etwas höher */
-	  .fut-top {
-	  	top: 9%;
-	  }
-	  
-	  /* Name kleiner und etwas tiefer */
-	  .fut-name {
-	  	font-size: 1.1rem;
-	  	top: 59%;
-	  }
-	  
-	  /* Stats weiter runter setzen */
-	  .fut-stats {
-	  	bottom: 10%;
-	  }
-	  
-	  /* Stat-Zahlen etwas kleiner machen */
-	  .fut-stats-row.values span {
-	  	font-size: 1.1rem !important;
-	  	top: 2px !important;
-	  }
-	  
-	  /* Stat-Labels kleiner */
-	  .fut-stats-row.labels span {
-	  	font-size: 0.7rem !important;
-	  }
+	@media (max-width: 900px) {
+	
+	/* Nur noch eine Spalte: erst Formular, dann Karten */
+	.layout {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	
+	/* Karten-Box etwas Abstand nach oben und volle Breite */
+	.cards-wrapper {
+		margin-top: 16px;
+	}
+	
+	/* Karten in der Mitte zeigen und nicht so schmal quetschen */
+	.cards-grid {
+		grid-template-columns: minmax(0, 1fr);
+		justify-items: center;
+	}
+	
+	/* Die eigentliche FUT-Karte nicht zu breit, schön zentriert */
+	.fut-card {
+		max-width: 280px;
+		margin: 0 auto;
+	}
+	
+	/* Name etwas höher & kleiner, damit er nicht in die Stats läuft */
+	.fut-name {
+		top: 54%;
+		font-size: 1.1rem;
+	}
+	
+	/* Stats etwas nach unten schieben */
+	.fut-stats {
+		bottom: 10%;
+	}
+	
+	/* Stat-Zahlen und Labels etwas kleiner auf Handy */
+	.fut-stats-row.values span {
+		font-size: 1.1rem !important;
+	}
+	
+	.fut-stats-row.labels span {
+		font-size: 0.7rem !important;
+	}
 	}
 
 
