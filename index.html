@@ -4,12 +4,8 @@
   <meta charset="UTF-8" />
   <title>Karten Creator – Stats Voting (mit Firebase)</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     body {
       background: #0f172a;
       color: #e5e7eb;
@@ -18,21 +14,11 @@
       justify-content: center;
       padding: 24px;
     }
-    .container {
-      width: 100%;
-      max-width: 1100px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-    }
-    .subtitle {
-      color: #9ca3af;
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-    }
+    .container { width: 100%; max-width: 1100px; }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; font-weight: 700; }
+    .subtitle { color: #9ca3af; margin-bottom: 1rem; font-size: 0.95rem; }
 
+    /* Admin Box */
     .admin-box {
       background: rgba(15,23,42,0.9);
       border-radius: 14px;
@@ -44,10 +30,7 @@
       gap: 8px;
       font-size: 0.8rem;
     }
-    .admin-box label {
-      font-size: 0.8rem;
-      color: #cbd5f5;
-    }
+    .admin-box label { font-size: 0.8rem; color: #cbd5f5; }
     .admin-box input {
       padding: 5px 8px;
       border-radius: 8px;
@@ -70,17 +53,11 @@
       background: rgba(56,189,248,0.2);
       color: #e0f2fe;
     }
-    .admin-box button:hover {
-      background: rgba(56,189,248,0.35);
-    }
-    .admin-status {
-      margin-left: auto;
-      font-size: 0.8rem;
-    }
-    .admin-status span {
-      font-weight: 600;
-    }
+    .admin-box button:hover { background: rgba(56,189,248,0.35); }
+    .admin-status { margin-left: auto; font-size: 0.8rem; }
+    .admin-status span { font-weight: 600; }
 
+    /* Layout */
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
@@ -94,23 +71,12 @@
       padding: 16px 18px 18px;
       border: 1px solid rgba(148,163,184,0.35);
       box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-      position: sticky;
-      top: 20px;
-      align-self: flex-start;
+      /* KEIN sticky -> weniger Überlagerung */
+      position: relative;
     }
-    .card-form h2 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-    .card-form small {
-      color: #9ca3af;
-      display: block;
-      margin-bottom: 1rem;
-      font-size: 0.8rem;
-    }
-    .field {
-      margin-bottom: 0.75rem;
-    }
+    .card-form h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .card-form small { color: #9ca3af; display: block; margin-bottom: 1rem; font-size: 0.8rem; }
+    .field { margin-bottom: 0.75rem; }
     .field label {
       display: block;
       font-size: 0.8rem;
@@ -172,6 +138,11 @@
       transform: translateY(0px) scale(0.98);
       box-shadow: 0 8px 24px rgba(34,197,94,0.35);
     }
+    .btn[disabled] {
+      opacity: .5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
 
     /* Kartenbereich */
     .cards-wrapper {
@@ -188,13 +159,8 @@
       align-items: baseline;
       margin-bottom: 12px;
     }
-    .cards-header h2 {
-      font-size: 1rem;
-    }
-    .cards-header span {
-      font-size: 0.8rem;
-      color: #9ca3af;
-    }
+    .cards-header h2 { font-size: 1rem; }
+    .cards-header span { font-size: 0.8rem; color: #9ca3af; }
 
     .cards-grid {
       display: grid;
@@ -223,6 +189,7 @@
       opacity: 0.7;
       mix-blend-mode: screen;
       pointer-events: none;
+      z-index: 0;
     }
     .card::after {
       content: "";
@@ -231,6 +198,7 @@
       border-radius: 18px;
       background: radial-gradient(circle at top, rgba(15,23,42,0.7), #020617 65%);
       z-index: 0;
+      pointer-events: none;
     }
     .card:hover {
       transform: translateY(-3px);
@@ -239,10 +207,7 @@
     }
 
     .card-header,
-    .stats {
-      position: relative;
-      z-index: 1;
-    }
+    .stats { position: relative; z-index: 1; }
     .card-header {
       display: flex;
       justify-content: space-between;
@@ -251,29 +216,15 @@
       gap: 6px;
     }
 
-    .player-main {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    .player-main { display: flex; flex-direction: column; gap: 2px; }
     .overall {
       font-size: 1.25rem;
       font-weight: 800;
       line-height: 1;
       text-shadow: 0 0 10px rgba(250,250,250,0.6);
     }
-    .name {
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
-    .tagline {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: #9ca3af;
-    }
+    .name { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; }
+    .tagline { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em; color: #9ca3af; }
 
     .card-meta {
       display: flex;
@@ -296,29 +247,42 @@
       overflow: hidden;
       white-space: nowrap;
     }
-    .delete-btn {
+    .card-meta-buttons {
+      display: flex;
+      gap: 4px;
+    }
+    .small-btn {
       border: none;
       border-radius: 999px;
       padding: 2px 6px;
       font-size: 0.65rem;
       cursor: pointer;
+      transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
+    }
+    .small-btn[disabled] {
+      opacity: .4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .delete-btn {
       background: rgba(127,29,29,0.12);
       color: #fecaca;
       border: 1px solid rgba(248,113,113,0.7);
-      transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
-    }
-    .delete-btn[disabled] {
-      opacity: 0.4;
-      cursor: not-allowed;
     }
     .delete-btn:hover:not([disabled]) {
       background: rgba(248,113,113,0.3);
       transform: translateY(-0.5px);
       box-shadow: 0 0 0 1px rgba(248,113,113,0.3);
     }
-    .delete-btn:active:not([disabled]) {
-      transform: translateY(0.5px) scale(0.97);
-      box-shadow: none;
+    .edit-btn {
+      background: rgba(56,189,248,0.15);
+      color: #e0f2fe;
+      border: 1px solid rgba(56,189,248,0.7);
+    }
+    .edit-btn:hover:not([disabled]) {
+      background: rgba(56,189,248,0.35);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.3);
     }
 
     .votes-label {
@@ -334,11 +298,7 @@
       gap: 4px 10px;
       font-size: 0.75rem;
     }
-    .stat-row {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    .stat-row { display: flex; flex-direction: column; gap: 2px; }
     .stat-row-main {
       display: flex;
       align-items: center;
@@ -388,10 +348,7 @@
       min-width: 40px;
       text-align: center;
     }
-    .stat-delta {
-      font-size: 0.7rem;
-      margin-left: 4px;
-    }
+    .stat-delta { font-size: 0.7rem; margin-left: 4px; }
     .stat-votes {
       font-size: 0.7rem;
       color: #9ca3af;
@@ -399,20 +356,12 @@
       flex-direction: column;
       gap: 1px;
     }
-    .trend {
-      font-size: 0.7rem;
-    }
+    .trend { font-size: 0.7rem; }
 
     @media (max-width: 800px) {
-      .layout {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      .card-form {
-        position: static;
-      }
-      .admin-box {
-        flex-wrap: wrap;
-      }
+      .layout { grid-template-columns: minmax(0, 1fr); }
+      .card-form { position: static; margin-bottom: 16px; }
+      .admin-box { flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -501,7 +450,7 @@
             </div>
           </div>
 
-          <button type="submit" class="btn">+ Karte hinzufügen</button>
+          <button type="submit" class="btn" id="createCardBtn">+ Karte hinzufügen</button>
         </form>
       </section>
 
@@ -509,14 +458,14 @@
       <section class="cards-wrapper">
         <div class="cards-header">
           <h2>Erstellte Karten (online)</h2>
-          <span>Alle Karten & Votes werden in Firebase gespeichert. Jeder kann voten, nur Admin kann erstellen/löschen.</span>
+          <span>Jeder kann voten, nur Admin kann erstellen/löschen/bearbeiten.</span>
         </div>
         <div id="cardsContainer" class="cards-grid"></div>
       </section>
     </div>
   </div>
 
-  <!-- Firebase (compat) CDN -->
+  <!-- Firebase (compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
 
@@ -527,6 +476,7 @@
     const adminPasswordInput = document.getElementById("adminPassword");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
     const adminStatusText = document.getElementById("adminStatusText");
+    const createCardBtn = document.getElementById("createCardBtn");
 
     // ❗ HIER DEIN ADMIN-PASSWORT FESTLEGEN
     const ADMIN_PASSWORD = "eierlecken"; // <-- ändere das!
@@ -535,11 +485,12 @@
 
     function updateAdminUI() {
       adminStatusText.textContent = isAdmin ? "Admin" : "nicht eingeloggt";
+      // Formular-Button aktiv/deaktiv
+      createCardBtn.disabled = !isAdmin;
 
-      // Löschen-Buttons updaten
-      document.querySelectorAll(".delete-btn").forEach(btn => {
-        btn.disabled = !isAdmin;
-      });
+      // Delete/Edit-Buttons updaten
+      document.querySelectorAll(".delete-btn").forEach(btn => { btn.disabled = !isAdmin; });
+      document.querySelectorAll(".edit-btn").forEach(btn => { btn.disabled = !isAdmin; });
     }
 
     adminLoginBtn.addEventListener("click", () => {
@@ -553,7 +504,7 @@
       }
     });
 
-    // Deine Firebase-Konfiguration
+    // Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDPV1BoQLODeFcJea9GJ9TQFRYv_k6Jo00",
       authDomain: "karten-creator.firebaseapp.com",
@@ -562,7 +513,6 @@
       messagingSenderId: "653062925464",
       appId: "1:653062925464:web:062ff9e541584a835cf4ed"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const cardsRef = db.collection("cards");
@@ -587,10 +537,9 @@
       return obj;
     }
 
-    // Neue Karte speichern – nur Admin
+    // Neue Karte (nur Admin)
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-
       if (!isAdmin) {
         alert("Nur der Admin kann Karten erstellen.");
         return;
@@ -629,7 +578,7 @@
       STAT_KEYS.forEach((key) => { form[key].value = 80; });
     });
 
-    // Karten live laden
+    // Live Karten
     cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
       cardsContainer.innerHTML = "";
       snapshot.forEach((doc) => {
@@ -666,7 +615,10 @@
           </div>
           <div class="card-meta">
             <div class="badge nation-badge">${escapeHtml(nation || "Nation")}</div>
-            <button type="button" class="delete-btn" title="Karte löschen">Löschen</button>
+            <div class="card-meta-buttons">
+              <button type="button" class="small-btn edit-btn" title="Stats bearbeiten">Bearbeiten</button>
+              <button type="button" class="small-btn delete-btn" title="Karte löschen">Löschen</button>
+            </div>
             <div class="votes-label">Vote die Stats ↑ / ↓</div>
           </div>
         </header>
@@ -683,13 +635,9 @@
         const community = Math.max(0, Math.min(99, base + net));
 
         let trendLabel;
-        if (net > 0) {
-          trendLabel = "Tendenz: ↑ hoch";
-        } else if (net < 0) {
-          trendLabel = "Tendenz: ↓ runter";
-        } else {
-          trendLabel = "Tendenz: ± neutral";
-        }
+        if (net > 0) trendLabel = "Tendenz: ↑ hoch";
+        else if (net < 0) trendLabel = "Tendenz: ↓ runter";
+        else trendLabel = "Tendenz: ± neutral";
 
         const row = document.createElement("div");
         row.className = "stat-row";
@@ -715,12 +663,17 @@
       });
 
       const deleteBtn = card.querySelector(".delete-btn");
+      const editBtn = card.querySelector(".edit-btn");
       deleteBtn.disabled = !isAdmin;
+      editBtn.disabled = !isAdmin;
 
-      // Klick-Handler (Vote + Löschen)
       card.addEventListener("click", async (e) => {
-        const delBtn = e.target.closest(".delete-btn");
-        if (delBtn) {
+        const del = e.target.closest(".delete-btn");
+        const edit = e.target.closest(".edit-btn");
+        const voteBtn = e.target.closest(".vote-btn");
+
+        // Löschen
+        if (del) {
           if (!isAdmin) {
             alert("Nur der Admin kann Karten löschen.");
             return;
@@ -736,13 +689,22 @@
           return;
         }
 
-        const btn = e.target.closest(".vote-btn");
-        if (!btn) return;
+        // Bearbeiten (Stats)
+        if (edit) {
+          if (!isAdmin) {
+            alert("Nur der Admin kann Stats bearbeiten.");
+            return;
+          }
+          await editCardStats(card.dataset.id);
+          return;
+        }
 
-        const statKey = btn.getAttribute("data-stat");
-        const isUpVote = btn.classList.contains("up");
+        // Votes
+        if (!voteBtn) return;
 
-        // Nur Votes speichern, Grundwerte bleiben unverändert
+        const statKey = voteBtn.getAttribute("data-stat");
+        const isUpVote = voteBtn.classList.contains("up");
+
         const updateData = {};
         if (isUpVote) {
           updateData[`votesUp.${statKey}`] = firebase.firestore.FieldValue.increment(1);
@@ -758,6 +720,35 @@
       });
 
       cardsContainer.appendChild(card);
+    }
+
+    // Admin-Stat-Editor (simple Dialoge)
+    async function editCardStats(cardId) {
+      try {
+        const docSnap = await cardsRef.doc(cardId).get();
+        if (!docSnap.exists) return;
+        const data = docSnap.data();
+        const stats = data.stats || {};
+        const newStats = {};
+
+        for (const key of STAT_KEYS) {
+          const current = stats[key] ?? 0;
+          const input = prompt(`Neuer Wert für ${key} (0–99):`, current);
+          if (input === null) {
+            // Abbrechen -> nichts speichern
+            return;
+          }
+          let num = Number(input);
+          if (!Number.isFinite(num)) num = current;
+          num = Math.max(0, Math.min(99, Math.round(num)));
+          newStats[key] = num;
+        }
+
+        await cardsRef.doc(cardId).update({ stats: newStats });
+      } catch (err) {
+        console.error("Fehler beim Bearbeiten der Stats:", err);
+        alert("Stats konnten nicht bearbeitet werden :(");
+      }
     }
 
     // Initial UI
