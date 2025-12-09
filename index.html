@@ -15,304 +15,488 @@
       padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
+
     body {
-      background: #0f172a;
+      background: radial-gradient(circle at top, #0f172a, #020617 55%, #000 100%);
       color: #e5e7eb;
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 24px;
-    }
-    .container {
-      width: 100%;
-      max-width: 1100px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-    }
-    .subtitle {
-      color: #9ca3af;
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
+      padding: 16px;
     }
 
-    /* Admin Box */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-family: "Bebas Neue", system-ui, sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 0.2rem;
+      color: #f9fafb;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+
     .admin-box {
-      background: rgba(15,23,42,0.9);
-      border-radius: 14px;
-      padding: 10px 12px;
-      border: 1px dashed rgba(148,163,184,0.6);
-      margin-bottom: 12px;
+      max-width: 360px;
+      margin: 0 auto 20px auto;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.95), rgba(15,23,42,0.9));
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.8rem;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.9);
     }
+
     .admin-box label {
       font-size: 0.8rem;
-      color: #cbd5f5;
+      white-space: nowrap;
+      color: #e5e7eb;
     }
+
     .admin-box input {
-      padding: 5px 8px;
-      border-radius: 8px;
-      border: 1px solid rgba(148,163,184,0.6);
+      flex: 1;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
       background: rgba(15,23,42,0.9);
       color: #e5e7eb;
       font-size: 0.8rem;
-      outline: none;
     }
-    .admin-box input:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px rgba(56,189,248,0.3);
-    }
+
     .admin-box button {
+      padding: 4px 10px;
       border-radius: 999px;
-      border: none;
-      padding: 5px 10px;
+      border: 1px solid rgba(56,189,248,0.9);
+      background: linear-gradient(to right, #0ea5e9, #22c55e);
+      color: #0b1120;
       font-size: 0.8rem;
       cursor: pointer;
-      background: rgba(56,189,248,0.2);
-      color: #e0f2fe;
-    }
-    .admin-box button:hover {
-      background: rgba(56,189,248,0.35);
-    }
-    .admin-status {
-      margin-left: auto;
-      font-size: 0.8rem;
-    }
-    .admin-status span {
       font-weight: 600;
+      white-space: nowrap;
+      box-shadow: 0 0 0 1px rgba(15,23,42,0.4), 0 8px 20px rgba(0,0,0,0.45);
+      transition: transform 0.1s ease, box-shadow 0.15s ease;
     }
 
-    /* View Toggle */
-    .view-toggle {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-    .view-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.85);
-      padding: 5px 12px;
-      font-size: 0.8rem;
-      color: #e5e7eb;
-      cursor: pointer;
-      transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
-    }
-    .view-btn:hover {
-      background: rgba(30,64,175,0.9);
+    .admin-box button:hover {
       transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(129,140,248,0.7);
-    }
-    .view-btn.active-view {
-      background: linear-gradient(135deg,#22c55e,#16a34a);
-      border-color: rgba(34,197,94,0.9);
-      box-shadow: 0 10px 24px rgba(34,197,94,0.5);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
     }
 
-    /* Layout */
+    .admin-status {
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
     .layout {
       display: grid;
-      grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
-      gap: 20px;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 2fr);
+      gap: 18px;
     }
 
-    /* Formular */
-    .card-form {
-      background: rgba(15,23,42,0.9);
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card-form, .card-list {
+      background: linear-gradient(to bottom right, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
       border-radius: 18px;
-      padding: 16px 18px 18px;
-      border: 1px solid rgba(148,163,184,0.35);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
-      position: relative;
+      padding: 16px 16px 18px;
+      border: 1px solid rgba(148,163,184,0.6);
+      box-shadow: 0 14px 30px rgba(15,23,42,0.9);
     }
-    .card-form h2 {
+
+    .card-form h2, .card-list h2 {
       font-size: 1.1rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 4px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: "Oswald", system-ui, sans-serif;
     }
+
     .card-form small {
+      display: block;
+      font-size: 0.7rem;
       color: #9ca3af;
-      display: block;
-      margin-bottom: 1rem;
-      font-size: 0.8rem;
+      margin-bottom: 8px;
     }
+
     .field {
-      margin-bottom: 0.75rem;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
+
     .field label {
-      display: block;
-      font-size: 0.8rem;
-      margin-bottom: 0.25rem;
+      font-size: 0.75rem;
       color: #cbd5f5;
     }
-    .field input[type="text"],
-    .field input[type="number"],
-    .field select {
-      width: 100%;
-      padding: 7px 9px;
-      border-radius: 10px;
-      border: 1px solid rgba(148,163,184,0.5);
-      background: rgba(15,23,42,0.8);
+
+    .field input, .field select {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.95);
       color: #e5e7eb;
       font-size: 0.85rem;
-      outline: none;
-      transition: border 0.15s, box-shadow 0.15s, background 0.15s;
     }
-    .field input[type="text"]:focus,
-    .field input[type="number"]:focus,
-    .field select:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px rgba(56,189,248,0.3);
-      background: rgba(15,23,42,0.95);
+
+    .field input::placeholder {
+      color: #64748b;
     }
 
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
+      gap: 6px;
+      margin-top: 6px;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: linear-gradient(135deg,#22c55e,#16a34a);
-      border: none;
-      border-radius: 999px;
-      padding: 8px 14px;
-      color: white;
-      font-size: 0.85rem;
+    .stats-grid .field {
+      margin-top: 0;
+    }
+
+    .stats-grid label {
+      text-align: center;
+      font-size: 0.7rem;
+    }
+
+    .stats-grid input {
+      text-align: center;
       font-weight: 600;
+    }
+
+    .btn-row {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button.primary {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,0.9);
+      background: linear-gradient(to right, #0ea5e9, #22c55e);
+      color: #0b1120;
+      font-size: 0.9rem;
       cursor: pointer;
-      width: 100%;
-      margin-top: 0.25rem;
-      box-shadow: 0 12px 35px rgba(34,197,94,0.35);
-      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, filter 0.1s;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: "Oswald", system-ui, sans-serif;
+      box-shadow: 0 0 0 1px rgba(15,23,42,0.4), 0 10px 25px rgba(0,0,0,0.6);
+      transition: transform 0.1s ease, box-shadow 0.15s ease, filter 0.1s ease;
     }
-    .btn:hover {
-      transform: translateY(-1px);
+
+    button.primary:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      filter: grayscale(0.2);
+      box-shadow: none;
+    }
+
+    button.primary:not(:disabled):hover {
+      transform: translateY(-0.5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.7);
       filter: brightness(1.05);
-      box-shadow: 0 16px 40px rgba(34,197,94,0.55);
     }
-    .btn:active {
-      transform: translateY(0px) scale(0.98);
-      box-shadow: 0 8px 24px rgba(34,197,94,0.35);
+
+    .small-btn {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.95);
+      color: #e5e7eb;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+      white-space: nowrap;
     }
-    .btn[disabled] {
-      opacity: .5;
+
+    .small-btn:hover:not(:disabled) {
+      background: rgba(15,23,42,1);
+      transform: translateY(-0.5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+    }
+
+    .small-btn:disabled {
+      opacity: 0.4;
       cursor: not-allowed;
       box-shadow: none;
     }
 
-    /* Kartenbereich */
-    .cards-wrapper {
-      background: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 55%),
-                  radial-gradient(circle at bottom, rgba(34,197,94,0.12), transparent 55%);
-      border-radius: 18px;
-      border: 1px solid rgba(148,163,184,0.4);
-      padding: 16px;
-      min-height: 300px;
+    .delete-btn {
+      background: rgba(127,29,29,0.15);
+      color: #fecaca;
+      border-color: rgba(248,113,113,0.7);
     }
-    .cards-header {
+    .delete-btn:hover:not(:disabled) {
+      background: rgba(248,113,113,0.3);
+      box-shadow: 0 0 0 1px rgba(248,113,113,0.7);
+    }
+
+    .sort-controls {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 12px;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      margin-bottom: 6px;
     }
-    .cards-header h2 {
-      font-size: 1rem;
+
+    .sort-btn {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.95);
+      color: #e5e7eb;
+      font-size: 0.75rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
     }
-    .cards-header span {
-      font-size: 0.8rem;
-      color: #9ca3af;
+    .sort-btn:hover {
+      background: rgba(15,23,42,1);
+      transform: translateY(-0.5px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
     }
 
     .cards-grid {
+      margin-top: 10px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
     }
 
     .card {
-      position: relative;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(15,23,42,0.95));
+      border-radius: 18px;
+      padding: 12px 12px 14px;
+      border: 1px solid rgba(148,163,184,0.7);
+      box-shadow: 0 14px 35px rgba(15,23,42,0.95);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
-    /* FUT Card mit PNG Template – Inhalte absolut auf der Karte */
+    .card-actions {
+      margin-top: 4px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .card-votes {
+      margin-top: 2px;
+      border-radius: 12px;
+      border: 1px solid rgba(31,41,55,0.9);
+      background: linear-gradient(to bottom right, rgba(15,23,42,0.95), rgba(15,23,42,0.98));
+      padding: 6px 8px;
+    }
+
+    .card-votes-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+
+    .votes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .vote-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 2.2fr) minmax(0, 1.2fr);
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      padding: 3px 4px;
+      border-radius: 8px;
+      background: rgba(15,23,42,0.9);
+    }
+
+    .vote-label {
+      font-weight: 600;
+      font-size: 0.7rem;
+      color: #e5e7eb;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .vote-values {
+      color: #e5e7eb;
+    }
+
+    .vote-delta {
+      margin-left: 4px;
+      font-weight: 700;
+      color: #22c55e;
+    }
+
+    .vote-controls {
+      display: flex;
+      gap: 4px;
+      justify-content: flex-end;
+    }
+
+    .vote-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.95);
+      color: #e5e7eb;
+      font-size: 0.8rem;
+      width: 28px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .vote-btn.up {
+      border-color: rgba(34,197,94,0.8);
+      color: #bbf7d0;
+    }
+
+    .vote-btn.down {
+      border-color: rgba(239,68,68,0.8);
+      color: #fecaca;
+    }
+
+    .vote-btn:hover {
+      filter: brightness(1.1);
+    }
+
+    .vote-info {
+      grid-column: 1 / span 3;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+
+    .trend {
+      text-align: right;
+    }
+
+    .vote-tendency {
+      font-weight: 700;
+      margin-left: 6px;
+    }
+
+    .vote-up {
+      color: #22c55e;
+    }
+
+    .vote-down {
+      color: #ef4444;
+    }
+
+    .vote-neutral {
+      color: #3b82f6;
+    }
+
+    /* FUT-Karte */
     .fut-card {
       position: relative;
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      background-image: url("fut-template.png"); /* ggf. Dateiname anpassen */
+      width: 230px;
+      height: 330px;
+      margin: 0 auto;
+      border-radius: 24px;
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/karten-creator.firebasestorage.app/o/futgold2.png?alt=media&token=6c1f7f1b-ff5f-4c1a-ab62-cb232a2d51ac");
       background-size: cover;
       background-position: center;
-      filter: drop-shadow(0 14px 24px rgba(0,0,0,0.7));
-    }
-    .fut-card-inner {
-      position: absolute;
-      inset: 0;
-      color: #111827;
-      font-smoothing: antialiased;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.9),
+        0 18px 45px rgba(0,0,0,0.95);
+      overflow: hidden;
     }
 
-    /* Rating + Position + Nation/Verein */
+    .fut-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 18px 16px 14px;
+      color: #111827;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+    }
+
     .fut-top {
       position: absolute;
-      top: 20%;
+      top: 8%;
       left: 10%;
       right: 10%;
       display: flex;
-      justify-content: space-between;
       align-items: flex-start;
-      font-family: "Arial Black", Impact, system-ui, sans-serif;
+      justify-content: space-between;
     }
+
     .fut-rating {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       gap: 2px;
     }
+
     .fut-ovr {
-      font-family: "Bebas Neue", sans-serif;
-      font-size: 3.5rem;
-      font-weight: 550;
+      font-family: "Oswald", system-ui, sans-serif;
+      font-size: 2.3rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
       line-height: 1;
-      letter-spacing: 0.01em;
-      margin-left: 8px;
-    }
-    .fut-pos {
-      font-family: "Bebas Neue", sans-serif;
-      font-size: 1.75rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      margin-left: 18px;
-      margin-top: -8px;
-    }
-    .fut-nation-club {
-      font-size: 0.6rem;
-      text-align: right;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      max-width: 90px;
-      font-weight: 700;
     }
 
-    /* Bildbereich */
+    .fut-pos {
+      font-family: "Oswald", system-ui, sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-top: -2px;
+    }
+
+    .fut-nation-club {
+      text-align: right;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      line-height: 1.3;
+      max-width: 90px;
+      font-weight: 600;
+    }
+
     .fut-photo-wrap {
       position: absolute;
-      top: 28%;
+      top: 29.5%;
       left: 50%;
       transform: translateX(-50%);
-      width: 200px;
-      height: 200px;
+      width: 130px;
+      height: 130px;
       background: transparent;
       border-radius: 0;
       overflow: visible;
@@ -320,6 +504,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .fut-photo-wrap img {
       width: 100%;
       height: 100%;
@@ -328,13 +513,12 @@
     }
 
     .fut-photo-initials {
-      font-weight: 800;
-      font-size: 1.2rem;
+      font-weight: 700;
+      font-size: 1.4rem;
+      text-transform: uppercase;
       color: #111827;
-      font-family: "Arial Black", Impact, system-ui, sans-serif;
     }
 
-    /* Name */
     .fut-name {
       position: absolute;
       top: 65%;
@@ -345,10 +529,22 @@
       text-align: center;
       font-family: "Oswald", sans-serif;
       letter-spacing: 0.05em;
-      white-space: nowrap;
     }
 
-    /* Stats: eine Reihe Labels, eine Reihe Zahlen */
+    .fut-meta {
+      position: absolute;
+      top: 63%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0.9;
+      font-weight: 600;
+    }
+
+    /* Stats: eine Reihe Labels, eine Reihe Zahlen (PAC SHO PAS DRI DEF PHY) */
     .fut-stats {
       position: absolute;
       left: 10%;
@@ -357,369 +553,284 @@
       display: grid;
       grid-auto-rows: auto;
       row-gap: 2px;
-      font-family: "Arial Black", Impact, system-ui, sans-serif;
     }
+
     .fut-stats-row {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      column-gap: 2px;
       text-align: center;
     }
+
     .fut-stats-row.labels span {
-      font-family: "Bebas Neue", sans-serif;
-      font-size: 1.20rem;
-      font-weight: 300;
+      font-family: "Oswald", system-ui, sans-serif;
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 0.16em;
+      color: #111827;
     }
+
     .fut-stats-row.values span {
-      font-family: "Bebas Neue", sans-serif;
-      font-size: 1.8rem;
-      font-weight: 300;
-      letter-spacing: 2px;
-      margin-top: -10px;
-    }
-
-    /* Buttons UNTER der Karte */
-    .card-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 6px;
-      padding: 0 4px;
-    }
-    .small-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 2px 8px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
-    }
-    .small-btn[disabled] {
-      opacity: .4;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-    .delete-btn {
-      background: rgba(127,29,29,0.12);
-      color: #fecaca;
-      border: 1px solid rgba(248,113,113,0.7);
-    }
-    .delete-btn:hover:not([disabled]) {
-      background: rgba(248,113,113,0.4);
-      transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(248,113,113,0.5);
-    }
-    .edit-btn {
-      background: rgba(37,99,235,0.15);
-      color: #bfdbfe;
-      border: 1px solid rgba(59,130,246,0.7);
-    }
-    .edit-btn:hover:not([disabled]) {
-      background: rgba(59,130,246,0.35);
-      transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(59,130,246,0.6);
-    }
-    .reset-btn {
-      background: rgba(202,138,4,0.15);
-      color: #facc15;
-      border: 1px solid rgba(234,179,8,0.8);
-    }
-    .reset-btn:hover:not([disabled]) {
-      background: rgba(234,179,8,0.35);
-      transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(234,179,8,0.6);
-    }
-
-    /* Votes unter der Karte */
-    .card-votes {
-      background: rgba(15,23,42,0.95);
-      border-radius: 16px;
-      padding: 8px 10px;
-      border: 1px solid rgba(148,163,184,0.45);
-      box-shadow: 0 12px 26px rgba(15,23,42,0.8);
-      font-size: 0.75rem;
-    }
-    .card-votes-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 4px;
-      font-size: 0.7rem;
-      color: #9ca3af;
-    }
-    .votes-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .vote-row {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      padding-top: 2px;
-      border-top: 1px dashed rgba(55,65,81,0.7);
-    }
-    .vote-row:first-child { border-top: none; }
-
-    .vote-main {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .vote-label {
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 0.7rem;
-    }
-    .vote-values {
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-    .vote-delta {
-      margin-left: 4px;
-      white-space: nowrap;
-    }
-    .vote-controls {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      padding: 2px 4px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
-      background: rgba(15,23,42,0.9);
-    }
-    .vote-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 0 5px;
-      font-size: 0.7rem;
-      width: 18px;
-      height: 18px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background: transparent;
-      color: #e5e7eb;
-      transition: background 0.1s, transform 0.08s;
-    }
-    .vote-btn:hover {
-      background: rgba(148,163,184,0.25);
-      transform: translateY(-0.5px);
-    }
-    .vote-btn:active {
-      transform: translateY(0.5px) scale(0.96);
-    }
-
-    .vote-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.7rem;
-      color: #9ca3af;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-    .trend {
-      font-size: 0.7rem;
-    }
-
-    .vote-tendency {
-      font-weight: 700;
-      margin-left: 6px;
-    }
-    .vote-up {
-      color: #22c55e;
-    }
-    .vote-down {
-      color: #ef4444;
-    }
-    .vote-neutral {
-      color: #3b82f6;
-    }
-
-    /* Sort Buttons */
-    .sort-controls {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      font-size: 0.8rem;
-    }
-    .sort-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.85);
-      padding: 4px 10px;
-      font-size: 0.75rem;
-      color: #e5e7eb;
-      cursor: pointer;
-      transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
-    }
-    .sort-btn:hover {
-      background: rgba(51,65,85,0.9);
-      transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(148,163,184,0.7);
-    }
-    .sort-btn:active {
-      transform: translateY(0.5px) scale(0.97);
-      box-shadow: none;
-    }
-
-    /* Aufstellungs-Ansicht */
-    .lineup-wrapper {
-      margin-top: 12px;
-      background: radial-gradient(circle at top, rgba(56,189,248,0.15), transparent 55%),
-                  radial-gradient(circle at bottom, rgba(34,197,94,0.15), transparent 55%);
-      border-radius: 18px;
-      border: 1px solid rgba(148,163,184,0.4);
-      padding: 16px;
-      display: none; /* Start: versteckt */
-    }
-    .lineup-header h2 {
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-    .lineup-header p {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-bottom: 10px;
-    }
-    .pitch {
+      font-family: "Oswald", system-ui, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #111827;
       position: relative;
-      background: linear-gradient(180deg,#064e3b,#022c22);
-      border-radius: 18px;
-      border: 1px solid rgba(16,185,129,0.6);
-      padding: 14px 10px 18px;
-      min-height: 260px;
-      box-shadow: inset 0 0 0 2px rgba(34,197,94,0.4);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    .pitch-line {
-      border-top: 1px solid rgba(209,250,229,0.4);
-      margin: 0 8px;
-    }
-    .lineup-row {
-      display: flex;
-      justify-content: space-around;
-      gap: 8px;
-      padding: 4px 4px 0;
-      flex-wrap: wrap;
-    }
-    .lineup-slot {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      min-width: 120px;
-      max-width: 160px;
-    }
-    .lineup-slot label {
-      font-size: 0.75rem;
-      color: #d1fae5;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .lineup-slot select {
-      width: 100%;
-      padding: 5px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(16,185,129,0.7);
-      background: rgba(15,23,42,0.9);
-      color: #ecfdf5;
-      font-size: 0.8rem;
-      outline: none;
-    }
-    .lineup-slot select:focus {
-      box-shadow: 0 0 0 1px rgba(52,211,153,0.8);
-    }
-    .lineup-team-info {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .lineup-team-info span {
-      font-weight: 600;
-    }
-    .team-ovr-value {
-      font-family: "Bebas Neue", sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 0.06em;
-      color: #bbf7d0;
+      top: 4px;
     }
 
     @media (max-width: 900px) {
-      /* Nur noch eine Spalte: erst Formular, dann Karten */
-      .layout {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
-      /* Karten-Box etwas Abstand nach oben und volle Breite */
-      .cards-wrapper {
-        margin-top: 16px;
-      }
-
-      /* Karten in der Mitte zeigen und nicht so schmal quetschen */
-      .cards-grid {
-        grid-template-columns: minmax(0, 1fr);
-        justify-items: center;
-      }
-
-      /* Die eigentliche FUT-Karte nicht zu breit, schön zentriert */
       .fut-card {
         max-width: 280px;
         margin: 0 auto;
       }
 
-      /* Name etwas höher & kleiner, damit er nicht in die Stats läuft */
       .fut-name {
-        top: 63.5%;
-        font-size: 1.2rem;
-      }
-
-      /* Stats etwas nach unten schieben */
-      .fut-stats {
-        bottom: 20%;
-      }
-
-      /* Stat-Zahlen und Labels etwas kleiner auf Handy */
-      .fut-stats-row.values span {
-        position: relative;
-        font-size: 1.3rem !important;
-        top: 6px;
-      }
-
-      .fut-stats-row.labels span {
-        position: relative;
-        font-size: 0.7rem !important;
-        top: 4px;
+        top: 60%;
+        font-size: 1.4rem;
       }
 
       .fut-ovr {
-        font-size: 2.4rem;
+        font-size: 1.8rem;
       }
 
       .fut-pos {
-        left: 12%;
-        top: 28%;
-        font-size: 1.1rem;
+        font-size: 1rem;
       }
+
+      .fut-stats {
+        bottom: 10%;
+      }
+
+      .fut-stats-row.values span {
+        font-size: 1.1rem;
+        top: 2px;
+      }
+
+      .fut-stats-row.labels span {
+        font-size: 0.7rem;
+      }
+
       .fut-photo-wrap {
         width: 130px;
         height: 130px;
         top: 29.5%;
       }
-      .pitch {
-        min-height: 230px;
+
+      .fut-photo-wrap img {
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
       }
+    }
+
+    /* View switch buttons */
+    .view-switch {
+      margin-top: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .view-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.85);
+      color: #e5e7eb;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    }
+    .view-btn.view-btn-active {
+      background: linear-gradient(to right, #0ea5e9, #22c55e);
+      border-color: transparent;
+      color: #0b1120;
+      box-shadow: 0 0 0 1px rgba(15,23,42,0.4), 0 10px 25px rgba(0,0,0,0.35);
+    }
+    .view-btn:hover {
+      transform: translateY(-0.5px);
+    }
+
+    /* Team section */
+    .team-section {
+      margin-top: 8px;
+    }
+    .team-layout {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .team-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .pitch {
+      position: relative;
+      border-radius: 18px;
+      padding: 16px 12px;
+      background: radial-gradient(circle at top, rgba(34,197,94,0.25), rgba(15,118,110,0.15), rgba(15,23,42,0.9));
+      border: 1px solid rgba(148,163,184,0.6);
+      box-shadow: 0 14px 35px rgba(15,23,42,0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 360px;
+    }
+    .pitch-row {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin: 6px 0;
+    }
+    .pitch-slot {
+      width: 86px;
+      height: 120px;
+      border-radius: 14px;
+      border: 1px dashed rgba(226,232,240,0.6);
+      background: rgba(15,23,42,0.75);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4px;
+      gap: 4px;
+    }
+    .slot-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+    .slot-card {
+      flex: 1;
+      width: 100%;
+      border-radius: 10px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(51,65,85,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      font-size: 0.7rem;
+      color: #9ca3af;
+      text-align: center;
+    }
+
+    .team-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .team-form,
+    .team-list {
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: linear-gradient(to bottom right, rgba(15,23,42,0.95), rgba(15,23,42,0.9));
+      padding: 14px 14px 16px;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.85);
+    }
+    .slot-selects {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .slot-select-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 0.8rem;
+    }
+    .slot-select-row span {
+      min-width: 32px;
+      color: #e5e7eb;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.7rem;
+    }
+    .slot-select-row select {
+      flex: 1;
+      padding: 4px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 0.8rem;
+    }
+
+    .team-ovr-box {
+      margin-top: 8px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+    .team-ovr-box span:first-child {
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+    #teamOvrValue {
+      font-family: "Bebas Neue", system-ui, sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.08em;
+      color: #22c55e;
+    }
+
+    .team-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .teams-grid {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+    .team-card {
+      border-radius: 12px;
+      border: 1px solid rgba(51,65,85,0.9);
+      background: rgba(15,23,42,0.95);
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .team-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .team-card-header h4 {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+    .team-card-ovr {
+      font-family: "Bebas Neue", system-ui, sans-serif;
+      font-size: 1.2rem;
+      color: #22c55e;
+    }
+    .team-card-body {
+      color: #9ca3af;
+      font-size: 0.75rem;
+    }
+    .team-card-actions {
+      margin-top: 6px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
     }
   </style>
 </head>
@@ -740,161 +851,200 @@
       </div>
     </div>
 
-    <!-- View Toggle -->
-    <div class="view-toggle">
-      <button type="button" id="viewCardsBtn" class="view-btn active-view">Karten</button>
-      <button type="button" id="viewLineupBtn" class="view-btn">Aufstellung (5v5)</button>
+    <div class="view-switch">
+      <button type="button" class="view-btn view-btn-active" data-view="cards">Karten</button>
+      <button type="button" class="view-btn" data-view="team">Team-Aufstellung</button>
     </div>
 
-    <!-- Hauptlayout: Formular + Karten -->
-    <div class="layout" id="cardsLayout">
-      <!-- Formular -->
-      <section class="card-form">
-        <h2>Neue Karte erstellen</h2>
-        <small>Werte 0–99, OVR wird positionsabhängig aus den Grundwerten berechnet.</small>
+    <section id="cardsView">
+      <div class="layout">
+        <!-- Formular -->
+        <section class="card-form">
+          <h2>Neue Karte erstellen</h2>
+          <small>Werte 0–99, OVR wird positionsabhängig aus den Grundwerten berechnet.</small>
 
-        <form id="cardForm">
-          <div class="field">
-            <label for="playerName">Name</label>
-            <input id="playerName" name="playerName" type="text" placeholder="Spielername" required />
-          </div>
-
-          <div class="field">
-            <label for="nation">Nation</label>
-            <input id="nation" name="nation" type="text" placeholder="z.B. Deutschland, Türkei, Brasilien ..." />
-          </div>
-
-          <div class="field">
-            <label for="team">Mannschaft / Verein</label>
-            <input id="team" name="team" type="text" placeholder="z.B. FC Freunde" />
-          </div>
-
-          <div class="field">
-            <label for="imageUrl">Bild-URL (Firebase Storage)</label>
-            <input id="imageUrl" name="imageUrl" type="text" placeholder="Link zum Spielerbild" />
-          </div>
-
-          <div class="field">
-            <label for="position">Position</label>
-            <select id="position" name="position">
-              <option value="">– Position wählen –</option>
-              <option value="TW">TW (Torwart)</option>
-              <option value="AV">AV (Außenverteidiger)</option>
-              <option value="IV">IV (Innenverteidiger)</option>
-              <option value="DM">DM (Defensives Mittelfeld)</option>
-              <option value="ZM">ZM (Zentrales Mittelfeld)</option>
-              <option value="OM">OM (Offensives Mittelfeld)</option>
-              <option value="LM">LM (Linkes Mittelfeld)</option>
-              <option value="RM">RM (Rechtes Mittelfeld)</option>
-              <option value="LF">LF (Linksaußen)</option>
-              <option value="RF">RF (Rechtsaußen)</option>
-              <option value="ST">ST (Stürmer)</option>
-            </select>
-          </div>
-
-          <div class="stats-grid">
+          <form id="cardForm">
             <div class="field">
-              <label for="PAC">PAC</label>
-              <input id="PAC" name="PAC" type="number" min="0" max="99" value="80" />
+              <label for="playerName">Name</label>
+              <input id="playerName" name="playerName" type="text" placeholder="Spielername" required />
             </div>
-            <div class="field">
-              <label for="SHO">SHO</label>
-              <input id="SHO" name="SHO" type="number" min="0" max="99" value="80" />
-            </div>
-            <div class="field">
-              <label for="PAS">PAS</label>
-              <input id="PAS" name="PAS" type="number" min="0" max="99" value="80" />
-            </div>
-            <div class="field">
-              <label for="DRI">DRI</label>
-              <input id="DRI" name="DRI" type="number" min="0" max="99" value="80" />
-            </div>
-            <div class="field">
-              <label for="DEF">DEF</label>
-              <input id="DEF" name="DEF" type="number" min="0" max="99" value="80" />
-            </div>
-            <div class="field">
-              <label for="PHY">PHY</label>
-              <input id="PHY" name="PHY" type="number" min="0" max="99" value="80" />
-            </div>
-          </div>
 
-          <button type="submit" class="btn" id="createCardBtn">+ Karte hinzufügen</button>
-        </form>
-      </section>
+            <div class="field">
+              <label for="nation">Nation</label>
+              <input id="nation" name="nation" type="text" placeholder="z.B. Deutschland, Türkei, Brasilien ..." />
+            </div>
 
-      <!-- Karten -->
-      <section class="cards-wrapper">
-        <div class="cards-header">
-          <div>
+            <div class="field">
+              <label for="team">Mannschaft / Verein</label>
+              <input id="team" name="team" type="text" placeholder="z.B. FC Freunde" />
+            </div>
+
+            <div class="field">
+              <label for="imageUrl">Bild-URL (Firebase Storage)</label>
+              <input id="imageUrl" name="imageUrl" type="text" placeholder="Link zum Spielerbild" />
+            </div>
+
+            <div class="field">
+              <label for="position">Position</label>
+              <select id="position" name="position">
+                <option value="">Position wählen</option>
+                <option value="TW">TW</option>
+                <option value="IV">IV</option>
+                <option value="AV">AV</option>
+                <option value="DM">DM</option>
+                <option value="ZM">ZM</option>
+                <option value="OM">OM</option>
+                <option value="LM">LM</option>
+                <option value="RM">RM</option>
+                <option value="ST">ST</option>
+                <option value="LF">LF</option>
+                <option value="RF">RF</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Grundwerte (Basis-Stats)</label>
+              <div class="stats-grid">
+                <div class="field">
+                  <label for="PAC">PAC</label>
+                  <input id="PAC" name="PAC" type="number" min="0" max="99" value="80" />
+                </div>
+                <div class="field">
+                  <label for="SHO">SHO</label>
+                  <input id="SHO" name="SHO" type="number" min="0" max="99" value="80" />
+                </div>
+                <div class="field">
+                  <label for="PAS">PAS</label>
+                  <input id="PAS" name="PAS" type="number" min="0" max="99" value="80" />
+                </div>
+                <div class="field">
+                  <label for="DRI">DRI</label>
+                  <input id="DRI" name="DRI" type="number" min="0" max="99" value="80" />
+                </div>
+                <div class="field">
+                  <label for="DEF">DEF</label>
+                  <input id="DEF" name="DEF" type="number" min="0" max="99" value="80" />
+                </div>
+                <div class="field">
+                  <label for="PHY">PHY</label>
+                  <input id="PHY" name="PHY" type="number" min="0" max="99" value="80" />
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button type="submit" id="createCardBtn" class="primary" disabled>+ Karte hinzufügen</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Kartenliste -->
+        <section class="card-list">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
             <h2>Erstellte Karten (online)</h2>
           </div>
           <div class="sort-controls">
             <button type="button" id="sortOvrDesc" class="sort-btn">OVR: hoch → niedrig</button>
             <button type="button" id="sortOvrAsc" class="sort-btn">OVR: niedrig → hoch</button>
           </div>
-        </div>
-        <div id="cardsContainer" class="cards-grid"></div>
-      </section>
-    </div>
-
-    <!-- Aufstellungs-Ansicht -->
-    <section id="lineupView" class="lineup-wrapper">
-      <div class="lineup-header">
-        <h2>5v5 Aufstellung</h2>
-        <p>Wähle 4 Feldspieler + 1 Torwart aus deinen Karten.</p>
-      </div>
-      <div class="pitch">
-        <!-- Torwart -->
-        <div class="lineup-row">
-          <div class="lineup-slot">
-            <label for="gkSelect">Torwart</label>
-            <select id="gkSelect">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="pitch-line"></div>
-
-        <!-- 4 Feldspieler -->
-        <div class="lineup-row">
-          <div class="lineup-slot">
-            <label for="p1Select">Spieler 1</label>
-            <select id="p1Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-          <div class="lineup-slot">
-            <label for="p2Select">Spieler 2</label>
-            <select id="p2Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="lineup-row">
-          <div class="lineup-slot">
-            <label for="p3Select">Spieler 3</label>
-            <select id="p3Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-          <div class="lineup-slot">
-            <label for="p4Select">Spieler 4</label>
-            <select id="p4Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="lineup-team-info">
-        <div>Team OVR (Durchschnitt der gewählten Karten):</div>
-        <div class="team-ovr-value" id="teamOvrValue">-</div>
+          <div id="cardsContainer" class="cards-grid"></div>
+        </section>
       </div>
     </section>
 
+    <section id="teamView" class="team-section" style="display:none">
+      <h2>Team-Aufstellung (5 vs 5)</h2>
+      <p class="subtitle">Zieh deine Spieler in die Positionen und speichere Teams.</p>
+      <div class="team-layout">
+        <div class="pitch">
+          <div class="pitch-row">
+            <div class="pitch-slot" data-slot="GK">
+              <div class="slot-label">TW</div>
+              <div class="slot-card">leer</div>
+            </div>
+          </div>
+          <div class="pitch-row">
+            <div class="pitch-slot" data-slot="P1">
+              <div class="slot-label">P1</div>
+              <div class="slot-card">leer</div>
+            </div>
+            <div class="pitch-slot" data-slot="P2">
+              <div class="slot-label">P2</div>
+              <div class="slot-card">leer</div>
+            </div>
+          </div>
+          <div class="pitch-row">
+            <div class="pitch-slot" data-slot="P3">
+              <div class="slot-label">P3</div>
+              <div class="slot-card">leer</div>
+            </div>
+            <div class="pitch-slot" data-slot="P4">
+              <div class="slot-label">P4</div>
+              <div class="slot-card">leer</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="team-panel">
+          <div class="team-form">
+            <h3>Aktuelles Team</h3>
+            <div class="field">
+              <label for="teamNameInput">Team-Name</label>
+              <input id="teamNameInput" type="text" placeholder="z.B. Team 1" />
+            </div>
+            <div class="field">
+              <label>Spieler für jede Position wählen</label>
+              <div class="slot-selects">
+                <div class="slot-select-row">
+                  <span>TW</span>
+                  <select class="slot-select" data-slot="GK">
+                    <option value="">— leer —</option>
+                  </select>
+                </div>
+                <div class="slot-select-row">
+                  <span>P1</span>
+                  <select class="slot-select" data-slot="P1">
+                    <option value="">— leer —</option>
+                  </select>
+                </div>
+                <div class="slot-select-row">
+                  <span>P2</span>
+                  <select class="slot-select" data-slot="P2">
+                    <option value="">— leer —</option>
+                  </select>
+                </div>
+                <div class="slot-select-row">
+                  <span>P3</span>
+                  <select class="slot-select" data-slot="P3">
+                    <option value="">— leer —</option>
+                  </select>
+                </div>
+                <div class="slot-select-row">
+                  <span>P4</span>
+                  <select class="slot-select" data-slot="P4">
+                    <option value="">— leer —</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="team-ovr-box">
+              <span>Team-OVR:</span>
+              <span id="teamOvrValue">-</span>
+            </div>
+            <div class="team-actions">
+              <button type="button" id="saveTeamBtn" class="sort-btn">Team speichern</button>
+              <button type="button" id="clearTeamBtn" class="sort-btn">Auswahl leeren</button>
+            </div>
+            <small>Nur Admin kann Teams speichern oder löschen.</small>
+          </div>
+
+          <div class="team-list">
+            <h3>Gespeicherte Teams</h3>
+            <div id="teamsContainer" class="teams-grid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- Firebase (compat) -->
@@ -914,13 +1064,18 @@
     const sortOvrDescBtn = document.getElementById("sortOvrDesc");
     const sortOvrAscBtn = document.getElementById("sortOvrAsc");
 
-    const viewCardsBtn = document.getElementById("viewCardsBtn");
-    const viewLineupBtn = document.getElementById("viewLineupBtn");
-    const cardsLayout = document.getElementById("cardsLayout");
-    const lineupView = document.getElementById("lineupView");
+    const cardsView = document.getElementById("cardsView");
+    const teamView = document.getElementById("teamView");
+    const viewButtons = document.querySelectorAll(".view-btn");
+    const teamNameInput = document.getElementById("teamNameInput");
+    const slotSelects = document.querySelectorAll(".slot-select");
+    const pitchSlots = document.querySelectorAll(".pitch-slot");
+    const teamOvrValue = document.getElementById("teamOvrValue");
+    const saveTeamBtn = document.getElementById("saveTeamBtn");
+    const clearTeamBtn = document.getElementById("clearTeamBtn");
+    const teamsContainer = document.getElementById("teamsContainer");
 
-    const lineupSelectIds = ["gkSelect", "p1Select", "p2Select", "p3Select", "p4Select"];
-    const teamOvrValueEl = document.getElementById("teamOvrValue");
+    const cardDataById = {};
 
     // Admin-Passwort (fest)
     const ADMIN_PASSWORD = "eierlecken";
@@ -935,33 +1090,19 @@
       document.querySelectorAll(".delete-btn").forEach(btn => { btn.disabled = !isAdmin; });
       document.querySelectorAll(".edit-btn").forEach(btn => { btn.disabled = !isAdmin; });
       document.querySelectorAll(".reset-btn").forEach(btn => { btn.disabled = !isAdmin; });
+      document.querySelectorAll(".delete-team-btn").forEach(btn => { btn.disabled = !isAdmin; });
     }
 
     adminLoginBtn.addEventListener("click", () => {
-      const entered = adminPasswordInput.value;
-      if (entered === ADMIN_PASSWORD) {
+      const pw = adminPasswordInput.value.trim();
+      if (pw === ADMIN_PASSWORD) {
         isAdmin = true;
-        updateAdminUI();
-        alert("Admin-Login erfolgreich.");
+        adminPasswordInput.value = "";
       } else {
-        alert("Falsches Admin-Passwort.");
+        isAdmin = false;
+        alert("Falsches Passwort. Keine Admin-Rechte.");
       }
-    });
-
-    // Views umschalten
-    viewCardsBtn.addEventListener("click", () => {
-      viewCardsBtn.classList.add("active-view");
-      viewLineupBtn.classList.remove("active-view");
-      cardsLayout.style.display = "";
-      lineupView.style.display = "none";
-    });
-
-    viewLineupBtn.addEventListener("click", () => {
-      viewLineupBtn.classList.add("active-view");
-      viewCardsBtn.classList.remove("active-view");
-      cardsLayout.style.display = "none";
-      lineupView.style.display = "block";
-      populateLineupSelects();
+      updateAdminUI();
     });
 
     // Firebase
@@ -1023,7 +1164,6 @@
 
       let ovr;
 
-      // ST / Flügel – sehr offensiv
       if (pos === "ST" || pos === "LF" || pos === "RF") {
         ovr =
           0.40 * s.SHO +
@@ -1031,39 +1171,27 @@
           0.20 * s.DRI +
           0.10 * s.PHY +
           0.05 * s.PAS;
-      }
-
-      // OM / LM / RM / ZM – Mittelfeld allround
-      else if (pos === "OM" || pos === "LM" || pos === "RM" || pos === "ZM") {
+      } else if (pos === "OM" || pos === "LM" || pos === "RM" || pos === "ZM") {
         ovr =
           0.30 * s.PAS +
           0.25 * s.DRI +
           0.20 * s.PAC +
           0.15 * s.SHO +
           0.10 * s.DEF;
-      }
-
-      // DM / IV / AV – defensiv
-      else if (pos === "DM" || pos === "IV" || pos === "AV") {
+      } else if (pos === "DM" || pos === "IV" || pos === "AV") {
         ovr =
           0.35 * s.DEF +
           0.25 * s.PHY +
           0.20 * s.PAC +
           0.10 * s.PAS +
           0.10 * s.DRI;
-      }
-
-      // TW
-      else if (pos === "TW") {
+      } else if (pos === "TW") {
         ovr =
           0.40 * s.DEF +
           0.30 * s.PHY +
           0.20 * s.PAC +
           0.10 * s.DRI;
-      }
-
-      // Fallback: einfacher Durchschnitt
-      else {
+      } else {
         const sum = STAT_KEYS.reduce((acc, key) => acc + (s[key] || 0), 0);
         ovr = sum / STAT_KEYS.length;
       }
@@ -1073,54 +1201,10 @@
 
     function emptyVotes() {
       const obj = {};
-      STAT_KEYS.forEach((k) => { obj[k] = 0; });
+      STAT_KEYS.forEach(k => obj[k] = 0);
       return obj;
     }
 
-    // Karte erstellen – nur Admin
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      if (!isAdmin) {
-        alert("Nur der Admin kann Karten erstellen.");
-        return;
-      }
-
-      const playerName = form.playerName.value.trim() || "Unbekannt";
-      const nation = form.nation.value.trim() || "";
-      const team = form.team.value.trim() || "";
-      const position = form.position.value || "";
-      const imageUrl = form.imageUrl.value.trim() || "";
-
-      const stats = {};
-      STAT_KEYS.forEach((key) => {
-        const value = Number(form[key].value);
-        stats[key] = Number.isFinite(value)
-          ? Math.min(99, Math.max(0, Math.round(value)))
-          : 0;
-      });
-
-      try {
-        await cardsRef.add({
-          name: playerName,
-          nation,
-          team,
-          position,
-          imageUrl,
-          stats,
-          votesUp: emptyVotes(),
-          votesDown: emptyVotes(),
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      } catch (err) {
-        console.error("Fehler beim Speichern:", err);
-        alert("Karte konnte nicht gespeichert werden :(");
-      }
-
-      form.reset();
-      STAT_KEYS.forEach((key) => { form[key].value = 80; });
-    });
-
-    // Live Karten – Docs zwischenspeichern
     cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
       currentDocs = [];
       snapshot.forEach((doc) => {
@@ -1131,7 +1215,12 @@
 
     function renderCards() {
       cardsContainer.innerHTML = "";
+      // Card-Cache leeren
+      for (const key in cardDataById) {
+        delete cardDataById[key];
+      }
 
+      // Kopie für Sortierung
       const docsToRender = [...currentDocs];
 
       if (currentSort === "ovr-desc" || currentSort === "ovr-asc") {
@@ -1140,21 +1229,26 @@
           const bData = b.data;
           const aOvr = calculateOverall(aData.stats || {}, aData.position || "");
           const bOvr = calculateOverall(bData.stats || {}, bData.position || "");
+
           return currentSort === "ovr-desc" ? bOvr - aOvr : aOvr - bOvr;
         });
       }
+      // wenn currentSort === "created" → Reihenfolge wie aus Firestore (createdAt)
 
       docsToRender.forEach(doc => {
         addCardToDOM(doc.id, doc.data);
       });
 
       updateAdminUI();
-      populateLineupSelects();
+      if (typeof updateTeamSlotOptions === "function") {
+        updateTeamSlotOptions();
+        updateTeamOvrFromSelects();
+      }
     }
 
     function initialsFromName(name) {
       const parts = name.trim().split(/\s+/);
-      if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
       return (parts[0][0] + parts[1][0]).toUpperCase();
     }
 
@@ -1173,6 +1267,12 @@
       card.dataset.id = id;
 
       const overall = calculateOverall(stats, position);
+
+      cardDataById[id] = { id, name, nation, team, position, stats, overall };
+      if (typeof updateTeamSlotOptions === "function") {
+        updateTeamSlotOptions();
+        updateTeamOvrFromSelects();
+      }
 
       card.innerHTML = `
         <div class="fut-card">
@@ -1216,8 +1316,7 @@
       const futStatsContainer = card.querySelector(".fut-stats");
       const votesList = card.querySelector(".votes-list");
 
-      const orderedStats = ["PAC","SHO","PAS","DRI","DEF","PHY"];
-
+      const orderedStats = ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"];
       const labelsHTML = orderedStats.map(k => `<span>${k}</span>`).join("");
       const valuesHTML = orderedStats.map(k => `<span>${stats[k] ?? 0}</span>`).join("");
 
@@ -1226,19 +1325,21 @@
         <div class="fut-stats-row values">${valuesHTML}</div>
       `;
 
-      STAT_KEYS.forEach((key) => {
+      orderedStats.forEach((key) => {
+        const up = votesUp[key] || 0;
+        const down = votesDown[key] || 0;
         const base = stats[key] ?? 0;
-        const up = votesUp[key] ?? 0;
-        const down = votesDown[key] ?? 0;
         const net = up - down;
-        const community = Math.max(0, Math.min(99, base + net));
+        const community = base + net;
 
+        const tendency = votesUp[key] - votesDown[key];
         let trendText;
         let trendClass;
-        if (net > 0) {
+
+        if (tendency > 0) {
           trendText = "↑ hoch";
           trendClass = "vote-up";
-        } else if (net < 0) {
+        } else if (tendency < 0) {
           trendText = "↓ runter";
           trendClass = "vote-down";
         } else {
@@ -1249,8 +1350,9 @@
         const voteRow = document.createElement("div");
         voteRow.className = "vote-row";
         voteRow.innerHTML = `
-          <div class="vote-main">
-            <span class="vote-label">${key}</span>
+          <div class="vote-label">${key}</div>
+          <div class="vote-values">
+            <span class="vote-label"></span>
             <span class="vote-values">
               ${base}${net !== 0 ? ` → ${community}` : ""}
               ${net !== 0 ? `<span class="vote-delta">${net > 0 ? "+" + net : net}</span>` : ""}
@@ -1287,7 +1389,6 @@
         const reset = e.target.closest(".reset-btn");
         const voteBtn = e.target.closest(".vote-btn");
 
-        // Löschen
         if (del) {
           if (!isAdmin) {
             alert("Nur der Admin kann Karten löschen.");
@@ -1304,7 +1405,6 @@
           return;
         }
 
-        // Votes zurücksetzen
         if (reset) {
           if (!isAdmin) {
             alert("Nur der Admin kann Votes zurücksetzen.");
@@ -1325,17 +1425,15 @@
           return;
         }
 
-        // Bearbeiten der Grundwerte + Name/Nation/Team/Position
         if (edit) {
           if (!isAdmin) {
             alert("Nur der Admin kann Stats bearbeiten.");
             return;
           }
-          await editCardStats(card.dataset.id);
+          await editCardStats(card.dataset.id, data);
           return;
         }
 
-        // Voting
         if (!voteBtn) return;
         const statKey = voteBtn.getAttribute("data-stat");
         const isUpVote = voteBtn.classList.contains("up");
@@ -1350,56 +1448,97 @@
         try {
           await cardsRef.doc(card.dataset.id).update(updateData);
         } catch (err) {
-          console.error("Fehler beim Updaten der Votes:", err);
+          console.error("Fehler beim Voting:", err);
+          alert("Vote konnte nicht gespeichert werden :(");
         }
       });
 
       cardsContainer.appendChild(card);
     }
 
-    // Admin-Stat-Editor (Grundwerte + Name/Nation/Team/Pos ändern)
-    async function editCardStats(cardId) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!isAdmin) {
+        alert("Nur der Admin kann Karten erstellen.");
+        return;
+      }
+
+      createCardBtn.disabled = true;
+
+      const playerName = form.playerName.value.trim() || "Unbekannt";
+      const nation = form.nation.value.trim() || "";
+      const team = form.team.value.trim() || "";
+      const position = form.position.value || "";
+      const imageUrl = form.imageUrl.value.trim() || "";
+
+      const stats = {};
+      STAT_KEYS.forEach((key) => {
+        const value = Number(form[key].value);
+        stats[key] = Number.isFinite(value)
+          ? Math.min(99, Math.max(0, Math.round(value)))
+          : 0;
+      });
+
       try {
-        const docSnap = await cardsRef.doc(cardId).get();
-        if (!docSnap.exists) return;
+        await cardsRef.add({
+          name: playerName,
+          nation,
+          team,
+          position,
+          imageUrl,
+          stats,
+          votesUp: emptyVotes(),
+          votesDown: emptyVotes(),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
-        const data = docSnap.data();
-        const stats = data.stats || {};
+        form.reset();
+        STAT_KEYS.forEach((key) => { form[key].value = 80; });
+      } catch (err) {
+        console.error("Fehler beim Speichern:", err);
+        alert("Karte konnte nicht gespeichert werden :(");
+      } finally {
+        createCardBtn.disabled = !isAdmin;
+      }
+    });
 
-        const currentName = data.name || "";
-        const currentNation = data.nation || "";
-        const currentTeam = data.team || "";
-        const currentPosition = data.position || "";
+    async function editCardStats(cardId, data) {
+      const currentName = data.name || "";
+      const currentNation = data.nation || "";
+      const currentTeam = data.team || "";
+      const currentPosition = data.position || "";
+      const stats = data.stats || {};
 
-        let newName = prompt("Neuer Spielername:", currentName);
-        if (newName === null) return;
-        newName = newName.trim() || currentName;
+      let newName = prompt("Neuer Spielername:", currentName);
+      if (newName === null) return;
+      newName = newName.trim() || currentName;
 
-        let newNation = prompt("Neue Nation:", currentNation);
-        if (newNation === null) return;
-        newNation = newNation.trim();
+      let newNation = prompt("Neue Nation:", currentNation);
+      if (newNation === null) return;
+      newNation = newNation.trim();
 
-        let newTeam = prompt("Neue Mannschaft / Verein:", currentTeam);
-        if (newTeam === null) return;
-        newTeam = newTeam.trim();
+      let newTeam = prompt("Neue Mannschaft / Verein:", currentTeam);
+      if (newTeam === null) return;
+      newTeam = newTeam.trim();
 
-        let newPosition = prompt("Neue Position (z.B. ST, ZM, IV, TW):", currentPosition);
-        if (newPosition === null) return;
-        newPosition = newPosition.trim().toUpperCase();
+      let newPosition = prompt("Neue Position (z.B. ST, ZM, IV, TW):", currentPosition);
+      if (newPosition === null) return;
+      newPosition = newPosition.trim().toUpperCase();
 
-        const newStats = {};
-        for (const key of STAT_KEYS) {
-          const current = stats[key] ?? 0;
-          const input = prompt(`Neuer Grundwert für ${key} (0–99):`, current);
-          if (input === null) {
-            return;
-          }
-          let num = Number(input);
-          if (!Number.isFinite(num)) num = current;
-          num = Math.max(0, Math.min(99, Math.round(num)));
-          newStats[key] = num;
+      const newStats = {};
+      for (const key of STAT_KEYS) {
+        const current = stats[key] ?? 0;
+        const input = prompt(`Neuer Grundwert für ${key} (0–99):`, current);
+        if (input === null) {
+          return;
         }
+        let num = Number(input);
+        if (!Number.isFinite(num)) num = current;
+        num = Math.max(0, Math.min(99, Math.round(num)));
+        newStats[key] = num;
+      }
 
+      try {
         await cardsRef.doc(cardId).update({
           name: newName,
           nation: newNation,
@@ -1413,66 +1552,254 @@
       }
     }
 
-    // Lineup: Selects mit Karten füllen
-    function populateLineupSelects() {
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-
-        const previous = sel.value;
-        sel.innerHTML = '<option value="">– Karte wählen –</option>';
-
-        currentDocs.forEach((doc) => {
-          const d = doc.data;
-          const ovr = calculateOverall(d.stats || {}, d.position || "");
-          const label = `${d.name || "Unbekannt"} (${d.position || "POS"}, OVR ${ovr})`;
-          const opt = document.createElement("option");
-          opt.value = doc.id;
-          opt.textContent = label;
-          sel.appendChild(opt);
+    // --- View switch zwischen Karten & Team ---
+    if (cardsView && teamView && viewButtons && viewButtons.length) {
+      viewButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const view = btn.getAttribute("data-view");
+          viewButtons.forEach((b) => b.classList.remove("view-btn-active"));
+          btn.classList.add("view-btn-active");
+          if (view === "team") {
+            cardsView.style.display = "none";
+            teamView.style.display = "";
+          } else {
+            cardsView.style.display = "";
+            teamView.style.display = "none";
+          }
         });
+      });
+    }
 
-        if (previous) {
-          sel.value = previous;
+    // --- Team-Builder (5 vs 5, 4 Feldspieler + TW) ---
+    const teamsRef = db.collection("teams");
+
+    function updateTeamSlotOptions() {
+      if (!slotSelects || !slotSelects.length) return;
+
+      const options = Object.values(cardDataById).map((card) => {
+        const parts = [card.name];
+        if (card.position) parts.push(card.position);
+        if (Number.isFinite(card.overall)) parts.push(card.overall);
+        return {
+          id: card.id,
+          label: parts.join(" | "),
+        };
+      });
+
+      slotSelects.forEach((select) => {
+        const current = select.value;
+        select.innerHTML = '<option value="">— leer —</option>';
+        options.forEach((opt) => {
+          const o = document.createElement("option");
+          o.value = opt.id;
+          o.textContent = opt.label;
+          select.appendChild(o);
+        });
+        if (current && cardDataById[current]) {
+          select.value = current;
         }
       });
 
-      updateTeamOvr();
+      updateTeamSlotsFromSelects();
     }
 
-    // Team-OVR berechnen
-    function updateTeamOvr() {
-      let total = 0;
-      let count = 0;
+    function updateTeamSlotsFromSelects() {
+      if (!pitchSlots || !pitchSlots.length) return;
 
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-        const cardId = sel.value;
-        if (!cardId) return;
-
-        const doc = currentDocs.find(d => d.id === cardId);
-        if (!doc) return;
-
-        const d = doc.data;
-        const ovr = calculateOverall(d.stats || {}, d.position || "");
-        total += ovr;
-        count++;
+      pitchSlots.forEach((slot) => {
+        const slotKey = slot.getAttribute("data-slot");
+        const select = document.querySelector('.slot-select[data-slot="' + slotKey + '"]');
+        const slotCardDiv = slot.querySelector(".slot-card");
+        if (!slotCardDiv || !select) return;
+        const cardId = select.value;
+        if (!cardId || !cardDataById[cardId]) {
+          slotCardDiv.textContent = "leer";
+        } else {
+          const card = cardDataById[cardId];
+          slotCardDiv.textContent =
+            card.name + (card.position ? " (" + card.position + ")" : "");
+        }
       });
 
-      if (count === 0) {
-        teamOvrValueEl.textContent = "-";
+      updateTeamOvrFromSelects();
+    }
+
+    function updateTeamOvrFromSelects() {
+      if (!teamOvrValue) return;
+      const overalls = [];
+      if (slotSelects && slotSelects.length) {
+        slotSelects.forEach((select) => {
+          const id = select.value;
+          if (id && cardDataById[id] && Number.isFinite(cardDataById[id].overall)) {
+            overalls.push(cardDataById[id].overall);
+          }
+        });
+      }
+      if (!overalls.length) {
+        teamOvrValue.textContent = "-";
       } else {
-        teamOvrValueEl.textContent = Math.round(total / count);
+        const sum = overalls.reduce((a, b) => a + b, 0);
+        teamOvrValue.textContent = Math.round(sum / overalls.length);
       }
     }
 
-    // Change Listener für Lineup-Selects
-    lineupSelectIds.forEach((id) => {
-      const sel = document.getElementById(id);
-      if (sel) {
-        sel.addEventListener("change", updateTeamOvr);
-      }
+    if (slotSelects && slotSelects.length) {
+      slotSelects.forEach((select) => {
+        select.addEventListener("change", () => {
+          updateTeamSlotsFromSelects();
+        });
+      });
+    }
+
+    if (clearTeamBtn) {
+      clearTeamBtn.addEventListener("click", () => {
+        slotSelects.forEach((select) => {
+          select.value = "";
+        });
+        updateTeamSlotsFromSelects();
+      });
+    }
+
+    if (saveTeamBtn) {
+      saveTeamBtn.addEventListener("click", async () => {
+        if (!isAdmin) {
+          alert("Nur der Admin kann Teams speichern.");
+          return;
+        }
+        const name = (teamNameInput.value || "").trim() || "Team";
+        const slots = {};
+        if (slotSelects && slotSelects.length) {
+          slotSelects.forEach((select) => {
+            const key = select.getAttribute("data-slot");
+            slots[key] = select.value || null;
+          });
+        }
+        const anyPlayer = Object.values(slots).some((v) => v);
+        if (!anyPlayer) {
+          alert("Wähle mindestens einen Spieler aus, bevor du speicherst.");
+          return;
+        }
+
+        try {
+          await teamsRef.add({
+            name,
+            slots,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          if (teamNameInput) teamNameInput.value = "";
+        } catch (err) {
+          console.error("Fehler beim Speichern des Teams:", err);
+          alert("Team konnte nicht gespeichert werden :(");
+        }
+      });
+    }
+
+    function renderTeams(snapshot) {
+      if (!teamsContainer) return;
+      teamsContainer.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const teamId = doc.id;
+        const name = data.name || "Team";
+        const slots = data.slots || {};
+        const playerNames = [];
+        const overalls = [];
+
+        Object.keys(slots).forEach((slotKey) => {
+          const cardId = slots[slotKey];
+          if (cardId && cardDataById[cardId]) {
+            const c = cardDataById[cardId];
+            playerNames.push(
+              slotKey +
+                ": " +
+                c.name +
+                (c.position ? " (" + c.position + ")" : "")
+            );
+            if (Number.isFinite(c.overall)) {
+              overalls.push(c.overall);
+            }
+          } else if (cardId) {
+            playerNames.push(slotKey + ": [Karte fehlt]");
+          }
+        });
+
+        let teamOvr = "-";
+        if (overalls.length) {
+          const sum = overalls.reduce((a, b) => a + b, 0);
+          teamOvr = Math.round(sum / overalls.length);
+        }
+
+        const cardDiv = document.createElement("div");
+        cardDiv.className = "team-card";
+        cardDiv.innerHTML = `
+          <div class="team-card-header">
+            <h4>${escapeHtml(name)}</h4>
+            <div class="team-card-ovr">${teamOvr}</div>
+          </div>
+          <div class="team-card-body">
+            ${
+              playerNames.length
+                ? playerNames.map(escapeHtml).join("<br/>")
+                : "Keine Spieler zugewiesen."
+            }
+          </div>
+          <div class="team-card-actions">
+            <button type="button" class="small-btn load-team-btn">Laden</button>
+            <button type="button" class="small-btn delete-team-btn">Löschen</button>
+          </div>
+        `;
+
+        const loadBtn = cardDiv.querySelector(".load-team-btn");
+        const delBtn = cardDiv.querySelector(".delete-team-btn");
+
+        loadBtn.addEventListener("click", () => {
+          if (slotSelects && slotSelects.length) {
+            slotSelects.forEach((select) => {
+              const key = select.getAttribute("data-slot");
+              const val = slots[key] || "";
+              select.value = val && cardDataById[val] ? val : "";
+            });
+          }
+          updateTeamSlotsFromSelects();
+          if (teamNameInput) {
+            teamNameInput.value = name;
+          }
+          if (cardsView && teamView) {
+            cardsView.style.display = "none";
+            teamView.style.display = "";
+            if (viewButtons && viewButtons.length) {
+              viewButtons.forEach((b) => b.classList.remove("view-btn-active"));
+              const btnTeam = document.querySelector(
+                '.view-btn[data-view="team"]'
+              );
+              if (btnTeam) btnTeam.classList.add("view-btn-active");
+            }
+          }
+        });
+
+        delBtn.addEventListener("click", async () => {
+          if (!isAdmin) {
+            alert("Nur der Admin kann Teams löschen.");
+            return;
+          }
+          const really = confirm("Dieses Team wirklich löschen?");
+          if (!really) return;
+          try {
+            await teamsRef.doc(teamId).delete();
+          } catch (err) {
+            console.error("Fehler beim Löschen des Teams:", err);
+            alert("Team konnte nicht gelöscht werden :(");
+          }
+        });
+
+        teamsContainer.appendChild(cardDiv);
+      });
+      updateAdminUI();
+    }
+
+    // Teams live aus Firestore laden
+    teamsRef.orderBy("createdAt").onSnapshot((snapshot) => {
+      renderTeams(snapshot);
     });
 
     // initial
