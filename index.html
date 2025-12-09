@@ -87,7 +87,7 @@
       font-weight: 600;
     }
 
-    /* View Toggle */
+    /* Navigation zwischen Karten & Aufstellung */
     .view-toggle {
       display: flex;
       gap: 8px;
@@ -102,6 +102,10 @@
       color: #e5e7eb;
       cursor: pointer;
       transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .view-btn:hover {
       background: rgba(30,64,175,0.9);
@@ -526,7 +530,6 @@
     .trend {
       font-size: 0.7rem;
     }
-
     .vote-tendency {
       font-weight: 700;
       margin-left: 6px;
@@ -568,191 +571,41 @@
       box-shadow: none;
     }
 
-    /* Aufstellungs-Ansicht */
-    .lineup-wrapper {
-      margin-top: 12px;
-      background: radial-gradient(circle at top, rgba(56,189,248,0.15), transparent 55%),
-                  radial-gradient(circle at bottom, rgba(34,197,94,0.15), transparent 55%);
-      border-radius: 18px;
-      border: 1px solid rgba(148,163,184,0.4);
-      padding: 16px;
-      display: none; /* Start: versteckt */
-    }
-    .lineup-header h2 {
-      font-size: 1rem;
-      margin-bottom: 4px;
-    }
-    .lineup-header p {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-bottom: 10px;
-    }
-
-    /* NEU: Team-Management-Bar */
-    .lineup-team-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-      margin-bottom: 10px;
-      font-size: 0.8rem;
-    }
-    .lineup-team-bar label {
-      color: #e5e7eb;
-    }
-    .lineup-team-bar select,
-    .lineup-team-bar input {
-      padding: 5px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.9);
-      color: #e5e7eb;
-      font-size: 0.8rem;
-      outline: none;
-    }
-    .lineup-team-bar input {
-      min-width: 120px;
-    }
-    .team-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.85);
-      padding: 4px 10px;
-      font-size: 0.75rem;
-      color: #e5e7eb;
-      cursor: pointer;
-      transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
-    }
-    .team-btn:hover {
-      background: rgba(30,64,175,0.9);
-      transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(129,140,248,0.7);
-    }
-    .team-btn.delete {
-      border-color: rgba(248,113,113,0.8);
-      color: #fecaca;
-    }
-
-    .pitch {
-      position: relative;
-      background: linear-gradient(180deg,#064e3b,#022c22);
-      border-radius: 18px;
-      border: 1px solid rgba(16,185,129,0.6);
-      padding: 14px 10px 18px;
-      min-height: 260px;
-      box-shadow: inset 0 0 0 2px rgba(34,197,94,0.4);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    .pitch-line {
-      border-top: 1px solid rgba(209,250,229,0.4);
-      margin: 0 8px;
-    }
-    .lineup-row {
-      display: flex;
-      justify-content: space-around;
-      gap: 8px;
-      padding: 4px 4px 0;
-      flex-wrap: wrap;
-    }
-    .lineup-slot {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      min-width: 120px;
-      max-width: 160px;
-    }
-    .lineup-slot label {
-      font-size: 0.75rem;
-      color: #d1fae5;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .lineup-slot select {
-      width: 100%;
-      padding: 5px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(16,185,129,0.7);
-      background: rgba(15,23,42,0.9);
-      color: #ecfdf5;
-      font-size: 0.8rem;
-      outline: none;
-    }
-    .lineup-slot select:focus {
-      box-shadow: 0 0 0 1px rgba(52,211,153,0.8);
-    }
-    .lineup-team-info {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .lineup-team-info span {
-      font-weight: 600;
-    }
-    .team-ovr-value {
-      font-family: "Bebas Neue", sans-serif;
-      font-size: 1.8rem;
-      letter-spacing: 0.06em;
-      color: #bbf7d0;
-    }
-
     @media (max-width: 900px) {
-      /* Nur noch eine Spalte: erst Formular, dann Karten */
       .layout {
         grid-template-columns: minmax(0, 1fr);
       }
-
-      /* Karten-Box etwas Abstand nach oben und volle Breite */
       .cards-wrapper {
         margin-top: 16px;
       }
-
-      /* Karten in der Mitte zeigen und nicht so schmal quetschen */
       .cards-grid {
         grid-template-columns: minmax(0, 1fr);
         justify-items: center;
       }
-
-      /* Die eigentliche FUT-Karte nicht zu breit, schön zentriert */
       .fut-card {
         max-width: 280px;
         margin: 0 auto;
       }
-
-      /* Name etwas höher & kleiner, damit er nicht in die Stats läuft */
       .fut-name {
         top: 63.5%;
         font-size: 1.2rem;
       }
-
-      /* Stats etwas nach unten schieben */
       .fut-stats {
         bottom: 20%;
       }
-
-      /* Stat-Zahlen und Labels etwas kleiner auf Handy */
       .fut-stats-row.values span {
         position: relative;
         font-size: 1.3rem !important;
         top: 6px;
       }
-
       .fut-stats-row.labels span {
         position: relative;
         font-size: 0.7rem !important;
         top: 4px;
       }
-
       .fut-ovr {
         font-size: 2.4rem;
       }
-
       .fut-pos {
         left: 12%;
         top: 28%;
@@ -762,9 +615,6 @@
         width: 130px;
         height: 130px;
         top: 29.5%;
-      }
-      .pitch {
-        min-height: 230px;
       }
     }
   </style>
@@ -786,14 +636,14 @@
       </div>
     </div>
 
-    <!-- View Toggle -->
+    <!-- Navigation -->
     <div class="view-toggle">
-      <button type="button" id="viewCardsBtn" class="view-btn active-view">Karten</button>
-      <button type="button" id="viewLineupBtn" class="view-btn">Aufstellung (5v5)</button>
+      <a href="index.html" class="view-btn active-view">Karten</a>
+      <a href="aufstellung.html" class="view-btn">Aufstellung (5v5)</a>
     </div>
 
     <!-- Hauptlayout: Formular + Karten -->
-    <div class="layout" id="cardsLayout">
+    <div class="layout">
       <!-- Formular -->
       <section class="card-form">
         <h2>Neue Karte erstellen</h2>
@@ -883,80 +733,6 @@
         <div id="cardsContainer" class="cards-grid"></div>
       </section>
     </div>
-
-    <!-- Aufstellungs-Ansicht -->
-    <section id="lineupView" class="lineup-wrapper">
-      <div class="lineup-header">
-        <h2>5v5 Aufstellung</h2>
-        <p>Wähle 4 Feldspieler + 1 Torwart aus deinen Karten.</p>
-      </div>
-
-      <!-- NEU: Team-Verwaltung -->
-      <div class="lineup-team-bar">
-        <label for="teamSelect">Gespeicherte Teams:</label>
-        <select id="teamSelect">
-          <option value="">– Team wählen –</option>
-        </select>
-
-        <label for="teamNameInput">Name:</label>
-        <input id="teamNameInput" type="text" placeholder="z.B. Team 1" />
-
-        <button type="button" id="newTeamBtn" class="team-btn">Neu</button>
-        <button type="button" id="saveTeamBtn" class="team-btn">Speichern</button>
-        <button type="button" id="deleteTeamBtn" class="team-btn delete">Löschen</button>
-      </div>
-
-      <div class="pitch">
-        <!-- Torwart -->
-        <div class="lineup-row">
-          <div class="lineup-slot">
-            <label for="gkSelect">Torwart</label>
-            <select id="gkSelect">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="pitch-line"></div>
-
-        <!-- 4 Feldspieler -->
-        <div class="lineup-row">
-          <div class="lineup-slot">
-            <label for="p1Select">Spieler 1</label>
-            <select id="p1Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-          <div class="lineup-slot">
-            <label for="p2Select">Spieler 2</label>
-            <select id="p2Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="lineup-row">
-          <div class="lineup-slot">
-            <label for="p3Select">Spieler 3</label>
-            <select id="p3Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-          <div class="lineup-slot">
-            <label for="p4Select">Spieler 4</label>
-            <select id="p4Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="lineup-team-info">
-        <div>Team OVR (Durchschnitt der gewählten Karten):</div>
-        <div class="team-ovr-value" id="teamOvrValue">-</div>
-      </div>
-    </section>
-
   </div>
 
   <!-- Firebase (compat) -->
@@ -976,31 +752,11 @@
     const sortOvrDescBtn = document.getElementById("sortOvrDesc");
     const sortOvrAscBtn = document.getElementById("sortOvrAsc");
 
-    const viewCardsBtn = document.getElementById("viewCardsBtn");
-    const viewLineupBtn = document.getElementById("viewLineupBtn");
-    const cardsLayout = document.getElementById("cardsLayout");
-    const lineupView = document.getElementById("lineupView");
-
-    const lineupSelectIds = ["gkSelect", "p1Select", "p2Select", "p3Select", "p4Select"];
-    const teamOvrValueEl = document.getElementById("teamOvrValue");
-
-    // NEU: Team-UI-Elemente
-    const teamSelect = document.getElementById("teamSelect");
-    const teamNameInput = document.getElementById("teamNameInput");
-    const newTeamBtn = document.getElementById("newTeamBtn");
-    const saveTeamBtn = document.getElementById("saveTeamBtn");
-    const deleteTeamBtn = document.getElementById("deleteTeamBtn");
-
-    // Admin-Passwort (fest)
     const ADMIN_PASSWORD = "eierlecken";
 
     let currentSort = "created"; // oder "ovr-desc" / "ovr-asc"
     let currentDocs = [];
     let isAdmin = false;
-
-    // NEU: Lineup-State
-    let currentLineups = [];
-    let currentLineupId = null;
 
     function updateAdminUI() {
       adminStatusText.textContent = isAdmin ? "Admin" : "nicht eingeloggt";
@@ -1021,23 +777,6 @@
       }
     });
 
-    // Views umschalten
-    viewCardsBtn.addEventListener("click", () => {
-      viewCardsBtn.classList.add("active-view");
-      viewLineupBtn.classList.remove("active-view");
-      cardsLayout.style.display = "";
-      lineupView.style.display = "none";
-    });
-
-    viewLineupBtn.addEventListener("click", () => {
-      viewLineupBtn.classList.add("active-view");
-      viewCardsBtn.classList.remove("active-view");
-      cardsLayout.style.display = "none";
-      lineupView.style.display = "block";
-      populateLineupSelects();
-    });
-
-    // Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDPV1BoQLODeFcJea9GJ9TQFRYv_k6Jo00",
       authDomain: "karten-creator.firebaseapp.com",
@@ -1049,13 +788,10 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const cardsRef = db.collection("cards");
-    const lineupsRef = db.collection("lineups");
 
-    // Auth & Storage
     const auth = firebase.auth();
     const storage = firebase.storage();
 
-    // Anonyme Anmeldung
     auth.signInAnonymously()
       .then(() => {
         console.log("Anonym angemeldet");
@@ -1097,7 +833,6 @@
 
       let ovr;
 
-      // ST / Flügel – sehr offensiv
       if (pos === "ST" || pos === "LF" || pos === "RF") {
         ovr =
           0.40 * s.SHO +
@@ -1105,39 +840,27 @@
           0.20 * s.DRI +
           0.10 * s.PHY +
           0.05 * s.PAS;
-      }
-
-      // OM / LM / RM / ZM – Mittelfeld allround
-      else if (pos === "OM" || pos === "LM" || pos === "RM" || pos === "ZM") {
+      } else if (pos === "OM" || pos === "LM" || pos === "RM" || pos === "ZM") {
         ovr =
           0.30 * s.PAS +
           0.25 * s.DRI +
           0.20 * s.PAC +
           0.15 * s.SHO +
           0.10 * s.DEF;
-      }
-
-      // DM / IV / AV – defensiv
-      else if (pos === "DM" || pos === "IV" || pos === "AV") {
+      } else if (pos === "DM" || pos === "IV" || pos === "AV") {
         ovr =
           0.35 * s.DEF +
           0.25 * s.PHY +
           0.20 * s.PAC +
           0.10 * s.PAS +
           0.10 * s.DRI;
-      }
-
-      // TW
-      else if (pos === "TW") {
+      } else if (pos === "TW") {
         ovr =
           0.40 * s.DEF +
           0.30 * s.PHY +
           0.20 * s.PAC +
           0.10 * s.DRI;
-      }
-
-      // Fallback: einfacher Durchschnitt
-      else {
+      } else {
         const sum = STAT_KEYS.reduce((acc, key) => acc + (s[key] || 0), 0);
         ovr = sum / STAT_KEYS.length;
       }
@@ -1151,7 +874,6 @@
       return obj;
     }
 
-    // Karte erstellen – nur Admin
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!isAdmin) {
@@ -1194,7 +916,6 @@
       STAT_KEYS.forEach((key) => { form[key].value = 80; });
     });
 
-    // Live Karten – Docs zwischenspeichern
     cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
       currentDocs = [];
       snapshot.forEach((doc) => {
@@ -1203,14 +924,11 @@
       renderCards();
     });
 
-    // Live Lineups
-    lineupsRef.orderBy("createdAt").onSnapshot((snapshot) => {
-      currentLineups = [];
-      snapshot.forEach((doc) => {
-        currentLineups.push({ id: doc.id, data: doc.data() });
-      });
-      renderLineupList();
-    });
+    function initialsFromName(name) {
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
 
     function renderCards() {
       cardsContainer.innerHTML = "";
@@ -1232,13 +950,6 @@
       });
 
       updateAdminUI();
-      populateLineupSelects();
-    }
-
-    function initialsFromName(name) {
-      const parts = name.trim().split(/\s+/);
-      if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
-      return (parts[0][0] + parts[1][0]).toUpperCase();
     }
 
     function addCardToDOM(id, data) {
@@ -1370,7 +1081,6 @@
         const reset = e.target.closest(".reset-btn");
         const voteBtn = e.target.closest(".vote-btn");
 
-        // Löschen
         if (del) {
           if (!isAdmin) {
             alert("Nur der Admin kann Karten löschen.");
@@ -1387,7 +1097,6 @@
           return;
         }
 
-        // Votes zurücksetzen
         if (reset) {
           if (!isAdmin) {
             alert("Nur der Admin kann Votes zurücksetzen.");
@@ -1408,7 +1117,6 @@
           return;
         }
 
-        // Bearbeiten der Grundwerte + Name/Nation/Team/Position
         if (edit) {
           if (!isAdmin) {
             alert("Nur der Admin kann Stats bearbeiten.");
@@ -1418,7 +1126,6 @@
           return;
         }
 
-        // Voting
         if (!voteBtn) return;
         const statKey = voteBtn.getAttribute("data-stat");
         const isUpVote = voteBtn.classList.contains("up");
@@ -1440,7 +1147,6 @@
       cardsContainer.appendChild(card);
     }
 
-    // Admin-Stat-Editor (Grundwerte + Name/Nation/Team/Pos ändern)
     async function editCardStats(cardId) {
       try {
         const docSnap = await cardsRef.doc(cardId).get();
@@ -1496,190 +1202,6 @@
       }
     }
 
-    // Lineup: Selects mit Karten füllen
-    function populateLineupSelects() {
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-
-        const previous = sel.value;
-        sel.innerHTML = '<option value="">– Karte wählen –</option>';
-
-        currentDocs.forEach((doc) => {
-          const d = doc.data;
-          const ovr = calculateOverall(d.stats || {}, d.position || "");
-          const label = `${d.name || "Unbekannt"} (${d.position || "POS"}, OVR ${ovr})`;
-          const opt = document.createElement("option");
-          opt.value = doc.id;
-          opt.textContent = label;
-          sel.appendChild(opt);
-        });
-
-        if (previous) {
-          sel.value = previous;
-        }
-      });
-
-      updateTeamOvr();
-    }
-
-    // Team-OVR berechnen
-    function updateTeamOvr() {
-      let total = 0;
-      let count = 0;
-
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-        const cardId = sel.value;
-        if (!cardId) return;
-
-        const doc = currentDocs.find(d => d.id === cardId);
-        if (!doc) return;
-
-        const d = doc.data;
-        const ovr = calculateOverall(d.stats || {}, d.position || "");
-        total += ovr;
-        count++;
-      });
-
-      if (count === 0) {
-        teamOvrValueEl.textContent = "-";
-      } else {
-        teamOvrValueEl.textContent = Math.round(total / count);
-      }
-    }
-
-    // Change Listener für Lineup-Selects
-    lineupSelectIds.forEach((id) => {
-      const sel = document.getElementById(id);
-      if (sel) {
-        sel.addEventListener("change", updateTeamOvr);
-      }
-    });
-
-    // NEU: Lineup-Liste rendern
-    function renderLineupList() {
-      if (!teamSelect) return;
-      const prevId = currentLineupId;
-      teamSelect.innerHTML = '<option value="">– Team wählen –</option>';
-
-      currentLineups.forEach((entry) => {
-        const opt = document.createElement("option");
-        opt.value = entry.id;
-        opt.textContent = entry.data.name || "Ohne Name";
-        teamSelect.appendChild(opt);
-      });
-
-      if (prevId) {
-        teamSelect.value = prevId;
-      }
-    }
-
-    // NEU: Team laden wenn gewählt
-    teamSelect.addEventListener("change", () => {
-      const id = teamSelect.value;
-      if (!id) {
-        currentLineupId = null;
-        teamNameInput.value = "";
-        // Slots nicht automatisch löschen, nur Auswahl des Teams zurücksetzen
-        return;
-      }
-      const lineup = currentLineups.find(l => l.id === id);
-      if (!lineup) return;
-
-      currentLineupId = id;
-      teamNameInput.value = lineup.data.name || "";
-      const slots = lineup.data.slots || {};
-
-      lineupSelectIds.forEach((slotId) => {
-        const sel = document.getElementById(slotId);
-        if (!sel) return;
-        const cardId = slots[slotId] || "";
-        sel.value = cardId || "";
-      });
-
-      updateTeamOvr();
-    });
-
-    // NEU: Neues Team
-    newTeamBtn.addEventListener("click", () => {
-      currentLineupId = null;
-      if (teamSelect) teamSelect.value = "";
-      teamNameInput.value = "";
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        if (sel) sel.value = "";
-      });
-      updateTeamOvr();
-    });
-
-    // NEU: Team speichern (neu oder update)
-    saveTeamBtn.addEventListener("click", async () => {
-      const name = teamNameInput.value.trim();
-      if (!name) {
-        alert("Bitte gib einen Teamnamen ein.");
-        return;
-      }
-
-      const slots = {};
-      let hasAny = false;
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        const val = sel ? sel.value : "";
-        if (val) {
-          slots[id] = val;
-          hasAny = true;
-        }
-      });
-
-      if (!hasAny) {
-        alert("Wähle mindestens eine Karte für das Team aus.");
-        return;
-      }
-
-      try {
-        if (currentLineupId) {
-          await lineupsRef.doc(currentLineupId).update({
-            name,
-            slots
-          });
-        } else {
-          const docRef = await lineupsRef.add({
-            name,
-            slots,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          currentLineupId = docRef.id;
-          teamSelect.value = docRef.id;
-        }
-      } catch (err) {
-        console.error("Fehler beim Speichern des Teams:", err);
-        alert("Team konnte nicht gespeichert werden :(");
-      }
-    });
-
-    // NEU: Team löschen
-    deleteTeamBtn.addEventListener("click", async () => {
-      if (!currentLineupId) {
-        alert("Kein Team ausgewählt.");
-        return;
-      }
-      const really = confirm("Willst du dieses Team wirklich löschen?");
-      if (!really) return;
-
-      try {
-        await lineupsRef.doc(currentLineupId).delete();
-        currentLineupId = null;
-        teamSelect.value = "";
-        teamNameInput.value = "";
-      } catch (err) {
-        console.error("Fehler beim Löschen des Teams:", err);
-        alert("Team konnte nicht gelöscht werden :(");
-      }
-    });
-
-    // initial
     updateAdminUI();
   </script>
 </body>
