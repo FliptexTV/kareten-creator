@@ -632,7 +632,7 @@
   <div class="container">
     <h1>FIFA Karten - Übersicht</h1>
     <p class="subtitle">
-      Created by Bator
+      Created by Bator&ChatGPT Abi
     </p>
 
     <!-- Admin Login -->
@@ -1187,32 +1187,65 @@
     }
 
     // Admin-Stat-Editor (Grundwerte ändern)
-    async function editCardStats(cardId) {
-      try {
-        const docSnap = await cardsRef.doc(cardId).get();
-        if (!docSnap.exists) return;
-        const data = docSnap.data();
-        const stats = data.stats || {};
-        const newStats = {};
+	async function editCardStats(cardId) {
+	try {
+		const docSnap = await cardsRef.doc(cardId).get();
+		if (!docSnap.exists) return;
+	
+		const data = docSnap.data();
+		const stats = data.stats || {};
+	
+		// Aktuelle Werte holen
+		const currentName = data.name || "";
+		const currentNation = data.nation || "";
+		const currentTeam = data.team || "";
+		const currentPosition = data.position || "";
+	
+		// 1) Text-Felder bearbeiten
+		let newName = prompt("Neuer Spielername:", currentName);
+		if (newName === null) return; // Abgebrochen
+		newName = newName.trim() || currentName;
+	
+		let newNation = prompt("Neue Nation:", currentNation);
+		if (newNation === null) return;
+		newNation = newNation.trim();
+	
+		let newTeam = prompt("Neue Mannschaft / Verein:", currentTeam);
+		if (newTeam === null) return;
+		newTeam = newTeam.trim();
+	
+		let newPosition = prompt("Neue Position (z.B. ST, ZM, IV, TW):", currentPosition);
+		if (newPosition === null) return;
+		newPosition = newPosition.trim().toUpperCase();
+	
+		// 2) Stats bearbeiten wie bisher
+		const newStats = {};
+		for (const key of STAT_KEYS) {
+		const current = stats[key] ?? 0;
+		const input = prompt(`Neuer Grundwert für ${key} (0–99):`, current);
+		if (input === null) {
+			return; // abgebrochen → nichts wird gespeichert
+		}
+		let num = Number(input);
+		if (!Number.isFinite(num)) num = current;
+		num = Math.max(0, Math.min(99, Math.round(num)));
+		newStats[key] = num;
+		}
+	
+		// 3) Alles in Firestore speichern
+		await cardsRef.doc(cardId).update({
+		name: newName,
+		nation: newNation,
+		team: newTeam,
+		position: newPosition,
+		stats: newStats
+		});
+	} catch (err) {
+		console.error("Fehler beim Bearbeiten der Stats:", err);
+		alert("Stats konnten nicht bearbeitet werden :(");
+	}
+	}
 
-        for (const key of STAT_KEYS) {
-          const current = stats[key] ?? 0;
-          const input = prompt(`Neuer Grundwert für ${key} (0–99):`, current);
-          if (input === null) {
-            return; // abgebrochen
-          }
-          let num = Number(input);
-          if (!Number.isFinite(num)) num = current;
-          num = Math.max(0, Math.min(99, Math.round(num)));
-          newStats[key] = num;
-        }
-
-        await cardsRef.doc(cardId).update({ stats: newStats });
-      } catch (err) {
-        console.error("Fehler beim Bearbeiten der Stats:", err);
-        alert("Stats konnten nicht bearbeitet werden :(");
-      }
-    }
 
     // initial
     updateAdminUI();
