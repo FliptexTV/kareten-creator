@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Aufstellung – 5v5 Teams</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      background: #0f172a;
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .subtitle {
+      color: #9ca3af;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    /* Navigation oben */
+    .view-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .view-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.85);
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .view-btn:hover {
+      background: rgba(30,64,175,0.9);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(129,140,248,0.7);
+    }
+    .view-btn.active-view {
+      background: linear-gradient(135deg,#22c55e,#16a34a);
+      border-color: rgba(34,197,94,0.9);
+      box-shadow: 0 10px 24px rgba(34,197,94,0.5);
+    }
+
+    .lineup-wrapper {
+      margin-top: 12px;
+      background: radial-gradient(circle at top, rgba(56,189,248,0.15), transparent 55%),
+                  radial-gradient(circle at bottom, rgba(34,197,94,0.15), transparent 55%);
+      border-radius: 18px;
+      border: 1px solid rgba(148,163,184,0.4);
+      padding: 16px;
+    }
+    .lineup-header h2 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .lineup-header p {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+
+    .lineup-team-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+    }
+    .lineup-team-bar label {
+      color: #e5e7eb;
+    }
+    .lineup-team-bar select,
+    .lineup-team-bar input {
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 0.8rem;
+      outline: none;
+    }
+    .lineup-team-bar input {
+      min-width: 120px;
+    }
+    .team-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.85);
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
+    }
+    .team-btn:hover {
+      background: rgba(30,64,175,0.9);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(129,140,248,0.7);
+    }
+    .team-btn.delete {
+      border-color: rgba(248,113,113,0.8);
+      color: #fecaca;
+    }
+
+    .pitch {
+      position: relative;
+      background: linear-gradient(180deg,#064e3b,#022c22);
+      border-radius: 18px;
+      border: 1px solid rgba(16,185,129,0.6);
+      padding: 14px 10px 18px;
+      min-height: 260px;
+      box-shadow: inset 0 0 0 2px rgba(34,197,94,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .pitch-line {
+      border-top: 1px solid rgba(209,250,229,0.4);
+      margin: 0 8px;
+    }
+    .lineup-row {
+      display: flex;
+      justify-content: space-around;
+      gap: 8px;
+      padding: 4px 4px 0;
+      flex-wrap: wrap;
+    }
+    .lineup-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 120px;
+      max-width: 160px;
+    }
+    .lineup-slot label {
+      font-size: 0.75rem;
+      color: #d1fae5;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .lineup-slot select {
+      width: 100%;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(16,185,129,0.7);
+      background: rgba(15,23,42,0.9);
+      color: #ecfdf5;
+      font-size: 0.8rem;
+      outline: none;
+    }
+    .lineup-slot select:focus {
+      box-shadow: 0 0 0 1px rgba(52,211,153,0.8);
+    }
+
+    .lineup-team-info {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .lineup-team-info span {
+      font-weight: 600;
+    }
+    .team-ovr-value {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.06em;
+      color: #bbf7d0;
+    }
+
+    @media (max-width: 900px) {
+      .pitch {
+        min-height: 230px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Aufstellung – 5v5</h1>
+    <p class="subtitle">
+      Wähle Karten für deine Aufstellung und speichere Teams.
+    </p>
+
+    <div class="view-toggle">
+      <a href="index.html" class="view-btn">Karten</a>
+      <a href="aufstellung.html" class="view-btn active-view">Aufstellung (5v5)</a>
+    </div>
+
+    <section id="lineupView" class="lineup-wrapper">
+      <div class="lineup-header">
+        <h2>5v5 Aufstellung</h2>
+        <p>Wähle 4 Feldspieler + 1 Torwart aus deinen Karten.</p>
+      </div>
+
+      <div class="lineup-team-bar">
+        <label for="teamSelect">Gespeicherte Teams:</label>
+        <select id="teamSelect">
+          <option value="">– Team wählen –</option>
+        </select>
+
+        <label for="teamNameInput">Name:</label>
+        <input id="teamNameInput" type="text" placeholder="z.B. Team 1" />
+
+        <button type="button" id="newTeamBtn" class="team-btn">Neu</button>
+        <button type="button" id="saveTeamBtn" class="team-btn">Speichern</button>
+        <button type="button" id="deleteTeamBtn" class="team-btn delete">Löschen</button>
+      </div>
+
+      <div class="pitch">
+        <div class="lineup-row">
+          <div class="lineup-slot">
+            <label for="gkSelect">Torwart</label>
+            <select id="gkSelect">
+              <option value="">– Karte wählen –</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="pitch-line"></div>
+
+        <div class="lineup-row">
+          <div class="lineup-slot">
+            <label for="p1Select">Spieler 1</label>
+            <select id="p1Select">
+              <option value="">– Karte wählen –</option>
+            </select>
+          </div>
+          <div class="lineup-slot">
+            <label for="p2Select">Spieler 2</label>
+            <select id="p2Select">
+              <option value="">– Karte wählen –</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="lineup-row">
+          <div class="lineup-slot">
+            <label for="p3Select">Spieler 3</label>
+            <select id="p3Select">
+              <option value="">– Karte wählen –</option>
+            </select>
+          </div>
+          <div class="lineup-slot">
+            <label for="p4Select">Spieler 4</label>
+            <select id="p4Select">
+              <option value="">– Karte wählen –</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="lineup-team-info">
+        <div>Team OVR (Durchschnitt der gewählten Karten):</div>
+        <div class="team-ovr-value" id="teamOvrValue">-</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-storage-compat.js"></script>
+
+  <script>
+    const STAT_KEYS = ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"];
+
+    const lineupSelectIds = ["gkSelect", "p1Select", "p2Select", "p3Select", "p4Select"];
+    const teamOvrValueEl = document.getElementById("teamOvrValue");
+
+    const teamSelect = document.getElementById("teamSelect");
+    const teamNameInput = document.getElementById("teamNameInput");
+    const newTeamBtn = document.getElementById("newTeamBtn");
+    const saveTeamBtn = document.getElementById("saveTeamBtn");
+    const deleteTeamBtn = document.getElementById("deleteTeamBtn");
+
+    let currentDocs = [];
+    let currentLineups = [];
+    let currentLineupId = null;
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPV1BoQLODeFcJea9GJ9TQFRYv_k6Jo00",
+      authDomain: "karten-creator.firebaseapp.com",
+      projectId: "karten-creator",
+      storageBucket: "karten-creator.firebasestorage.app",
+      messagingSenderId: "653062925464",
+      appId: "1:653062925464:web:062ff9e541584a835cf4ed"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const cardsRef = db.collection("cards");
+    const lineupsRef = db.collection("lineups");
+
+    const auth = firebase.auth();
+    const storage = firebase.storage();
+
+    auth.signInAnonymously()
+      .then(() => {
+        console.log("Anonym angemeldet (Aufstellung)");
+      })
+      .catch((error) => {
+        console.error("Fehler bei anonymer Anmeldung:", error);
+      });
+
+    function calculateOverall(stats, position) {
+      const s = {
+        PAC: Number(stats.PAC) || 0,
+        SHO: Number(stats.SHO) || 0,
+        PAS: Number(stats.PAS) || 0,
+        DRI: Number(stats.DRI) || 0,
+        DEF: Number(stats.DEF) || 0,
+        PHY: Number(stats.PHY) || 0,
+      };
+
+      const pos = String(position || "").toUpperCase();
+
+      let ovr;
+
+      if (pos === "ST" || pos === "LF" || pos === "RF") {
+        ovr =
+          0.40 * s.SHO +
+          0.25 * s.PAC +
+          0.20 * s.DRI +
+          0.10 * s.PHY +
+          0.05 * s.PAS;
+      } else if (pos === "OM" || pos === "LM" || pos === "RM" || pos === "ZM") {
+        ovr =
+          0.30 * s.PAS +
+          0.25 * s.DRI +
+          0.20 * s.PAC +
+          0.15 * s.SHO +
+          0.10 * s.DEF;
+      } else if (pos === "DM" || pos === "IV" || pos === "AV") {
+        ovr =
+          0.35 * s.DEF +
+          0.25 * s.PHY +
+          0.20 * s.PAC +
+          0.10 * s.PAS +
+          0.10 * s.DRI;
+      } else if (pos === "TW") {
+        ovr =
+          0.40 * s.DEF +
+          0.30 * s.PHY +
+          0.20 * s.PAC +
+          0.10 * s.DRI;
+      } else {
+        const sum = STAT_KEYS.reduce((acc, key) => acc + (s[key] || 0), 0);
+        ovr = sum / STAT_KEYS.length;
+      }
+
+      return Math.round(ovr);
+    }
+
+    cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
+      currentDocs = [];
+      snapshot.forEach((doc) => {
+        currentDocs.push({ id: doc.id, data: doc.data() });
+      });
+      populateLineupSelects();
+    });
+
+    lineupsRef.orderBy("createdAt").onSnapshot((snapshot) => {
+      currentLineups = [];
+      snapshot.forEach((doc) => {
+        currentLineups.push({ id: doc.id, data: doc.data() });
+      });
+      renderLineupList();
+    });
+
+    function populateLineupSelects() {
+      lineupSelectIds.forEach((id) => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+
+        const previous = sel.value;
+        sel.innerHTML = '<option value="">– Karte wählen –</option>';
+
+        currentDocs.forEach((doc) => {
+          const d = doc.data;
+          const ovr = calculateOverall(d.stats || {}, d.position || "");
+          const label = `${d.name || "Unbekannt"} (${d.position || "POS"}, OVR ${ovr})`;
+          const opt = document.createElement("option");
+          opt.value = doc.id;
+          opt.textContent = label;
+          sel.appendChild(opt);
+        });
+
+        if (previous) {
+          sel.value = previous;
+        }
+      });
+
+      updateTeamOvr();
+    }
+
+    function updateTeamOvr() {
+      let total = 0;
+      let count = 0;
+
+      lineupSelectIds.forEach((id) => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+        const cardId = sel.value;
+        if (!cardId) return;
+
+        const doc = currentDocs.find(d => d.id === cardId);
+        if (!doc) return;
+
+        const d = doc.data;
+        const ovr = calculateOverall(d.stats || {}, d.position || "");
+        total += ovr;
+        count++;
+      });
+
+      if (count === 0) {
+        teamOvrValueEl.textContent = "-";
+      } else {
+        teamOvrValueEl.textContent = Math.round(total / count);
+      }
+    }
+
+    lineupSelectIds.forEach((id) => {
+      const sel = document.getElementById(id);
+      if (sel) {
+        sel.addEventListener("change", updateTeamOvr);
+      }
+    });
+
+    function renderLineupList() {
+      if (!teamSelect) return;
+      const prevId = currentLineupId;
+      teamSelect.innerHTML = '<option value="">– Team wählen –</option>';
+
+      currentLineups.forEach((entry) => {
+        const opt = document.createElement("option");
+        opt.value = entry.id;
+        opt.textContent = entry.data.name || "Ohne Name";
+        teamSelect.appendChild(opt);
+      });
+
+      if (prevId) {
+        teamSelect.value = prevId;
+      }
+    }
+
+    teamSelect.addEventListener("change", () => {
+      const id = teamSelect.value;
+      if (!id) {
+        currentLineupId = null;
+        teamNameInput.value = "";
+        return;
+      }
+      const lineup = currentLineups.find(l => l.id === id);
+      if (!lineup) return;
+
+      currentLineupId = id;
+      teamNameInput.value = lineup.data.name || "";
+      const slots = lineup.data.slots || {};
+
+      lineupSelectIds.forEach((slotId) => {
+        const sel = document.getElementById(slotId);
+        if (!sel) return;
+        const cardId = slots[slotId] || "";
+        sel.value = cardId || "";
+      });
+
+      updateTeamOvr();
+    });
+
+    newTeamBtn.addEventListener("click", () => {
+      currentLineupId = null;
+      if (teamSelect) teamSelect.value = "";
+      teamNameInput.value = "";
+      lineupSelectIds.forEach((id) => {
+        const sel = document.getElementById(id);
+        if (sel) sel.value = "";
+      });
+      updateTeamOvr();
+    });
+
+    saveTeamBtn.addEventListener("click", async () => {
+      const name = teamNameInput.value.trim();
+      if (!name) {
+        alert("Bitte gib einen Teamnamen ein.");
+        return;
+      }
+
+      const slots = {};
+      let hasAny = false;
+      lineupSelectIds.forEach((id) => {
+        const sel = document.getElementById(id);
+        const val = sel ? sel.value : "";
+        if (val) {
+          slots[id] = val;
+          hasAny = true;
+        }
+      });
+
+      if (!hasAny) {
+        alert("Wähle mindestens eine Karte für das Team aus.");
+        return;
+      }
+
+      try {
+        if (currentLineupId) {
+          await lineupsRef.doc(currentLineupId).update({
+            name,
+            slots
+          });
+        } else {
+          const docRef = await lineupsRef.add({
+            name,
+            slots,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          currentLineupId = docRef.id;
+          teamSelect.value = docRef.id;
+        }
+      } catch (err) {
+        console.error("Fehler beim Speichern des Teams:", err);
+        alert("Team konnte nicht gespeichert werden :(");
+      }
+    });
+
+    deleteTeamBtn.addEventListener("click", async () => {
+      if (!currentLineupId) {
+        alert("Kein Team ausgewählt.");
+        return;
+      }
+      const really = confirm("Willst du dieses Team wirklich löschen?");
+      if (!really) return;
+
+      try {
+        await lineupsRef.doc(currentLineupId).delete();
+        currentLineupId = null;
+        teamSelect.value = "";
+        teamNameInput.value = "";
+      } catch (err) {
+        console.error("Fehler beim Löschen des Teams:", err);
+        alert("Team konnte nicht gelöscht werden :(");
+      }
+    });
+  </script>
+</body>
+</html>
