@@ -523,6 +523,35 @@
 	.vote-neutral {
 	  color: #3b82f6;   /* blau */
 	}
+	
+	.sort-controls {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	font-size: 0.8rem;
+	}
+	
+	.sort-btn {
+	border-radius: 999px;
+	border: 1px solid rgba(148,163,184,0.6);
+	background: rgba(15,23,42,0.85);
+	padding: 4px 10px;
+	font-size: 0.75rem;
+	color: #e5e7eb;
+	cursor: pointer;
+	transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
+	}
+	
+	.sort-btn:hover {
+	background: rgba(51,65,85,0.9);
+	transform: translateY(-0.5px);
+	box-shadow: 0 0 0 1px rgba(148,163,184,0.7);
+	}
+	
+	.sort-btn:active {
+	transform: translateY(0.5px) scale(0.97);
+	box-shadow: none;
+	}
 
 
 	@media (max-width: 900px) {
@@ -694,13 +723,20 @@
       </section>
 
       <!-- Karten -->
-      <section class="cards-wrapper">
-        <div class="cards-header">
-          <h2>Erstellte Karten (online)</h2>
-          <span>Jeder kann voten, nur Admin kann erstellen, löschen & Stats bearbeiten.</span>
-        </div>
-        <div id="cardsContainer" class="cards-grid"></div>
-      </section>
+	  <section class="cards-wrapper">
+	    <div class="cards-header">
+	  	  <div>
+	  	    <h2>Erstellte Karten (online)</h2>
+	  	    <span>Jeder kann voten, nur Admin kann erstellen, löschen & Stats bearbeiten.</span>
+	  	  </div>
+	  	  <div class="sort-controls">
+	  	    <button type="button" id="sortOvrDesc" class="sort-btn">OVR: hoch → niedrig</button>
+	  	    <button type="button" id="sortOvrAsc" class="sort-btn">OVR: niedrig → hoch</button>
+	  	  </div>
+	    </div>
+	    <div id="cardsContainer" class="cards-grid"></div>
+	  </section>
+
     </div>
   </div>
 
@@ -719,10 +755,14 @@
     const adminLoginBtn = document.getElementById("adminLoginBtn");
     const adminStatusText = document.getElementById("adminStatusText");
     const createCardBtn = document.getElementById("createCardBtn");
+	const sortOvrDescBtn = document.getElementById("sortOvrDesc");
+	const sortOvrAscBtn = document.getElementById("sortOvrAsc");
 
     // Admin-Passwort (fest)
     const ADMIN_PASSWORD = "eierlecken";
-
+	
+	let currentSort = "created"; // oder "ovr-desc" / "ovr-asc"
+	let currentDocs = [];
     let isAdmin = false;
 
     function updateAdminUI() {
@@ -769,6 +809,16 @@
 		.catch((error) => {
 			console.error("Fehler bei anonymer Anmeldung:", error);
 		});
+
+	sortOvrDescBtn.addEventListener("click", () => {
+	  currentSort = "ovr-desc";
+	  renderCards();
+	});
+	
+	sortOvrAscBtn.addEventListener("click", () => {
+	  currentSort = "ovr-asc";
+	  renderCards();
+	});
 
 
     function escapeHtml(str) {
@@ -892,13 +942,41 @@
     });
 
     // Live Karten
-    cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
-      cardsContainer.innerHTML = "";
-      snapshot.forEach((doc) => {
-        addCardToDOM(doc.id, doc.data());
-      });
-      updateAdminUI();
-    });
+	// Live Karten – Docs zwischenspeichern und dann mit aktuellem Sortiermodus rendern
+	cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
+	  currentDocs = [];
+	  snapshot.forEach((doc) => {
+		currentDocs.push({ id: doc.id, data: doc.data() });
+	  });
+	  renderCards();
+	});
+	
+	function renderCards() {
+	cardsContainer.innerHTML = "";
+	
+	// Kopie für Sortierung
+	const docsToRender = [...currentDocs];
+	
+	if (currentSort === "ovr-desc" || currentSort === "ovr-asc") {
+		docsToRender.sort((a, b) => {
+		const aData = a.data;
+		const bData = b.data;
+		const aOvr = calculateOverall(aData.stats || {}, aData.position || "");
+		const bOvr = calculateOverall(bData.stats || {}, bData.position || "");
+	
+		return currentSort === "ovr-desc" ? bOvr - aOvr : aOvr - bOvr;
+		});
+	}
+	// wenn currentSort === "created" → Reihenfolge wie aus Firestore (createdAt)
+	
+	docsToRender.forEach(doc => {
+		addCardToDOM(doc.id, doc.data);
+	});
+	
+	updateAdminUI();
+	}
+
+
 
     function initialsFromName(name) {
       const parts = name.trim().split(/\s+/);
