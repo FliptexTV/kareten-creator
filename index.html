@@ -587,6 +587,52 @@
       color: #9ca3af;
       margin-bottom: 10px;
     }
+
+    /* NEU: Team-Management-Bar */
+    .lineup-team-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+    }
+    .lineup-team-bar label {
+      color: #e5e7eb;
+    }
+    .lineup-team-bar select,
+    .lineup-team-bar input {
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 0.8rem;
+      outline: none;
+    }
+    .lineup-team-bar input {
+      min-width: 120px;
+    }
+    .team-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.85);
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      color: #e5e7eb;
+      cursor: pointer;
+      transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
+    }
+    .team-btn:hover {
+      background: rgba(30,64,175,0.9);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(129,140,248,0.7);
+    }
+    .team-btn.delete {
+      border-color: rgba(248,113,113,0.8);
+      color: #fecaca;
+    }
+
     .pitch {
       position: relative;
       background: linear-gradient(180deg,#064e3b,#022c22);
@@ -844,6 +890,22 @@
         <h2>5v5 Aufstellung</h2>
         <p>Wähle 4 Feldspieler + 1 Torwart aus deinen Karten.</p>
       </div>
+
+      <!-- NEU: Team-Verwaltung -->
+      <div class="lineup-team-bar">
+        <label for="teamSelect">Gespeicherte Teams:</label>
+        <select id="teamSelect">
+          <option value="">– Team wählen –</option>
+        </select>
+
+        <label for="teamNameInput">Name:</label>
+        <input id="teamNameInput" type="text" placeholder="z.B. Team 1" />
+
+        <button type="button" id="newTeamBtn" class="team-btn">Neu</button>
+        <button type="button" id="saveTeamBtn" class="team-btn">Speichern</button>
+        <button type="button" id="deleteTeamBtn" class="team-btn delete">Löschen</button>
+      </div>
+
       <div class="pitch">
         <!-- Torwart -->
         <div class="lineup-row">
@@ -922,12 +984,23 @@
     const lineupSelectIds = ["gkSelect", "p1Select", "p2Select", "p3Select", "p4Select"];
     const teamOvrValueEl = document.getElementById("teamOvrValue");
 
+    // NEU: Team-UI-Elemente
+    const teamSelect = document.getElementById("teamSelect");
+    const teamNameInput = document.getElementById("teamNameInput");
+    const newTeamBtn = document.getElementById("newTeamBtn");
+    const saveTeamBtn = document.getElementById("saveTeamBtn");
+    const deleteTeamBtn = document.getElementById("deleteTeamBtn");
+
     // Admin-Passwort (fest)
     const ADMIN_PASSWORD = "eierlecken";
 
     let currentSort = "created"; // oder "ovr-desc" / "ovr-asc"
     let currentDocs = [];
     let isAdmin = false;
+
+    // NEU: Lineup-State
+    let currentLineups = [];
+    let currentLineupId = null;
 
     function updateAdminUI() {
       adminStatusText.textContent = isAdmin ? "Admin" : "nicht eingeloggt";
@@ -976,6 +1049,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const cardsRef = db.collection("cards");
+    const lineupsRef = db.collection("lineups");
 
     // Auth & Storage
     const auth = firebase.auth();
@@ -1127,6 +1201,15 @@
         currentDocs.push({ id: doc.id, data: doc.data() });
       });
       renderCards();
+    });
+
+    // Live Lineups
+    lineupsRef.orderBy("createdAt").onSnapshot((snapshot) => {
+      currentLineups = [];
+      snapshot.forEach((doc) => {
+        currentLineups.push({ id: doc.id, data: doc.data() });
+      });
+      renderLineupList();
     });
 
     function renderCards() {
@@ -1472,6 +1555,127 @@
       const sel = document.getElementById(id);
       if (sel) {
         sel.addEventListener("change", updateTeamOvr);
+      }
+    });
+
+    // NEU: Lineup-Liste rendern
+    function renderLineupList() {
+      if (!teamSelect) return;
+      const prevId = currentLineupId;
+      teamSelect.innerHTML = '<option value="">– Team wählen –</option>';
+
+      currentLineups.forEach((entry) => {
+        const opt = document.createElement("option");
+        opt.value = entry.id;
+        opt.textContent = entry.data.name || "Ohne Name";
+        teamSelect.appendChild(opt);
+      });
+
+      if (prevId) {
+        teamSelect.value = prevId;
+      }
+    }
+
+    // NEU: Team laden wenn gewählt
+    teamSelect.addEventListener("change", () => {
+      const id = teamSelect.value;
+      if (!id) {
+        currentLineupId = null;
+        teamNameInput.value = "";
+        // Slots nicht automatisch löschen, nur Auswahl des Teams zurücksetzen
+        return;
+      }
+      const lineup = currentLineups.find(l => l.id === id);
+      if (!lineup) return;
+
+      currentLineupId = id;
+      teamNameInput.value = lineup.data.name || "";
+      const slots = lineup.data.slots || {};
+
+      lineupSelectIds.forEach((slotId) => {
+        const sel = document.getElementById(slotId);
+        if (!sel) return;
+        const cardId = slots[slotId] || "";
+        sel.value = cardId || "";
+      });
+
+      updateTeamOvr();
+    });
+
+    // NEU: Neues Team
+    newTeamBtn.addEventListener("click", () => {
+      currentLineupId = null;
+      if (teamSelect) teamSelect.value = "";
+      teamNameInput.value = "";
+      lineupSelectIds.forEach((id) => {
+        const sel = document.getElementById(id);
+        if (sel) sel.value = "";
+      });
+      updateTeamOvr();
+    });
+
+    // NEU: Team speichern (neu oder update)
+    saveTeamBtn.addEventListener("click", async () => {
+      const name = teamNameInput.value.trim();
+      if (!name) {
+        alert("Bitte gib einen Teamnamen ein.");
+        return;
+      }
+
+      const slots = {};
+      let hasAny = false;
+      lineupSelectIds.forEach((id) => {
+        const sel = document.getElementById(id);
+        const val = sel ? sel.value : "";
+        if (val) {
+          slots[id] = val;
+          hasAny = true;
+        }
+      });
+
+      if (!hasAny) {
+        alert("Wähle mindestens eine Karte für das Team aus.");
+        return;
+      }
+
+      try {
+        if (currentLineupId) {
+          await lineupsRef.doc(currentLineupId).update({
+            name,
+            slots
+          });
+        } else {
+          const docRef = await lineupsRef.add({
+            name,
+            slots,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          currentLineupId = docRef.id;
+          teamSelect.value = docRef.id;
+        }
+      } catch (err) {
+        console.error("Fehler beim Speichern des Teams:", err);
+        alert("Team konnte nicht gespeichert werden :(");
+      }
+    });
+
+    // NEU: Team löschen
+    deleteTeamBtn.addEventListener("click", async () => {
+      if (!currentLineupId) {
+        alert("Kein Team ausgewählt.");
+        return;
+      }
+      const really = confirm("Willst du dieses Team wirklich löschen?");
+      if (!really) return;
+
+      try {
+        await lineupsRef.doc(currentLineupId).delete();
+        currentLineupId = null;
+        teamSelect.value = "";
+        teamNameInput.value = "";
+      } catch (err) {
+        console.error("Fehler beim Löschen des Teams:", err);
+        alert("Team konnte nicht gelöscht werden :(");
       }
     });
 
