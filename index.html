@@ -687,6 +687,16 @@
               <option value="ST">ST (Stürmer)</option>
             </select>
           </div>
+		  
+		  <div class="field">
+		    <label for="cardTemplate">Karten-Design</label>
+		    <select id="cardTemplate" name="cardTemplate">
+			  <option value="fut-template.png">Standard</option>
+			  <option value="fut-template-icon.png">Icon</option>
+			  <option value="fut-template-inform.png">Inform</option>
+		    </select>
+		  </div>
+
 
           <div class="stats-grid">
             <div class="field">
@@ -886,6 +896,7 @@
       const team = form.team.value.trim() || "";
       const position = form.position.value || "";
       const imageUrl = form.imageUrl.value.trim() || "";
+	  const cardTemplate = form.cardTemplate.value || "fut-template.png";
 
       const stats = {};
       STAT_KEYS.forEach((key) => {
@@ -902,6 +913,7 @@
           team,
           position,
           imageUrl,
+		  template: cardTemplate,
           stats,
           votesUp: emptyVotes(),
           votesDown: emptyVotes(),
@@ -958,6 +970,7 @@
       const team = data.team || "";
       const position = data.position || "";
       const imageUrl = data.imageUrl || "";
+	  const template = data.template || "fut-template.png";
       const stats = data.stats || {};
       const votesUp = data.votesUp || {};
       const votesDown = data.votesDown || {};
@@ -969,7 +982,7 @@
       const overall = calculateOverall(stats, position);
 
       card.innerHTML = `
-        <div class="fut-card">
+        <div class="fut-card" style="background-image: url('${template}');">
           <div class="fut-card-inner">
             <div class="fut-top">
               <div class="fut-rating">
