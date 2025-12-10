@@ -446,9 +446,19 @@
     const cardsRef = db.collection("cards");
     const lineupsRef = db.collection("lineups");
     const auth = firebase.auth();
+	
+	// prüfen, ob jemand eingeloggt ist
+	auth.onAuthStateChanged((user) => {
+	if (!user) {
+		// niemand eingeloggt → zurück zur Login-Seite
+		window.location.href = "index.html";
+		return;
+	}
+	
+	// falls du später noch irgendwas mit dem User machen willst:
+	console.log("Eingeloggt als:", user.email || user.uid);
+	});
 
-    // Anonymous login (damit Regeln mit request.auth != null funktionieren)
-    auth.signInAnonymously().catch(console.error);
 
     // Karten live holen
     cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
