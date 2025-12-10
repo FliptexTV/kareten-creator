@@ -917,7 +917,7 @@
       const overall = calculateOverall(stats, position);
 
       card.innerHTML = `
-        <div class="fut-card" style="background-image: url('${escapeHtml(data.template || "fut-template.png")}');">
+        <div class="fut-card ${themeClass}" style="background-image: url('${escapeHtml(template)}');">
           <div class="fut-card-inner">
             <div class="fut-top">
               <div class="fut-rating">
