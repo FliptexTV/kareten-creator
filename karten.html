@@ -342,6 +342,30 @@
       letter-spacing: 2px;
       margin-top: -10px;
     }
+	
+	/* THEMES: Farben pro Kartentyp */
+	/* Basis – lässt die normalen Farben wie sie sind */
+	
+	/* ICON-Karte – Gold/Weiß-Töne */
+	.theme-icon .fut-ovr,
+	.theme-icon .fut-pos,
+	.theme-icon .fut-name,
+	.theme-icon .fut-nation-club,
+	.theme-icon .fut-stats-row span {
+	color: #594d2c; /* HIER FARBE FÜR ICON-TEXTE ÄNDERN */
+	text-shadow: 0 0 4px rgba(0,0,0,0.8);
+	}
+	
+	/* INFORM-Karte – Gelb/Orange-Töne */
+	.theme-inform .fut-ovr,
+	.theme-inform .fut-pos,
+	.theme-inform .fut-name,
+	.theme-inform .fut-nation-club,
+	.theme-inform .fut-stats-row span {
+	color: #f5dd77; /* HIER FARBE FÜR INFORM-TEXTE ÄNDERN */
+	text-shadow: 0 0 4px rgba(0,0,0,0.8);
+	}
+
 
     .card-actions {
       display: flex;
@@ -604,6 +628,15 @@
             <label for="imageUrl">Bild-URL (Firebase Storage)</label>
             <input id="imageUrl" name="imageUrl" type="text" placeholder="Link zum Spielerbild" />
           </div>
+		  <div class="field">
+		    <label for="template">Karten-Template</label>
+		    <select id="template" name="template">
+		  	  <option value="fut-template.png">Standard Gold</option>
+		  	  <option value="fut-template-icon.png">Icon Karte</option>
+		  	  <option value="fut-template-inform.png">InForm / TOTW</option>
+		    </select>
+		  </div>
+
           <div class="field">
             <label for="position">Position</label>
             <select id="position" name="position">
@@ -825,6 +858,7 @@
           nation,
           team,
           position,
+		  template: form.template.value,
           imageUrl,
           stats,
           votesUp: emptyVotes(),
@@ -883,7 +917,7 @@
       const overall = calculateOverall(stats, position);
 
       card.innerHTML = `
-        <div class="fut-card">
+        <div class="fut-card" style="background-image: url('${escapeHtml(data.template || "fut-template.png")}');">
           <div class="fut-card-inner">
             <div class="fut-top">
               <div class="fut-rating">
