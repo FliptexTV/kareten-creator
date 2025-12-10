@@ -175,11 +175,11 @@
     const registerErrorEl = document.getElementById("registerError");
 
     // Wenn schon eingeloggt → direkt zu Karten
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        window.location.href = "karten.html";
-      }
-    });
+	auth.onAuthStateChanged(user => {
+	if (user && user.emailVerified) {
+		window.location.href = "karten.html";
+	}
+	});
 
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -187,13 +187,30 @@
       const email = document.getElementById("loginEmail").value.trim();
       const password = document.getElementById("loginPassword").value;
 
-      try {
-        await auth.signInWithEmailAndPassword(email, password);
-        window.location.href = "karten.html";
-      } catch (err) {
-        console.error(err);
-        loginErrorEl.textContent = "Login fehlgeschlagen: " + (err.message || "");
-      }
+	  try {
+	    const cred = await auth.signInWithEmailAndPassword(email, password);
+	  
+	    if (!cred.user.emailVerified) {
+	  	// gleich wieder ausloggen, damit er nicht "als halb-verifiziert" drin hängt
+	  	  await auth.signOut();
+	  
+	  	  loginErrorEl.textContent =
+	  	    "Bitte bestätige zuerst deine E-Mail. Wir haben dir einen Bestätigungslink geschickt.";
+	  	  try {
+	  	    await cred.user.sendEmailVerification();
+	  	  } catch (err2) {
+	  	    console.error("Fehler beim Senden der Verifizierungs-Mail:", err2);
+	  	  }
+	  	  return;
+	    }
+	  
+	    // E-Mail ist verifiziert → weiter zu Karten
+	    window.location.href = "karten.html";
+	  } catch (err) {
+	    console.error(err);
+	    loginErrorEl.textContent = "Login fehlgeschlagen: " + (err.message || "");
+	  }
+
     });
 
     registerForm.addEventListener("submit", async (e) => {
@@ -202,18 +219,32 @@
       const email = document.getElementById("regEmail").value.trim();
       const password = document.getElementById("regPassword").value;
 
-      try {
-        const cred = await auth.createUserWithEmailAndPassword(email, password);
-        await db.collection("users").doc(cred.user.uid).set({
-          email: cred.user.email,
-          isAdmin: false,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        window.location.href = "karten.html";
-      } catch (err) {
-        console.error(err);
-        registerErrorEl.textContent = "Registrierung fehlgeschlagen: " + (err.message || "");
-      }
+	  try {
+	    const cred = await auth.createUserWithEmailAndPassword(email, password);
+	  
+	    // User in Firestore speichern
+	    await db.collection("users").doc(cred.user.uid).set({
+	 	  email: cred.user.email,
+	 	  isAdmin: false,
+	 	  createdAt: firebase.firestore.FieldValue.serverTimestamp()
+	    });
+	  
+	    // Verifizierungs-Mail schicken
+	    await cred.user.sendEmailVerification();
+	  
+	    // User ausloggen, bis Mail bestätigt ist
+	    await auth.signOut();
+	  
+	    registerErrorEl.style.color = "#bbf7d0"; // grünlicher Hinweis
+	    registerErrorEl.textContent =
+	 	  "Account erstellt. Bitte bestätige deine E-Mail und logge dich danach ein.";
+	  } catch (err) {
+	    console.error(err);
+	    registerErrorEl.style.color = "#fecaca";
+	    registerErrorEl.textContent =
+	 	  "Registrierung fehlgeschlagen: " + (err.message || "");
+	  }
+
     });
   </script>
 </body>
