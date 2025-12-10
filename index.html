@@ -119,18 +119,25 @@
     <p class="subtitle">Erstelle Karten & Aufstellungen – nur für registrierte Spieler.</p>
 
     <!-- LOGIN -->
-    <form id="loginForm">
-      <div class="field">
-        <label for="loginEmail">E-Mail</label>
-        <input type="email" id="loginEmail" required placeholder="dein@email.de" />
-      </div>
-      <div class="field">
-        <label for="loginPassword">Passwort</label>
-        <input type="password" id="loginPassword" required placeholder="Passwort" />
-      </div>
-      <button type="submit" class="btn btn-primary">Login</button>
-      <div id="loginError" class="error"></div>
-    </form>
+	<form id="loginForm">
+	  <div class="field">
+		<label for="loginEmail">E-Mail</label>
+		<input type="email" id="loginEmail" required placeholder="dein@email.de" />
+	  </div>
+	  <div class="field">
+		<label for="loginPassword">Passwort</label>
+		<input type="password" id="loginPassword" required placeholder="Passwort" />
+	  </div>
+	  <button type="submit" class="btn btn-primary">Login</button>
+	
+	<!-- NEU: Passwort vergessen -->
+	  <button type="button" class="btn btn-secondary" id="resetPasswordBtn">
+		Passwort vergessen?
+	  </button>
+	
+	  <div id="loginError" class="error"></div>
+	</form>
+
 
     <div class="section-title">Noch kein Account?</div>
 
@@ -173,6 +180,7 @@
     const registerForm = document.getElementById("registerForm");
     const loginErrorEl = document.getElementById("loginError");
     const registerErrorEl = document.getElementById("registerError");
+	const resetPasswordBtn = document.getElementById("resetPasswordBtn");
 
     // Wenn schon eingeloggt → direkt zu Karten
 	auth.onAuthStateChanged(user => {
@@ -246,6 +254,31 @@
 	  }
 
     });
+	resetPasswordBtn.addEventListener("click", async () => {
+	  // Fehlermeldung zurücksetzen
+	  loginErrorEl.style.color = "#fecaca";
+	  loginErrorEl.textContent = "";
+	
+	  const email = document.getElementById("loginEmail").value.trim();
+	  if (!email) {
+		loginErrorEl.textContent = "Bitte gib zuerst deine E-Mail im Login-Feld ein.";
+		return;
+	  }
+	
+	  try {
+		await auth.sendPasswordResetEmail(email);
+		// Erfolgsmeldung in grün anzeigen
+		loginErrorEl.style.color = "#bbf7d0";
+		loginErrorEl.textContent =
+		  "Wenn ein Account mit dieser E-Mail existiert, wurde ein Link zum Zurücksetzen verschickt.";
+	  } catch (err) {
+		console.error(err);
+		loginErrorEl.style.color = "#fecaca";
+		loginErrorEl.textContent =
+		  "Fehler beim Zurücksetzen: " + (err.message || "");
+	  }
+	});
+
   </script>
 </body>
 </html>
