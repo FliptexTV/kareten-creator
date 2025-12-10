@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>5v5 Aufstellung – FIFA Karten</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Karten – FIFA Creator</title>
   <style>
     * {
       box-sizing: border-box;
@@ -25,7 +25,7 @@
     }
     .container {
       width: 100%;
-      max-width: 1000px;
+      max-width: 1100px;
     }
     h1 {
       font-size: 2rem;
@@ -38,213 +38,493 @@
       font-size: 0.95rem;
     }
 
-    /* simple nav */
-    .nav {
+    /* Top-Bar */
+    .top-bar {
       display: flex;
-      gap: 10px;
-      margin-bottom: 16px;
-      font-size: 0.85rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
     }
-    .nav a {
-      color: #93c5fd;
-      text-decoration: none;
-      padding: 4px 10px;
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .nav-link {
       border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 0.8rem;
       border: 1px solid rgba(148,163,184,0.6);
       background: rgba(15,23,42,0.85);
+      color: #e5e7eb;
+      text-decoration: none;
     }
-    .nav a:hover {
-      background: rgba(30,64,175,0.9);
-    }
-    .nav span.current {
-      padding: 4px 10px;
-      border-radius: 999px;
+    .nav-link.active {
       background: linear-gradient(135deg,#22c55e,#16a34a);
-      border: 1px solid rgba(34,197,94,0.9);
+      border-color: rgba(34,197,94,0.9);
+      box-shadow: 0 8px 24px rgba(34,197,94,0.4);
+    }
+    .user-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      background: rgba(15,23,42,0.9);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px dashed rgba(148,163,184,0.7);
+    }
+    .user-role {
       font-weight: 600;
     }
+    #logoutBtn {
+      border-radius: 999px;
+      border: none;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      background: rgba(248,113,113,0.2);
+      color: #fecaca;
+    }
 
-    .lineup-wrapper {
-      margin-top: 8px;
-      background: radial-gradient(circle at top, rgba(56,189,248,0.15), transparent 55%),
-                  radial-gradient(circle at bottom, rgba(34,197,94,0.15), transparent 55%);
+    /* Layout */
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    /* Formular */
+    .card-form {
+      background: rgba(15,23,42,0.9);
+      border-radius: 18px;
+      padding: 16px 18px 18px;
+      border: 1px solid rgba(148,163,184,0.35);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+      position: relative;
+    }
+    .card-form h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .card-form small {
+      color: #9ca3af;
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+    }
+    .field {
+      margin-bottom: 0.75rem;
+    }
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+      color: #cbd5f5;
+    }
+    .field input[type="text"],
+    .field input[type="number"],
+    .field select {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 10px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.8);
+      color: #e5e7eb;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border 0.15s, box-shadow 0.15s, background 0.15s;
+    }
+    .field input[type="text"]:focus,
+    .field input[type="number"]:focus,
+    .field select:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.3);
+      background: rgba(15,23,42,0.95);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: linear-gradient(135deg,#22c55e,#16a34a);
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 0.25rem;
+      box-shadow: 0 12px 35px rgba(34,197,94,0.35);
+      transition: transform 0.08s ease-out, box-shadow 0.08s ease-out, filter 0.1s;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 16px 40px rgba(34,197,94,0.55);
+    }
+    .btn:active {
+      transform: translateY(0px) scale(0.98);
+      box-shadow: 0 8px 24px rgba(34,197,94,0.35);
+    }
+    .btn[disabled] {
+      opacity: .5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Kartenbereich */
+    .cards-wrapper {
+      background: radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 55%),
+                  radial-gradient(circle at bottom, rgba(34,197,94,0.12), transparent 55%);
       border-radius: 18px;
       border: 1px solid rgba(148,163,184,0.4);
       padding: 16px;
+      min-height: 300px;
     }
-    .lineup-header h2 {
-      font-size: 1.1rem;
-      margin-bottom: 4px;
-    }
-    .lineup-header p {
-      font-size: 0.85rem;
-      color: #9ca3af;
-      margin-bottom: 10px;
-    }
-
-    /* Team-Erstellung */
-    .team-form {
-      margin-bottom: 14px;
-    }
-    .team-form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 10px;
-      font-size: 0.85rem;
-    }
-    .team-form-row label {
-      color: #e5e7eb;
-    }
-    .team-form-row input {
-      padding: 6px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.9);
-      color: #e5e7eb;
-      font-size: 0.85rem;
-      outline: none;
-      min-width: 160px;
-    }
-    .team-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.6);
-      background: rgba(15,23,42,0.85);
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      color: #e5e7eb;
-      cursor: pointer;
-      transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
-    }
-    .team-btn:hover {
-      background: rgba(30,64,175,0.9);
-      transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(129,140,248,0.7);
-    }
-    .team-btn.delete {
-      border-color: rgba(248,113,113,0.8);
-      color: #fecaca;
-    }
-
-    .pitch {
-      position: relative;
-      background: linear-gradient(180deg,#064e3b,#022c22);
-      border-radius: 18px;
-      border: 1px solid rgba(16,185,129,0.6);
-      padding: 14px 10px 18px;
-      min-height: 260px;
-      box-shadow: inset 0 0 0 2px rgba(34,197,94,0.4);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-    .pitch-line {
-      border-top: 1px solid rgba(209,250,229,0.4);
-      margin: 0 8px;
-    }
-    .lineup-row {
-      display: flex;
-      justify-content: space-around;
-      gap: 8px;
-      padding: 4px 4px 0;
-      flex-wrap: wrap;
-    }
-    .lineup-slot {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      min-width: 120px;
-      max-width: 180px;
-    }
-    .lineup-slot label {
-      font-size: 0.75rem;
-      color: #d1fae5;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .lineup-slot select {
-      width: 100%;
-      padding: 5px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(16,185,129,0.7);
-      background: rgba(15,23,42,0.9);
-      color: #ecfdf5;
-      font-size: 0.8rem;
-      outline: none;
-    }
-    .lineup-slot select:focus {
-      box-shadow: 0 0 0 1px rgba(52,211,153,0.8);
-    }
-
-    .lineup-team-info {
-      margin-top: 10px;
-      font-size: 0.9rem;
+    .cards-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+    .cards-header h2 {
+      font-size: 1rem;
+    }
+    .cards-header span {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
       gap: 6px;
     }
-    .lineup-team-info span {
-      font-weight: 600;
+
+    /* FUT Card */
+    .fut-card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background-image: url("fut-template.png");
+      background-size: cover;
+      background-position: center;
+      filter: drop-shadow(0 14px 24px rgba(0,0,0,0.7));
     }
-    .team-ovr-value {
+    .fut-card-inner {
+      position: absolute;
+      inset: 0;
+      color: #111827;
+      font-smoothing: antialiased;
+    }
+    .fut-top {
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      right: 10%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-family: "Arial Black", Impact, system-ui, sans-serif;
+    }
+    .fut-rating {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+    .fut-ovr {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 3.5rem;
+      font-weight: 550;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      margin-left: 8px;
+    }
+    .fut-pos {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 1.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      margin-left: 18px;
+      margin-top: -8px;
+    }
+    .fut-nation-club {
+      font-size: 0.6rem;
+      text-align: right;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      max-width: 90px;
+      font-weight: 700;
+    }
+
+    .fut-photo-wrap {
+      position: absolute;
+      top: 28%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 200px;
+      background: transparent;
+      border-radius: 0;
+      overflow: visible;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fut-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .fut-photo-initials {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #111827;
+      font-family: "Arial Black", Impact, system-ui, sans-serif;
+    }
+
+    .fut-name {
+      position: absolute;
+      top: 65%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: 600;
+      font-size: 1.75rem;
+      text-align: center;
+      font-family: "Oswald", sans-serif;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .fut-stats {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      bottom: 15%;
+      display: grid;
+      grid-auto-rows: auto;
+      row-gap: 2px;
+      font-family: "Arial Black", Impact, system-ui, sans-serif;
+    }
+    .fut-stats-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      text-align: center;
+    }
+    .fut-stats-row.labels span {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 1.20rem;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .fut-stats-row.values span {
       font-family: "Bebas Neue", sans-serif;
       font-size: 1.8rem;
-      letter-spacing: 0.06em;
-      color: #bbf7d0;
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-top: -10px;
+    }
+	
+	/* THEMES: Farben pro Kartentyp */
+	/* Basis – lässt die normalen Farben wie sie sind */
+	
+	/* ICON-Karte – Gold/Weiß-Töne */
+	.theme-icon .fut-ovr,
+	.theme-icon .fut-pos,
+	.theme-icon .fut-name,
+	.theme-icon .fut-nation-club,
+	.theme-icon .fut-stats-row span {
+	color: #594d2c; /* HIER FARBE FÜR ICON-TEXTE ÄNDERN */
+	text-shadow: 0 0 4px rgba(0,0,0,0.8);
+	}
+	
+	/* INFORM-Karte – Gelb/Orange-Töne */
+	.theme-inform .fut-ovr,
+	.theme-inform .fut-pos,
+	.theme-inform .fut-name,
+	.theme-inform .fut-nation-club,
+	.theme-inform .fut-stats-row span {
+	color: #f5dd77; /* HIER FARBE FÜR INFORM-TEXTE ÄNDERN */
+	text-shadow: 0 0 4px rgba(0,0,0,0.8);
+	}
+
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      padding: 0 4px;
+    }
+    .small-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
+    }
+    .small-btn[disabled] {
+      opacity: .4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .delete-btn {
+      background: rgba(127,29,29,0.12);
+      color: #fecaca;
+      border: 1px solid rgba(248,113,113,0.7);
+    }
+    .delete-btn:hover:not([disabled]) {
+      background: rgba(248,113,113,0.4);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(248,113,113,0.5);
+    }
+    .edit-btn {
+      background: rgba(37,99,235,0.15);
+      color: #bfdbfe;
+      border: 1px solid rgba(59,130,246,0.7);
+    }
+    .edit-btn:hover:not([disabled]) {
+      background: rgba(59,130,246,0.35);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(59,130,246,0.6);
+    }
+    .reset-btn {
+      background: rgba(202,138,4,0.15);
+      color: #facc15;
+      border: 1px solid rgba(234,179,8,0.8);
+    }
+    .reset-btn:hover:not([disabled]) {
+      background: rgba(234,179,8,0.35);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(234,179,8,0.6);
     }
 
-    /* Liste der erstellten Teams */
-    .teams-list-wrapper {
-      margin-top: 18px;
-    }
-    .teams-list-wrapper h3 {
-      font-size: 1rem;
-      margin-bottom: 6px;
-    }
-    .teams-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .team-card {
+    .card-votes {
       background: rgba(15,23,42,0.95);
-      border-radius: 14px;
-      padding: 10px 12px;
-      border: 1px solid rgba(148,163,184,0.5);
-      font-size: 0.85rem;
+      border-radius: 16px;
+      padding: 8px 10px;
+      border: 1px solid rgba(148,163,184,0.45);
+      box-shadow: 0 12px 26px rgba(15,23,42,0.8);
+      font-size: 0.75rem;
+    }
+    .card-votes-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+    .votes-list {
       display: flex;
       flex-direction: column;
       gap: 4px;
     }
-    .team-card-header {
+    .vote-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-top: 2px;
+      border-top: 1px dashed rgba(55,65,81,0.7);
+    }
+    .vote-row:first-child { border-top: none; }
+    .vote-main {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: wrap;
     }
-    .team-card-name {
+    .vote-label {
       font-weight: 600;
-      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.7rem;
     }
-    .team-card-ovr {
-      font-family: "Bebas Neue", sans-serif;
-      font-size: 1.4rem;
-      color: #bbf7d0;
+    .vote-values {
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
-    .team-card-players {
+    .vote-delta {
+      margin-left: 4px;
+      white-space: nowrap;
+    }
+    .vote-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 4px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.9);
+    }
+    .vote-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0 5px;
+      font-size: 0.7rem;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: transparent;
+      color: #e5e7eb;
+      transition: background 0.1s, transform 0.08s;
+    }
+    .vote-btn:hover {
+      background: rgba(148,163,184,0.25);
+      transform: translateY(-0.5px);
+    }
+    .vote-btn:active {
+      transform: translateY(0.5px) scale(0.96);
+    }
+    .vote-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
       color: #9ca3af;
-      font-size: 0.8rem;
+      flex-wrap: wrap;
+      gap: 4px;
     }
-    .team-card-buttons {
-      margin-top: 4px;
+    .trend {
+      font-size: 0.7rem;
+    }
+    .vote-tendency {
+      font-weight: 700;
+      margin-left: 6px;
+    }
+    .vote-up { color: #22c55e; }
+    .vote-down { color: #ef4444; }
+    .vote-neutral { color: #3b82f6; }
+
+    .sort-controls {
       display: flex;
       gap: 6px;
+      align-items: center;
+      font-size: 0.8rem;
     }
-    .team-card-buttons button {
+    .sort-btn {
       border-radius: 999px;
       border: 1px solid rgba(148,163,184,0.6);
       background: rgba(15,23,42,0.85);
@@ -254,174 +534,267 @@
       cursor: pointer;
       transition: background 0.1s, transform 0.08s, box-shadow 0.08s;
     }
-    .team-card-buttons button:hover {
-      background: rgba(30,64,175,0.9);
+    .sort-btn:hover {
+      background: rgba(51,65,85,0.9);
       transform: translateY(-0.5px);
-      box-shadow: 0 0 0 1px rgba(129,140,248,0.7);
-    }
-    .team-card-buttons .delete {
-      border-color: rgba(248,113,113,0.8);
-      color: #fecaca;
+      box-shadow: 0 0 0 1px rgba(148,163,184,0.7);
     }
 
     @media (max-width: 900px) {
-      .pitch {
-        min-height: 230px;
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .cards-wrapper {
+        margin-top: 16px;
+      }
+      .cards-grid {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+      }
+      .fut-card {
+        max-width: 280px;
+        margin: 0 auto;
+      }
+      .fut-name {
+        top: 63.5%;
+        font-size: 1.2rem;
+      }
+      .fut-stats {
+        bottom: 20%;
+      }
+      .fut-stats-row.values span {
+        position: relative;
+        font-size: 1.3rem !important;
+        top: 6px;
+      }
+      .fut-stats-row.labels span {
+        position: relative;
+        font-size: 0.7rem !important;
+        top: 4px;
+      }
+      .fut-ovr {
+        font-size: 2.4rem;
+      }
+      .fut-pos {
+        left: 12%;
+        top: 28%;
+        font-size: 1.1rem;
+      }
+      .fut-photo-wrap {
+        width: 130px;
+        height: 130px;
+        top: 29.5%;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>FIFA Aufstellung – 5v5</h1>
-    <p class="subtitle">Wähle Spieler aus deinen Karten, speichere Teams und sieh dir das Team-OVR an.</p>
-
-    <div class="nav">
-      <a href="index.html">Karten</a>
-      <span class="current">Aufstellung</span>
-	  <a href="stats.html" class="nav-link">Stats</a>
+    <h1>FIFA Karten – Übersicht</h1>
+    <p class="subtitle">Created by Bator &amp; ChatGPT Abi</p>  
+	
+    <div class="top-bar">
+      <div class="nav-links">
+        <a href="karten.html" class="nav-link active">Karten</a>
+        <a href="aufstellung.html" class="nav-link">Aufstellung</a>
+		<a href="stats.html" class="nav-link">Stats</a>
+      </div>
+      <div class="user-box">
+        <span id="userEmail">-</span>
+        (<span id="userRole">User</span>)
+        <button type="button" id="logoutBtn">Logout</button>
+      </div>
     </div>
 
-    <section class="lineup-wrapper">
-      <div class="lineup-header">
-        <h2>5v5 Aufstellung</h2>
-        <p>4 Feldspieler + 1 Torwart aus deinen Karten auswählen und als Team speichern.</p>
-      </div>
+    <div class="layout">
+      <!-- Formular -->
+      <section class="card-form">
+        <h2>Neue Karte erstellen</h2>
+        <small>Nur Admins. Werte 0–99, OVR wird positionsabhängig aus den Grundwerten berechnet.</small>
 
-      <!-- Team-Erstellung -->
-      <div class="team-form">
-        <div class="team-form-row">
-          <label for="teamNameInput">Teamname:</label>
-          <input id="teamNameInput" type="text" placeholder="z.B. Team Bator" />
-          <button type="button" id="saveTeamBtn" class="team-btn">Team speichern</button>
-          <button type="button" id="newTeamBtn" class="team-btn">Neue Auswahl</button>
-        </div>
-      </div>
+        <form id="cardForm">
+          <div class="field">
+            <label for="playerName">Name</label>
+            <input id="playerName" name="playerName" type="text" placeholder="Spielername" required />
+          </div>
+          <div class="field">
+            <label for="nation">Nation</label>
+            <input id="nation" name="nation" type="text" placeholder="z.B. Deutschland, Türkei, Brasilien ..." />
+          </div>
+          <div class="field">
+            <label for="team">Mannschaft / Verein</label>
+            <input id="team" name="team" type="text" placeholder="z.B. FC Freunde" />
+          </div>
+          <div class="field">
+            <label for="imageUrl">Bild-URL (Firebase Storage)</label>
+            <input id="imageUrl" name="imageUrl" type="text" placeholder="Link zum Spielerbild" />
+          </div>
+		  <div class="field">
+		    <label for="template">Karten-Template</label>
+		    <select id="template" name="template">
+		  	  <option value="fut-template.png">Standard Gold</option>
+		  	  <option value="fut-template-icon.png">Icon Karte</option>
+		  	  <option value="fut-template-inform.png">InForm / TOTW</option>
+		    </select>
+		  </div>
 
-      <div class="pitch">
-        <!-- Torwart -->
-        <div class="lineup-row">
-          <div class="lineup-slot">
-            <label for="gkSelect">Torwart</label>
-            <select id="gkSelect">
-              <option value="">– Karte wählen –</option>
+          <div class="field">
+            <label for="position">Position</label>
+            <select id="position" name="position">
+              <option value="">– Position wählen –</option>
+              <option value="TW">TW (Torwart)</option>
+              <option value="AV">AV (Außenverteidiger)</option>
+              <option value="IV">IV (Innenverteidiger)</option>
+              <option value="DM">DM (Defensives Mittelfeld)</option>
+              <option value="ZM">ZM (Zentrales Mittelfeld)</option>
+              <option value="OM">OM (Offensives Mittelfeld)</option>
+              <option value="LM">LM (Linkes Mittelfeld)</option>
+              <option value="RM">RM (Rechtes Mittelfeld)</option>
+              <option value="LF">LF (Linksaußen)</option>
+              <option value="RF">RF (Rechtsaußen)</option>
+              <option value="ST">ST (Stürmer)</option>
             </select>
+          </div>
+
+          <div class="stats-grid">
+            <div class="field">
+              <label for="PAC">PAC</label>
+              <input id="PAC" name="PAC" type="number" min="0" max="99" value="80" />
+            </div>
+            <div class="field">
+              <label for="SHO">SHO</label>
+              <input id="SHO" name="SHO" type="number" min="0" max="99" value="80" />
+            </div>
+            <div class="field">
+              <label for="PAS">PAS</label>
+              <input id="PAS" name="PAS" type="number" min="0" max="99" value="80" />
+            </div>
+            <div class="field">
+              <label for="DRI">DRI</label>
+              <input id="DRI" name="DRI" type="number" min="0" max="99" value="80" />
+            </div>
+            <div class="field">
+              <label for="DEF">DEF</label>
+              <input id="DEF" name="DEF" type="number" min="0" max="99" value="80" />
+            </div>
+            <div class="field">
+              <label for="PHY">PHY</label>
+              <input id="PHY" name="PHY" type="number" min="0" max="99" value="80" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn" id="createCardBtn">+ Karte hinzufügen</button>
+        </form>
+      </section>
+
+      <!-- Karten -->
+      <section class="cards-wrapper">
+        <div class="cards-header">
+          <div>
+            <h2>Erstellte Karten (online)</h2>
+          </div>
+          <div class="sort-controls">
+            <button type="button" id="sortOvrDesc" class="sort-btn">OVR: hoch → niedrig</button>
+            <button type="button" id="sortOvrAsc" class="sort-btn">OVR: niedrig → hoch</button>
           </div>
         </div>
-
-        <div class="pitch-line"></div>
-
-        <!-- 4 Feldspieler -->
-        <div class="lineup-row">
-          <div class="lineup-slot">
-            <label for="p1Select">Spieler 1</label>
-            <select id="p1Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-          <div class="lineup-slot">
-            <label for="p2Select">Spieler 2</label>
-            <select id="p2Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="lineup-row">
-          <div class="lineup-slot">
-            <label for="p3Select">Spieler 3</label>
-            <select id="p3Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-          <div class="lineup-slot">
-            <label for="p4Select">Spieler 4</label>
-            <select id="p4Select">
-              <option value="">– Karte wählen –</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="lineup-team-info">
-        <div>Team OVR (Durchschnitt der gewählten Karten):</div>
-        <div class="team-ovr-value" id="teamOvrValue">-</div>
-      </div>
-
-      <!-- Liste der Teams -->
-      <div class="teams-list-wrapper">
-        <h3>Erstellte Teams</h3>
-        <div id="teamsList" class="teams-list"></div>
-      </div>
-    </section>
+        <div id="cardsContainer" class="cards-grid"></div>
+      </section>
+    </div>
   </div>
 
-  <!-- Firebase (compat) -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
 
   <script>
-    const lineupSelectIds = ["gkSelect", "p1Select", "p2Select", "p3Select", "p4Select"];
-    const teamOvrValueEl = document.getElementById("teamOvrValue");
-    const teamNameInput = document.getElementById("teamNameInput");
-    const saveTeamBtn = document.getElementById("saveTeamBtn");
-    const newTeamBtn = document.getElementById("newTeamBtn");
-    const teamsListEl = document.getElementById("teamsList");
-
-    let currentDocs = [];      // Karten
-    let currentLineups = [];   // Teams
-    let currentLineupId = null; // welches Team gerade „aktiv“ ist
-
     const STAT_KEYS = ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"];
+    const form = document.getElementById("cardForm");
+    const cardsContainer = document.getElementById("cardsContainer");
+    const createCardBtn = document.getElementById("createCardBtn");
+    const sortOvrDescBtn = document.getElementById("sortOvrDesc");
+    const sortOvrAscBtn = document.getElementById("sortOvrAsc");
+    const userEmailEl = document.getElementById("userEmail");
+    const userRoleEl = document.getElementById("userRole");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    function calculateOverall(stats, position) {
-      const s = {
-        PAC: Number(stats.PAC) || 0,
-        SHO: Number(stats.SHO) || 0,
-        PAS: Number(stats.PAS) || 0,
-        DRI: Number(stats.DRI) || 0,
-        DEF: Number(stats.DEF) || 0,
-        PHY: Number(stats.PHY) || 0,
-      };
+    let currentDocs = [];
+    let currentSort = "created";
+    let isAdmin = false;
+    let currentUser = null;
+    let cardsUnsub = null;
 
-      const pos = String(position || "").toUpperCase();
-      let ovr;
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPV1BoQLODeFcJea9GJ9TQFRYv_k6Jo00",
+      authDomain: "karten-creator.firebaseapp.com",
+      projectId: "karten-creator",
+      storageBucket: "karten-creator.firebasestorage.app",
+      messagingSenderId: "653062925464",
+      appId: "1:653062925464:web:062ff9e541584a835cf4ed"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    const cardsRef = db.collection("cards");
+    const usersRef = db.collection("users");
 
-      if (pos === "ST" || pos === "LF" || pos === "RF") {
-        ovr =
-          0.40 * s.SHO +
-          0.25 * s.PAC +
-          0.20 * s.DRI +
-          0.10 * s.PHY +
-          0.05 * s.PAS;
-      } else if (pos === "OM" || pos === "LM" || pos === "RM" || pos === "ZM") {
-        ovr =
-          0.30 * s.PAS +
-          0.25 * s.DRI +
-          0.20 * s.PAC +
-          0.15 * s.SHO +
-          0.10 * s.DEF;
-      } else if (pos === "DM" || pos === "IV" || pos === "AV") {
-        ovr =
-          0.35 * s.DEF +
-          0.25 * s.PHY +
-          0.20 * s.PAC +
-          0.10 * s.PAS +
-          0.10 * s.DRI;
-      } else if (pos === "TW") {
-        ovr =
-          0.40 * s.DEF +
-          0.30 * s.PHY +
-          0.20 * s.PAC +
-          0.10 * s.DRI;
-      } else {
-        const sum = STAT_KEYS.reduce((acc, key) => acc + (s[key] || 0), 0);
-        ovr = sum / STAT_KEYS.length;
+    auth.onAuthStateChanged(async (user) => {
+	  if (!user || !user.emailVerified) {
+	  	if (user && !user.emailVerified) {
+	  	  alert("Bitte bestätige zuerst deine E-Mail, bevor du die Karten-Seite nutzen kannst.");
+	  	}
+	  	await auth.signOut().catch(() => {});
+	  	window.location.href = "index.html";
+	  	return;
+	  }
+	  
+      currentUser = user;
+      userEmailEl.textContent = user.email || "(ohne E-Mail)";
+
+      try {
+        const userDoc = await usersRef.doc(user.uid).get();
+        isAdmin = userDoc.exists && userDoc.data().isAdmin === true;
+      } catch (e) {
+        console.error("Fehler beim Laden des User-Dokuments:", e);
+        isAdmin = false;
       }
+      updateAdminUI();
 
-      return Math.round(ovr);
+      if (cardsUnsub) cardsUnsub();
+      cardsUnsub = cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
+        currentDocs = [];
+        snapshot.forEach((doc) => currentDocs.push({ id: doc.id, data: doc.data() }));
+        renderCards();
+      });
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await auth.signOut();
+        window.location.href = "index.html";
+      } catch (e) {
+        console.error("Logout-Fehler:", e);
+      }
+    });
+
+    function updateAdminUI() {
+      userRoleEl.textContent = isAdmin ? "Admin" : "User";
+      createCardBtn.disabled = !isAdmin;
+      document.querySelectorAll(".delete-btn").forEach(btn => { btn.disabled = !isAdmin; });
+      document.querySelectorAll(".edit-btn").forEach(btn => { btn.disabled = !isAdmin; });
+      document.querySelectorAll(".reset-btn").forEach(btn => { btn.disabled = !isAdmin; });
     }
+
+    sortOvrDescBtn.addEventListener("click", () => {
+      currentSort = "ovr-desc";
+      renderCards();
+    });
+
+    sortOvrAscBtn.addEventListener("click", () => {
+      currentSort = "ovr-asc";
+      renderCards();
+    });
 
     function escapeHtml(str) {
       return String(str || "")
@@ -432,263 +805,406 @@
         .replace(/'/g, "&#039;");
     }
 
-    // Firebase Setup
-    const firebaseConfig = {
-      apiKey: "AIzaSyDPV1BoQLODeFcJea9GJ9TQFRYv_k6Jo00",
-      authDomain: "karten-creator.firebaseapp.com",
-      projectId: "karten-creator",
-      storageBucket: "karten-creator.firebasestorage.app",
-      messagingSenderId: "653062925464",
-      appId: "1:653062925464:web:062ff9e541584a835cf4ed"
-    };
+    function calculateOverall(stats, position) {
+      const s = {
+        PAC: Number(stats.PAC) || 0,
+        SHO: Number(stats.SHO) || 0,
+        PAS: Number(stats.PAS) || 0,
+        DRI: Number(stats.DRI) || 0,
+        DEF: Number(stats.DEF) || 0,
+        PHY: Number(stats.PHY) || 0,
+      };
+      const pos = String(position || "").toUpperCase();
+      let ovr;
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const cardsRef = db.collection("cards");
-    const lineupsRef = db.collection("lineups");
-    const auth = firebase.auth();
-	
-	// prüfen, ob jemand eingeloggt ist
-	auth.onAuthStateChanged(async (user) => {
-	  if (!user || !user.emailVerified) {
-		if (user && !user.emailVerified) {
-		  alert("Bitte bestätige zuerst deine E-Mail, bevor du die Aufstellungs-Seite nutzen kannst.");
-		}
-		await auth.signOut().catch(() => {});
-		window.location.href = "index.html";
-		return;
-	  }
-	
-	  console.log("Eingeloggt als (verifiziert):", user.email || user.uid);
-	});
-
-
-    // Karten live holen
-    cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
-      currentDocs = [];
-      snapshot.forEach((doc) => {
-        currentDocs.push({ id: doc.id, data: doc.data() });
-      });
-      populateLineupSelects();
-      renderTeamsList(); // Team-Anzeige updaten (für Labels / OVR)
-    });
-
-    // Teams live holen
-    lineupsRef.orderBy("createdAt").onSnapshot((snapshot) => {
-      currentLineups = [];
-      snapshot.forEach((doc) => {
-        currentLineups.push({ id: doc.id, data: doc.data() });
-      });
-      renderTeamsList();
-    });
-
-    function populateLineupSelects() {
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-
-        const previous = sel.value;
-        sel.innerHTML = '<option value="">– Karte wählen –</option>';
-
-        currentDocs.forEach((doc) => {
-          const d = doc.data;
-          const ovr = calculateOverall(d.stats || {}, d.position || "");
-          const label = `${d.name || "Unbekannt"} (${d.position || "POS"}, OVR ${ovr})`;
-          const opt = document.createElement("option");
-          opt.value = doc.id;
-          opt.textContent = label;
-          sel.appendChild(opt);
-        });
-
-        if (previous) {
-          sel.value = previous;
-        }
-      });
-
-      updateTeamOvr();
-    }
-
-    function updateTeamOvr() {
-      let total = 0;
-      let count = 0;
-
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        if (!sel) return;
-        const cardId = sel.value;
-        if (!cardId) return;
-
-        const doc = currentDocs.find(d => d.id === cardId);
-        if (!doc) return;
-
-        const d = doc.data;
-        const ovr = calculateOverall(d.stats || {}, d.position || "");
-        total += ovr;
-        count++;
-      });
-
-      if (count === 0) {
-        teamOvrValueEl.textContent = "-";
+      if (pos === "ST" || pos === "LF" || pos === "RF") {
+        ovr = 0.40 * s.SHO + 0.25 * s.PAC + 0.20 * s.DRI + 0.10 * s.PHY + 0.05 * s.PAS;
+      } else if (pos === "OM" || pos === "LM" || pos === "RM" || pos === "ZM") {
+        ovr = 0.30 * s.PAS + 0.25 * s.DRI + 0.20 * s.PAC + 0.15 * s.SHO + 0.10 * s.DEF;
+      } else if (pos === "DM" || pos === "IV" || pos === "AV") {
+        ovr = 0.35 * s.DEF + 0.25 * s.PHY + 0.20 * s.PAC + 0.10 * s.PAS + 0.10 * s.DRI;
+      } else if (pos === "TW") {
+        ovr = 0.40 * s.DEF + 0.30 * s.PHY + 0.20 * s.PAC + 0.10 * s.DRI;
       } else {
-        teamOvrValueEl.textContent = Math.round(total / count);
+        const sum = STAT_KEYS.reduce((acc, key) => acc + (s[key] || 0), 0);
+        ovr = sum / STAT_KEYS.length;
       }
+      return Math.round(ovr);
     }
 
-    // Change Listener für Selects
-    lineupSelectIds.forEach((id) => {
-      const sel = document.getElementById(id);
-      if (sel) {
-        sel.addEventListener("change", updateTeamOvr);
-      }
-    });
+    function emptyVotes() {
+      const obj = {};
+      STAT_KEYS.forEach((k) => { obj[k] = 0; });
+      return obj;
+    }
 
-    // Neue Auswahl
-    newTeamBtn.addEventListener("click", () => {
-      currentLineupId = null;
-      teamNameInput.value = "";
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        if (sel) sel.value = "";
-      });
-      updateTeamOvr();
-    });
-
-    // Team speichern (alle Eingeloggten dürfen Teams speichern)
-    saveTeamBtn.addEventListener("click", async () => {
-      const name = teamNameInput.value.trim();
-      if (!name) {
-        alert("Bitte gib einen Teamnamen ein.");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!isAdmin) {
+        alert("Nur Admins können Karten erstellen.");
         return;
       }
+      const playerName = form.playerName.value.trim() || "Unbekannt";
+      const nation = form.nation.value.trim() || "";
+      const team = form.team.value.trim() || "";
+      const position = form.position.value || "";
+      const imageUrl = form.imageUrl.value.trim() || "";
 
-      const slots = {};
-      let hasAny = false;
-      lineupSelectIds.forEach((id) => {
-        const sel = document.getElementById(id);
-        const val = sel ? sel.value : "";
-        if (val) {
-          slots[id] = val;
-          hasAny = true;
-        }
+      const stats = {};
+      STAT_KEYS.forEach((key) => {
+        const value = Number(form[key].value);
+        stats[key] = Number.isFinite(value)
+          ? Math.min(99, Math.max(0, Math.round(value)))
+          : 0;
       });
-
-      if (!hasAny) {
-        alert("Wähle mindestens eine Karte für das Team aus.");
-        return;
-      }
 
       try {
-        if (currentLineupId) {
-          await lineupsRef.doc(currentLineupId).update({
-            name,
-            slots
-          });
-        } else {
-          const docRef = await lineupsRef.add({
-            name,
-            slots,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          currentLineupId = docRef.id;
-        }
+        await cardsRef.add({
+          name: playerName,
+          nation,
+          team,
+          position,
+		  template: form.template.value,
+          imageUrl,
+          stats,
+          votesUp: emptyVotes(),
+          votesDown: emptyVotes(),
+		  userVotes: {},
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        form.reset();
+        STAT_KEYS.forEach((key) => { form[key].value = 80; });
       } catch (err) {
-        console.error("Fehler beim Speichern des Teams:", err);
-        alert("Team konnte nicht gespeichert werden :(");
+        console.error("Fehler beim Speichern:", err);
+        alert("Karte konnte nicht gespeichert werden :(");
       }
     });
 
-    function renderTeamsList() {
-      teamsListEl.innerHTML = "";
+    function renderCards() {
+      cardsContainer.innerHTML = "";
+      const docsToRender = [...currentDocs];
 
-      if (currentLineups.length === 0) {
-        teamsListEl.innerHTML = "<p style='font-size:0.8rem;color:#9ca3af;'>Noch keine Teams erstellt.</p>";
-        return;
+      if (currentSort === "ovr-desc" || currentSort === "ovr-asc") {
+        docsToRender.sort((a, b) => {
+          const aData = a.data;
+          const bData = b.data;
+          const aOvr = calculateOverall(aData.stats || {}, aData.position || "");
+          const bOvr = calculateOverall(bData.stats || {}, bData.position || "");
+          return currentSort === "ovr-desc" ? bOvr - aOvr : aOvr - bOvr;
+        });
       }
 
-      currentLineups.forEach((entry) => {
-        const id = entry.id;
-        const data = entry.data;
-        const name = data.name || "Ohne Name";
-        const slots = data.slots || {};
+      docsToRender.forEach(doc => {
+        addCardToDOM(doc.id, doc.data);
+      });
 
-        // Team-OVR
-        let total = 0;
-        let count = 0;
-        const playerTexts = [];
+      updateAdminUI();
+    }
 
-        lineupSelectIds.forEach((slotId) => {
-          const cardId = slots[slotId];
-          if (!cardId) return;
-          const doc = currentDocs.find(d => d.id === cardId);
-          if (!doc) {
-            playerTexts.push(`${slotId}: (Karte gelöscht)`);
-            return;
-          }
-          const d = doc.data;
-          const ovr = calculateOverall(d.stats || {}, d.position || "");
-          total += ovr;
-          count++;
+    function initialsFromName(name) {
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
 
-          const label = `${d.name || "Unbekannt"} (${d.position || "POS"}, OVR ${ovr})`;
-          playerTexts.push(`${slotId === "gkSelect" ? "TW" : "Spieler"}: ${label}`);
-        });
+    function addCardToDOM(id, data) {
+      const name = data.name || "Unbekannt";
+      const nation = data.nation || "";
+      const team = data.team || "";
+      const position = data.position || "";
+      const imageUrl = data.imageUrl || "";
+      const stats = data.stats || {};
+      const votesUp = data.votesUp || {};
+      const votesDown = data.votesDown || {};
+	  const template = data.template || "fut-template.png";
+	  
+	  let themeClass = "";           // Standard-Gold
+	  if (template.includes("icon")) {
+	    themeClass = "theme-icon";   // Icon-Farben
+	  } else if (template.includes("inform")) {
+	    themeClass = "theme-inform"; // Inform-Farben
+	  }
 
-        const teamOvr = count > 0 ? Math.round(total / count) : "-";
+      const card = document.createElement("article");
+      card.className = "card";
+      card.dataset.id = id;
 
-        const cardEl = document.createElement("div");
-        cardEl.className = "team-card";
-        cardEl.dataset.id = id;
-        cardEl.innerHTML = `
-          <div class="team-card-header">
-            <div class="team-card-name">${escapeHtml(name)}</div>
-            <div class="team-card-ovr">${teamOvr}</div>
+      const overall = calculateOverall(stats, position);
+
+      card.innerHTML = `
+        <div class="fut-card ${themeClass}" style="background-image: url('${escapeHtml(template)}');">
+          <div class="fut-card-inner">
+            <div class="fut-top">
+              <div class="fut-rating">
+                <div class="fut-ovr">${overall}</div>
+                <div class="fut-pos">${escapeHtml(position || "POS")}</div>
+              </div>
+              <div class="fut-nation-club">
+                ${escapeHtml(nation || "Nation")}<br/>
+                ${escapeHtml(team || "Verein")}
+              </div>
+            </div>
+            <div class="fut-photo-wrap">
+              ${
+                imageUrl
+                  ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(name)}" />`
+                  : `<div class="fut-photo-initials">${escapeHtml(initialsFromName(name))}</div>`
+              }
+            </div>
+            <div class="fut-name">${escapeHtml(name)}</div>
+            <div class="fut-stats"></div>
           </div>
-          <div class="team-card-players">
-            ${playerTexts.map(escapeHtml).join("<br>")}
+        </div>
+        <div class="card-actions">
+          <button type="button" class="small-btn edit-btn" title="Stats bearbeiten">Bearbeiten</button>
+          <button type="button" class="small-btn reset-btn" title="Votes zurücksetzen">Votes reset</button>
+          <button type="button" class="small-btn delete-btn" title="Karte löschen">Löschen</button>
+        </div>
+        <div class="card-votes">
+          <div class="card-votes-header">
+            <span>Voting pro Stat</span>
+            <span>↑ hoch / ↓ runter</span>
           </div>
-          <div class="team-card-buttons">
-            <button type="button" class="load">Team laden</button>
-            <button type="button" class="delete">Löschen</button>
+          <div class="votes-list"></div>
+        </div>
+      `;
+
+      const futStatsContainer = card.querySelector(".fut-stats");
+      const votesList = card.querySelector(".votes-list");
+      const orderedStats = ["PAC","SHO","PAS","DRI","DEF","PHY"];
+      const labelsHTML = orderedStats.map(k => `<span>${k}</span>`).join("");
+      const valuesHTML = orderedStats.map(k => `<span>${stats[k] ?? 0}</span>`).join("");
+
+      futStatsContainer.innerHTML = `
+        <div class="fut-stats-row labels">${labelsHTML}</div>
+        <div class="fut-stats-row values">${valuesHTML}</div>
+      `;
+
+      STAT_KEYS.forEach((key) => {
+        const base = stats[key] ?? 0;
+        const up = votesUp[key] ?? 0;
+        const down = votesDown[key] ?? 0;
+        const net = up - down;
+        const community = Math.max(0, Math.min(99, base + net));
+
+        let trendText;
+        let trendClass;
+        if (net > 0) {
+          trendText = "↑ hoch";
+          trendClass = "vote-up";
+        } else if (net < 0) {
+          trendText = "↓ runter";
+          trendClass = "vote-down";
+        } else {
+          trendText = "± neutral";
+          trendClass = "vote-neutral";
+        }
+
+        const voteRow = document.createElement("div");
+        voteRow.className = "vote-row";
+        voteRow.innerHTML = `
+          <div class="vote-main">
+            <span class="vote-label">${key}</span>
+            <span class="vote-values">
+              ${base}${net !== 0 ? ` → ${community}` : ""}
+              ${net !== 0 ? `<span class="vote-delta">${net > 0 ? "+" + net : net}</span>` : ""}
+            </span>
+            <div class="vote-controls">
+              <button type="button" class="vote-btn down" data-stat="${key}">−</button>
+              <button type="button" class="vote-btn up" data-stat="${key}">+</button>
+            </div>
+          </div>
+          <div class="vote-info">
+            <span>
+              Votes: ▲${up} / ▼${down}${net !== 0 ? ` (Netto ${net > 0 ? "+" + net : net})` : ""}
+            </span>
+            <span class="trend">
+              Tendenz:
+              <span class="vote-tendency ${trendClass}">${trendText}</span>
+            </span>
           </div>
         `;
-
-        // Buttons
-        const loadBtn = cardEl.querySelector(".load");
-        const deleteBtn = cardEl.querySelector(".delete");
-
-        loadBtn.addEventListener("click", () => {
-          currentLineupId = id;
-          teamNameInput.value = name;
-
-          lineupSelectIds.forEach((slotId) => {
-            const sel = document.getElementById(slotId);
-            if (!sel) return;
-            sel.value = slots[slotId] || "";
-          });
-
-          updateTeamOvr();
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-
-        deleteBtn.addEventListener("click", async () => {
-          const really = confirm("Willst du dieses Team wirklich löschen?");
-          if (!really) return;
-
-          try {
-            await lineupsRef.doc(id).delete();
-            if (currentLineupId === id) {
-              currentLineupId = null;
-              teamNameInput.value = "";
-            }
-          } catch (err) {
-            console.error("Fehler beim Löschen des Teams:", err);
-            alert("Team konnte nicht gelöscht werden :(");
-          }
-        });
-
-        teamsListEl.appendChild(cardEl);
+        votesList.appendChild(voteRow);
       });
+
+      const deleteBtn = card.querySelector(".delete-btn");
+      const editBtn = card.querySelector(".edit-btn");
+      const resetBtn = card.querySelector(".reset-btn");
+
+      deleteBtn.disabled = !isAdmin;
+      editBtn.disabled = !isAdmin;
+      resetBtn.disabled = !isAdmin;
+
+      card.addEventListener("click", async (e) => {
+        const del = e.target.closest(".delete-btn");
+        const edit = e.target.closest(".edit-btn");
+        const reset = e.target.closest(".reset-btn");
+        const voteBtn = e.target.closest(".vote-btn");
+
+        if (del) {
+          if (!isAdmin) { alert("Nur Admins können Karten löschen."); return; }
+          const really = confirm("Willst du diese Karte wirklich löschen?");
+          if (!really) return;
+          try { await cardsRef.doc(card.dataset.id).delete(); }
+          catch (err) {
+            console.error("Fehler beim Löschen:", err);
+            alert("Karte konnte nicht gelöscht werden :(");
+          }
+          return;
+        }
+
+		if (reset) {
+		  if (!isAdmin) { 
+			alert("Nur Admins können Votes zurücksetzen."); 
+			return; 
+		  }
+		  const really = confirm("Willst du alle Votes für diese Karte zurücksetzen?");
+		  if (!really) return;
+		
+		  try {
+		    await cardsRef.doc(card.dataset.id).update({
+			  votesUp: emptyVotes(),
+			  votesDown: emptyVotes(),
+			  userVotes: {} // NEU: alle User-Votes löschen -> alle dürfen wieder neu voten
+		    });
+		  } catch (err) {
+			console.error("Fehler beim Zurücksetzen der Votes:", err);
+			alert("Votes konnten nicht zurückgesetzt werden :(");
+		  }
+		  return;
+		}
+
+
+        if (edit) {
+          if (!isAdmin) { alert("Nur Admins können Stats bearbeiten."); return; }
+          await editCardStats(card.dataset.id);
+          return;
+        }
+
+		// Voting – pro User nur 1 Vote pro Stat
+		if (!voteBtn) return;
+		
+		// zur Sicherheit
+		if (!currentUser) {
+		  alert("Bitte logge dich erneut ein, um voten zu können.");
+		  return;
+		}
+		
+		const statKey = voteBtn.getAttribute("data-stat");
+		const isUpVote = voteBtn.classList.contains("up");
+		const cardId = card.dataset.id;
+		
+		try {
+		  await db.runTransaction(async (tx) => {
+			const docRef = cardsRef.doc(cardId);
+			const snap = await tx.get(docRef);
+			if (!snap.exists) {
+			  throw new Error("not-found");
+			}
+		
+			const data = snap.data() || {};
+			const votesUp = { ...(data.votesUp || emptyVotes()) };
+			const votesDown = { ...(data.votesDown || emptyVotes()) };
+			const userVotes = data.userVotes ? { ...data.userVotes } : {};
+		
+			const userId = currentUser.uid;
+			const userEntry = userVotes[userId] ? { ...userVotes[userId] } : {};
+		
+			// wenn der User für diesen Stat schon gevotet hat -> blocken
+			if (userEntry[statKey]) {
+			  const err = new Error("already-voted");
+			  err.code = "already-voted";
+			  throw err;
+			}
+		
+			// Vote zählen
+			if (isUpVote) {
+			  votesUp[statKey] = (votesUp[statKey] || 0) + 1;
+			  userEntry[statKey] = 1;    // 1 = hoch
+			} else {
+			  votesDown[statKey] = (votesDown[statKey] || 0) + 1;
+			  userEntry[statKey] = -1;   // -1 = runter
+			}
+		
+			userVotes[userId] = userEntry;
+		
+			tx.update(docRef, {
+			  votesUp,
+			  votesDown,
+			  userVotes
+			});
+		  });
+		} catch (err) {
+		  if (err.code === "already-voted") {
+			alert("Du hast für diesen Stat schon abgestimmt. Pro Stat nur eine Stimme pro Account.");
+		} else if (err.message !== "not-found") {
+			console.error("Fehler beim Voting:", err);
+			alert("Voting konnte nicht gespeichert werden :(");
+		  }
+		}
+
+      });
+
+      cardsContainer.appendChild(card);
     }
+
+    async function editCardStats(cardId) {
+      try {
+        const docSnap = await cardsRef.doc(cardId).get();
+        if (!docSnap.exists) return;
+
+        const data = docSnap.data();
+        const stats = data.stats || {};
+
+        const currentName = data.name || "";
+        const currentNation = data.nation || "";
+        const currentTeam = data.team || "";
+        const currentPosition = data.position || "";
+
+        let newName = prompt("Neuer Spielername:", currentName);
+        if (newName === null) return;
+        newName = newName.trim() || currentName;
+
+        let newNation = prompt("Neue Nation:", currentNation);
+        if (newNation === null) return;
+        newNation = newNation.trim();
+
+        let newTeam = prompt("Neue Mannschaft / Verein:", currentTeam);
+        if (newTeam === null) return;
+        newTeam = newTeam.trim();
+
+        let newPosition = prompt("Neue Position (z.B. ST, ZM, IV, TW):", currentPosition);
+        if (newPosition === null) return;
+        newPosition = newPosition.trim().toUpperCase();
+
+        const newStats = {};
+        for (const key of STAT_KEYS) {
+          const current = stats[key] ?? 0;
+          const input = prompt(`Neuer Grundwert für ${key} (0–99):`, current);
+          if (input === null) {
+            return;
+          }
+          let num = Number(input);
+          if (!Number.isFinite(num)) num = current;
+          num = Math.max(0, Math.min(99, Math.round(num)));
+          newStats[key] = num;
+        }
+
+        await cardsRef.doc(cardId).update({
+          name: newName,
+          nation: newNation,
+          team: newTeam,
+          position: newPosition,
+          stats: newStats
+        });
+      } catch (err) {
+        console.error("Fehler beim Bearbeiten der Stats:", err);
+        alert("Stats konnten nicht bearbeitet werden :(");
+      }
+    }
+
+    // initial
+    updateAdminUI();
   </script>
 </body>
 </html>
