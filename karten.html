@@ -868,6 +868,7 @@
           stats,
           votesUp: emptyVotes(),
           votesDown: emptyVotes(),
+		  userVotes: {},
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         form.reset();
@@ -1051,21 +1052,27 @@
           return;
         }
 
-        if (reset) {
-          if (!isAdmin) { alert("Nur Admins können Votes zurücksetzen."); return; }
-          const really = confirm("Willst du alle Votes für diese Karte zurücksetzen?");
-          if (!really) return;
-          try {
-            await cardsRef.doc(card.dataset.id).update({
-              votesUp: emptyVotes(),
-              votesDown: emptyVotes()
-            });
-          } catch (err) {
-            console.error("Fehler beim Zurücksetzen der Votes:", err);
-            alert("Votes konnten nicht zurückgesetzt werden :(");
-          }
-          return;
-        }
+		if (reset) {
+		  if (!isAdmin) { 
+			alert("Nur Admins können Votes zurücksetzen."); 
+			return; 
+		  }
+		  const really = confirm("Willst du alle Votes für diese Karte zurücksetzen?");
+		  if (!really) return;
+		
+		  try {
+		    await cardsRef.doc(card.dataset.id).update({
+			  votesUp: emptyVotes(),
+			  votesDown: emptyVotes(),
+			  userVotes: {} // NEU: alle User-Votes löschen -> alle dürfen wieder neu voten
+		    });
+		  } catch (err) {
+			console.error("Fehler beim Zurücksetzen der Votes:", err);
+			alert("Votes konnten nicht zurückgesetzt werden :(");
+		  }
+		  return;
+		}
+
 
         if (edit) {
           if (!isAdmin) { alert("Nur Admins können Stats bearbeiten."); return; }
@@ -1073,22 +1080,68 @@
           return;
         }
 
-        if (!voteBtn) return;
-        const statKey = voteBtn.getAttribute("data-stat");
-        const isUpVote = voteBtn.classList.contains("up");
+		// Voting – pro User nur 1 Vote pro Stat
+		if (!voteBtn) return;
+		
+		// zur Sicherheit
+		if (!currentUser) {
+		  alert("Bitte logge dich erneut ein, um voten zu können.");
+		  return;
+		}
+		
+		const statKey = voteBtn.getAttribute("data-stat");
+		const isUpVote = voteBtn.classList.contains("up");
+		const cardId = card.dataset.id;
+		
+		try {
+		  await db.runTransaction(async (tx) => {
+			const docRef = cardsRef.doc(cardId);
+			const snap = await tx.get(docRef);
+			if (!snap.exists) {
+			  throw new Error("not-found");
+			}
+		
+			const data = snap.data() || {};
+			const votesUp = { ...(data.votesUp || emptyVotes()) };
+			const votesDown = { ...(data.votesDown || emptyVotes()) };
+			const userVotes = data.userVotes ? { ...data.userVotes } : {};
+		
+			const userId = currentUser.uid;
+			const userEntry = userVotes[userId] ? { ...userVotes[userId] } : {};
+		
+			// wenn der User für diesen Stat schon gevotet hat -> blocken
+			if (userEntry[statKey]) {
+			  const err = new Error("already-voted");
+			  err.code = "already-voted";
+			  throw err;
+			}
+		
+			// Vote zählen
+			if (isUpVote) {
+			  votesUp[statKey] = (votesUp[statKey] || 0) + 1;
+			  userEntry[statKey] = 1;    // 1 = hoch
+			} else {
+			  votesDown[statKey] = (votesDown[statKey] || 0) + 1;
+			  userEntry[statKey] = -1;   // -1 = runter
+			}
+		
+			userVotes[userId] = userEntry;
+		
+			tx.update(docRef, {
+			  votesUp,
+			  votesDown,
+			  userVotes
+			});
+		  });
+		} catch (err) {
+		  if (err.code === "already-voted") {
+			alert("Du hast für diesen Stat schon abgestimmt. Pro Stat nur eine Stimme pro Account.");
+		} else if (err.message !== "not-found") {
+			console.error("Fehler beim Voting:", err);
+			alert("Voting konnte nicht gespeichert werden :(");
+		  }
+		}
 
-        const updateData = {};
-        if (isUpVote) {
-          updateData[`votesUp.${statKey}`] = firebase.firestore.FieldValue.increment(1);
-        } else {
-          updateData[`votesDown.${statKey}`] = firebase.firestore.FieldValue.increment(1);
-        }
-
-        try {
-          await cardsRef.doc(card.dataset.id).update(updateData);
-        } catch (err) {
-          console.error("Fehler beim Updaten der Votes:", err);
-        }
       });
 
       cardsContainer.appendChild(card);
