@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stats & Rangliste – FIFA Karten</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
+      color: #e5e7eb;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 30px 12px;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1100px;
+      background: rgba(15,23,42,0.96);
+      border-radius: 24px;
+      border: 1px solid rgba(148,163,184,0.5);
+      box-shadow:
+        0 22px 60px rgba(15,23,42,0.85),
+        0 0 0 1px rgba(15,23,42,0.7);
+      padding: 18px 18px 20px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .logo-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .logo-title h1 {
+      font-size: 1.1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+      font-weight: 600;
+    }
+    .logo-title span {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav-link {
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      color: #e5e7eb;
+      text-decoration: none;
+      background: rgba(15,23,42,0.9);
+      transition: background 0.12s, border-color 0.12s, transform 0.08s;
+    }
+    .nav-link:hover {
+      background: rgba(30,64,175,0.9);
+      border-color: rgba(129,140,248,0.7);
+      transform: translateY(-0.5px);
+    }
+    .nav-link.active {
+      background: linear-gradient(135deg,#22c55e,#16a34a);
+      border-color: rgba(34,197,94,0.9);
+      box-shadow: 0 10px 30px rgba(34,197,94,0.5);
+    }
+
+    .user-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+    .user-info-row span strong {
+      color: #e5e7eb;
+    }
+    .logout-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: rgba(127,29,29,0.15);
+      color: #fecaca;
+      border: 1px solid rgba(248,113,113,0.8);
+      transition: background 0.1s, transform 0.1s, box-shadow 0.1s;
+    }
+    .logout-btn:hover {
+      background: rgba(248,113,113,0.35);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(248,113,113,0.7);
+    }
+
+    .content {
+      background: radial-gradient(circle at top, rgba(30,64,175,0.15), transparent 55%);
+      border-radius: 18px;
+      border: 1px solid rgba(51,65,85,0.8);
+      padding: 14px 14px 16px;
+    }
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .content-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .content-header-left h2 {
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #e5e7eb;
+    }
+    .content-header-left p {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .sort-buttons {
+      display: inline-flex;
+      gap: 4px;
+      padding: 3px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(55,65,81,0.9);
+    }
+    .sort-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      background: transparent;
+      color: #9ca3af;
+      transition: background 0.1s, color 0.1s, transform 0.08s;
+    }
+    .sort-btn.active {
+      background: rgba(37,99,235,0.9);
+      color: #e5e7eb;
+    }
+    .sort-btn:hover {
+      transform: translateY(-0.5px);
+    }
+
+    .table-wrapper {
+      margin-top: 8px;
+      border-radius: 14px;
+      border: 1px solid rgba(30,64,175,0.9);
+      background: rgba(15,23,42,0.96);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    thead {
+      background: linear-gradient(135deg,rgba(30,64,175,0.9),rgba(59,130,246,0.9));
+    }
+    thead th {
+      text-align: left;
+      padding: 8px 10px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-top: 1px solid rgba(31,41,55,0.9);
+    }
+    tbody tr:nth-child(even) {
+      background: rgba(15,23,42,0.9);
+    }
+    tbody tr:nth-child(odd) {
+      background: rgba(15,23,42,0.96);
+    }
+    td {
+      padding: 7px 9px;
+      vertical-align: middle;
+    }
+    td.name-cell {
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    td.small-muted {
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+    .badge-pos {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+    }
+    .badge-ovr {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
+    }
+    .stat-number {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .edit-stat-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      background: rgba(34,197,94,0.1);
+      color: #bbf7d0;
+      border: 1px solid rgba(34,197,94,0.7);
+      transition: background 0.1s, transform 0.08s, box-shadow 0.1s;
+    }
+    .edit-stat-btn:hover {
+      background: rgba(34,197,94,0.35);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 0 1px rgba(34,197,94,0.7);
+    }
+    .edit-stat-btn[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .empty-hint {
+      padding: 10px;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      text-align: center;
+    }
+
+    .foot-hint {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-align: right;
+    }
+
+    @media (max-width: 700px) {
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .user-info-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      table {
+        font-size: 0.75rem;
+      }
+      thead th, td {
+        padding: 6px 6px;
+      }
+      .badge-ovr {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="top-bar">
+      <div class="logo-title">
+        <h1>FIFA Karten</h1>
+        <span>Stats & Rangliste</span>
+      </div>
+      <div class="nav-links">
+        <a href="karten.html" class="nav-link">Karten</a>
+        <a href="aufstellung.html" class="nav-link">Aufstellung</a>
+        <a href="stats.html" class="nav-link active">Stats</a>
+      </div>
+    </div>
+
+    <div class="user-info-row">
+      <div>
+        <span>Eingeloggt als: <strong id="userEmail">–</strong></span><br />
+        <span>Rolle: <strong id="userRole">–</strong></span>
+      </div>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </div>
+
+    <div class="content">
+      <div class="content-header">
+        <div class="content-header-left">
+          <h2>Spieler-Statistiken</h2>
+          <p>Nur Admins können Tore / Siege bearbeiten. Alle sehen das Ranking.</p>
+        </div>
+        <div class="sort-buttons">
+          <button id="sortByWins" class="sort-btn active">nach Siegen</button>
+          <button id="sortByGoals" class="sort-btn">nach Toren</button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Spieler</th>
+              <th>Team / Land</th>
+              <th>POS</th>
+              <th>OVR</th>
+              <th>Siege</th>
+              <th>Tore</th>
+              <th>Aktion</th>
+            </tr>
+          </thead>
+          <tbody id="statsTableBody">
+            <tr><td colspan="8" class="empty-hint">Lade Spieler...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="foot-hint">
+        Bearbeitung nur mit Admin-Account (isAdmin = true in Firestore).
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+
+  <script>
+    const STAT_KEYS = ["PAC","SHO","PAS","DRI","DEF","PHY"];
+
+    const userEmailEl = document.getElementById("userEmail");
+    const userRoleEl = document.getElementById("userRole");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const sortByWinsBtn = document.getElementById("sortByWins");
+    const sortByGoalsBtn = document.getElementById("sortByGoals");
+    const statsTableBody = document.getElementById("statsTableBody");
+
+    let currentUser = null;
+    let isAdmin = false;
+    let currentSort = "wins"; // "wins" oder "goals"
+    let cardsData = [];
+    let cardsUnsub = null;
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPV1BoQLODeFcJea9GJ9TQFRYv_k6Jo00",
+      authDomain: "karten-creator.firebaseapp.com",
+      projectId: "karten-creator",
+      storageBucket: "karten-creator.firebasestorage.app",
+      messagingSenderId: "653062925464",
+      appId: "1:653062925464:web:062ff9e541584a835cf4ed"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    const cardsRef = db.collection("cards");
+    const usersRef = db.collection("users");
+
+    // gleiche OVR-Formel wie auf Karten- / Aufstellungsseite
+    function calculateOverall(stats, position) {
+      const s = {
+        PAC: Number(stats.PAC) || 0,
+        SHO: Number(stats.SHO) || 0,
+        PAS: Number(stats.PAS) || 0,
+        DRI: Number(stats.DRI) || 0,
+        DEF: Number(stats.DEF) || 0,
+        PHY: Number(stats.PHY) || 0,
+      };
+      const pos = String(position || "").toUpperCase();
+      let ovr;
+
+      if (pos === "ST" || pos === "LF" || pos === "RF") {
+        ovr =
+          0.40 * s.SHO +
+          0.25 * s.PAC +
+          0.20 * s.DRI +
+          0.10 * s.PHY +
+          0.05 * s.PAS;
+      } else if (["OM","LM","RM","ZM"].includes(pos)) {
+        ovr =
+          0.30 * s.PAS +
+          0.25 * s.DRI +
+          0.20 * s.PAC +
+          0.15 * s.SHO +
+          0.10 * s.DEF;
+      } else if (["DM","IV","AV"].includes(pos)) {
+        ovr =
+          0.35 * s.DEF +
+          0.25 * s.PHY +
+          0.20 * s.PAC +
+          0.10 * s.PAS +
+          0.10 * s.DRI;
+      } else if (pos === "TW") {
+        ovr =
+          0.40 * s.DEF +
+          0.30 * s.PHY +
+          0.20 * s.PAC +
+          0.10 * s.DRI;
+      } else {
+        const sum = STAT_KEYS.reduce((acc, key) => acc + (s[key] || 0), 0);
+        ovr = sum / STAT_KEYS.length;
+      }
+      return Math.round(ovr);
+    }
+
+    function renderTable() {
+      if (!cardsData.length) {
+        statsTableBody.innerHTML =
+          '<tr><td colspan="8" class="empty-hint">Noch keine Karten / Spieler vorhanden.</td></tr>';
+        return;
+      }
+
+      // sortieren
+      const sorted = [...cardsData].sort((a,b) => {
+        if (currentSort === "goals") {
+          return (b.goals || 0) - (a.goals || 0);
+        }
+        // default: wins
+        return (b.wins || 0) - (a.wins || 0);
+      });
+
+      let html = "";
+      sorted.forEach((c, idx) => {
+        const ovr = calculateOverall(c.stats || {}, c.position || "");
+        const pos = (c.position || "").toUpperCase();
+        const wins = Number(c.wins || 0);
+        const goals = Number(c.goals || 0);
+
+        html += `
+          <tr data-id="${c.id}">
+            <td>${idx + 1}</td>
+            <td class="name-cell">
+              ${c.name || "Unbekannt"}
+            </td>
+            <td class="small-muted">
+              ${(c.team || "Team?")} &nbsp;•&nbsp; ${(c.nation || "Land?")}
+            </td>
+            <td><span class="badge-pos">${pos || "-"}</span></td>
+            <td><span class="badge-ovr">${ovr}</span></td>
+            <td class="stat-number">${wins}</td>
+            <td class="stat-number">${goals}</td>
+            <td>
+              <button class="edit-stat-btn" ${!isAdmin ? "disabled" : ""}>
+                Bearbeiten
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      statsTableBody.innerHTML = html;
+
+      if (isAdmin) {
+        document.querySelectorAll(".edit-stat-btn").forEach(btn => {
+          btn.addEventListener("click", async (e) => {
+            const tr = e.target.closest("tr");
+            const cardId = tr.getAttribute("data-id");
+            const card = cardsData.find(c => c.id === cardId);
+            if (!card) return;
+
+            const currentWins = Number(card.wins || 0);
+            const currentGoals = Number(card.goals || 0);
+
+            const newWinsStr = prompt(`Neue Siege für ${card.name}:`, currentWins);
+            if (newWinsStr === null) return;
+            const newGoalsStr = prompt(`Neue Tore für ${card.name}:`, currentGoals);
+            if (newGoalsStr === null) return;
+
+            const wins = Number(newWinsStr);
+            const goals = Number(newGoalsStr);
+
+            try {
+              await cardsRef.doc(cardId).update({
+                wins: Number.isFinite(wins) ? wins : currentWins,
+                goals: Number.isFinite(goals) ? goals : currentGoals
+              });
+            } catch (err) {
+              console.error("Fehler beim Update der Stats:", err);
+              alert("Stats konnten nicht gespeichert werden.");
+            }
+          });
+        });
+      }
+    }
+
+    sortByWinsBtn.addEventListener("click", () => {
+      currentSort = "wins";
+      sortByWinsBtn.classList.add("active");
+      sortByGoalsBtn.classList.remove("active");
+      renderTable();
+    });
+    sortByGoalsBtn.addEventListener("click", () => {
+      currentSort = "goals";
+      sortByGoalsBtn.classList.add("active");
+      sortByWinsBtn.classList.remove("active");
+      renderTable();
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await auth.signOut();
+        window.location.href = "index.html";
+      } catch (e) {
+        console.error("Logout-Fehler:", e);
+      }
+    });
+
+    auth.onAuthStateChanged(async (user) => {
+      if (!user || !user.emailVerified) {
+        if (user && !user.emailVerified) {
+          alert("Bitte bestätige zuerst deine E-Mail, bevor du die Stats-Seite nutzen kannst.");
+        }
+        await auth.signOut().catch(() => {});
+        window.location.href = "index.html";
+        return;
+      }
+
+      currentUser = user;
+      userEmailEl.textContent = user.email || "(ohne E-Mail)";
+
+      try {
+        const userDoc = await usersRef.doc(user.uid).get();
+        isAdmin = userDoc.exists && userDoc.data().isAdmin === true;
+      } catch (e) {
+        console.error("Fehler beim Laden des User-Dokuments:", e);
+        isAdmin = false;
+      }
+      userRoleEl.textContent = isAdmin ? "Admin" : "User";
+
+      if (cardsUnsub) cardsUnsub();
+      cardsUnsub = cardsRef.orderBy("createdAt").onSnapshot((snapshot) => {
+        cardsData = [];
+        snapshot.forEach((doc) => {
+          const d = doc.data();
+          cardsData.push({
+            id: doc.id,
+            name: d.name || "Unbekannt",
+            team: d.team || "",
+            nation: d.nation || "",
+            position: d.position || "",
+            stats: d.stats || {},
+            wins: d.wins || 0,
+            goals: d.goals || 0
+          });
+        });
+        renderTable();
+      });
+    });
+  </script>
+</body>
+</html>
