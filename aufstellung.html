@@ -448,15 +448,17 @@
     const auth = firebase.auth();
 	
 	// prüfen, ob jemand eingeloggt ist
-	auth.onAuthStateChanged((user) => {
-	if (!user) {
-		// niemand eingeloggt → zurück zur Login-Seite
+	auth.onAuthStateChanged(async (user) => {
+	  if (!user || !user.emailVerified) {
+		if (user && !user.emailVerified) {
+		  alert("Bitte bestätige zuerst deine E-Mail, bevor du die Aufstellungs-Seite nutzen kannst.");
+		}
+		await auth.signOut().catch(() => {});
 		window.location.href = "index.html";
 		return;
-	}
+	  }
 	
-	// falls du später noch irgendwas mit dem User machen willst:
-	console.log("Eingeloggt als:", user.email || user.uid);
+	  console.log("Eingeloggt als (verifiziert):", user.email || user.uid);
 	});
 
 
