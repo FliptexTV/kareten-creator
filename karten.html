@@ -909,6 +909,14 @@
       const stats = data.stats || {};
       const votesUp = data.votesUp || {};
       const votesDown = data.votesDown || {};
+	  const template = data.template || "fut-template.png";
+	  
+	  let themeClass = "";           // Standard-Gold
+	  if (template.includes("icon")) {
+	    themeClass = "theme-icon";   // Icon-Farben
+	  } else if (template.includes("inform")) {
+	    themeClass = "theme-inform"; // Inform-Farben
+	  }
 
       const card = document.createElement("article");
       card.className = "card";
