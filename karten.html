@@ -1079,7 +1079,8 @@
           return;
         }
 
-		// Voting – pro User nur 1 Vote pro Stat
+		// Voting – pro User: 1 aktiver Vote pro Stat,
+		// aber man kann ihn entfernen oder die Richtung wechseln
 		if (!voteBtn) return;
 		
 		// zur Sicherheit
@@ -1101,29 +1102,48 @@
 			}
 		
 			const data = snap.data() || {};
-			const votesUp = { ...(data.votesUp || emptyVotes()) };
+			const votesUp   = { ...(data.votesUp   || emptyVotes()) };
 			const votesDown = { ...(data.votesDown || emptyVotes()) };
 			const userVotes = data.userVotes ? { ...data.userVotes } : {};
 		
 			const userId = currentUser.uid;
 			const userEntry = userVotes[userId] ? { ...userVotes[userId] } : {};
 		
-			// wenn der User für diesen Stat schon gevotet hat -> blocken
-			if (userEntry[statKey]) {
-			  const err = new Error("already-voted");
-			  err.code = "already-voted";
-			  throw err;
-			}
+			const previous = userEntry[statKey] || 0; // 0 = noch kein Vote, 1 = up, -1 = down
 		
-			// Vote zählen
-			if (isUpVote) {
-			  votesUp[statKey] = (votesUp[statKey] || 0) + 1;
-			  userEntry[statKey] = 1;    // 1 = hoch
-			} else {
+			// 1) gleicher Vote nochmal -> Vote entfernen
+			if (previous === 1 && isUpVote) {
+			  votesUp[statKey] = Math.max(0, (votesUp[statKey] || 0) - 1);
+			  delete userEntry[statKey];
+			} else if (previous === -1 && !isUpVote) {
+			  votesDown[statKey] = Math.max(0, (votesDown[statKey] || 0) - 1);
+			  delete userEntry[statKey];
+			}
+			// 2) von Up nach Down wechseln
+			else if (previous === 1 && !isUpVote) {
+			  votesUp[statKey]   = Math.max(0, (votesUp[statKey]   || 0) - 1);
 			  votesDown[statKey] = (votesDown[statKey] || 0) + 1;
-			  userEntry[statKey] = -1;   // -1 = runter
+			  userEntry[statKey] = -1;
+			}
+			// 3) von Down nach Up wechseln
+			else if (previous === -1 && isUpVote) {
+			  votesDown[statKey] = Math.max(0, (votesDown[statKey] || 0) - 1);
+			  votesUp[statKey]   = (votesUp[statKey] || 0) + 1;
+			  userEntry[statKey] = 1;
+			}
+			// 4) noch kein Vote -> neuen Vote setzen
+			else if (previous === 0) {
+			  if (isUpVote) {
+				votesUp[statKey] = (votesUp[statKey] || 0) + 1;
+				userEntry[statKey] = 1;
+			  } else {
+				votesDown[statKey] = (votesDown[statKey] || 0) + 1;
+				userEntry[statKey] = -1;
+			  }
 			}
 		
+			// Wenn der User gar keine Votes mehr hat, kann man ihn theoretisch auch löschen,
+			// ist aber nicht zwingend nötig – ich lass ihn drin.
 			userVotes[userId] = userEntry;
 		
 			tx.update(docRef, {
@@ -1133,13 +1153,12 @@
 			});
 		  });
 		} catch (err) {
-		  if (err.code === "already-voted") {
-			alert("Du hast für diesen Stat schon abgestimmt. Pro Stat nur eine Stimme pro Account.");
-		} else if (err.message !== "not-found") {
-			console.error("Fehler beim Voting:", err);
-			alert("Voting konnte nicht gespeichert werden :(");
+		  if (err.message !== "not-found") {
+		    console.error("Fehler beim Voting:", err);
+		    alert("Voting konnte nicht gespeichert werden :(");
 		  }
 		}
+
 
       });
 
