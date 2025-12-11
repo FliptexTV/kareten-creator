@@ -591,7 +591,7 @@
 <body>
   <div class="container">
     <h1>FIFA Karten – Übersicht v0.9</h1>
-    <p class="subtitle">Created by Bator,	1 Vote pro Stat</p>  
+    <p class="subtitle">Created by Bator</p>  
 	
     <div class="top-bar">
       <div class="nav-links">
@@ -985,7 +985,6 @@
         const up = votesUp[key] ?? 0;
         const down = votesDown[key] ?? 0;
         const net = up - down;
-        const community = Math.max(0, Math.min(99, base + net));
 
         let trendText;
         let trendClass;
@@ -1006,8 +1005,7 @@
           <div class="vote-main">
             <span class="vote-label">${key}</span>
             <span class="vote-values">
-              ${base}${net !== 0 ? ` → ${community}` : ""}
-              ${net !== 0 ? `<span class="vote-delta">${net > 0 ? "+" + net : net}</span>` : ""}
+              ${base}
             </span>
             <div class="vote-controls">
               <button type="button" class="vote-btn down" data-stat="${key}">−</button>
@@ -1208,4 +1206,3 @@
   </script>
 </body>
 </html>
-
