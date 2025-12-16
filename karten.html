@@ -805,53 +805,89 @@
         .replace(/'/g, "&#039;");
     }
 
-	function getFlagEmoji(input) {
-	  const raw = String(input || "").trim();
-	  if (!raw) return "";
+	// === FLAGS (Emoji) ===
 	
-	  // 1) Map von häufigen Ländernamen -> ISO Code
-	  const map = {
-		"deutschland": "DE",
-		"germany": "DE",
-		"österreich": "AT",
-		"austria": "AT",
-		"türkei": "TR",
-		"tuerkei": "TR",
-		"turkey": "TR",
-		"brasilien": "BR",
-		"brazil": "BR",
-		"frankreich": "FR",
-		"france": "FR",
-		"italien": "IT",
-		"italy": "IT",
-		"spanien": "ES",
-		"spain": "ES",
-		"portugal": "PT",
-		"argentinien": "AR",
-		"argentina": "AR",
-		"england": "GB",   // England als GB-Flagge (Emoji-Standard)
-		"uk": "GB",
-		"grossbritannien": "GB",
-		"great britain": "GB",
-		"niederlande": "NL",
-		"netherlands": "NL"
-	  };
+	// 1) ISO2-Code ("TR", "DE", "AT"...) -> 🇹🇷🇩🇪🇦🇹
+	function iso2ToFlagEmoji(iso2) {
+	  const code = String(iso2 || "").trim().toUpperCase();
+	  if (!/^[A-Z]{2}$/.test(code)) return "";
+	  const A = 0x1F1E6;
+	  const first = code.charCodeAt(0) - 65 + A;
+	  const second = code.charCodeAt(1) - 65 + A;
+	  return String.fromCodePoint(first, second);
+	}
 	
-	  // 2) Wenn schon 2 Buchstaben eingegeben wurden, nutzen
-	  let code = raw.toUpperCase();
-	  if (code.length !== 2) {
-		const key = raw.toLowerCase();
-		code = map[key] || "";
+	// 2) Ländername -> ISO2 (kleine Map für die häufigsten, erweiterbar)
+	const COUNTRY_NAME_TO_ISO2 = {
+	  "DEUTSCHLAND": "DE",
+	  "GERMANY": "DE",
+	  "ÖSTERREICH": "AT",
+	  "AUSTRIA": "AT",
+	  "SCHWEIZ": "CH",
+	  "SWITZERLAND": "CH",
+	  "TÜRKEI": "TR",
+	  "TURKEY": "TR",
+	  "FRANKREICH": "FR",
+	  "FRANCE": "FR",
+	  "ITALIEN": "IT",
+	  "ITALY": "IT",
+	  "SPANIEN": "ES",
+	  "SPAIN": "ES",
+	  "PORTUGAL": "PT",
+	  "BRASILIEN": "BR",
+	  "BRAZIL": "BR",
+	  "ARGENTINIEN": "AR",
+	  "ARGENTINA": "AR",
+	  "ENGLAND": "GB",      // FIFA zeigt England, Flag emoji ist UK-Flagge
+	  "UNITED KINGDOM": "GB",
+	  "GROSSBRITANNIEN": "GB",
+	  "KROATIEN": "HR",
+	  "CROATIA": "HR",
+	  "NIEDERLANDE": "NL",
+	  "NETHERLANDS": "NL",
+	  "BELGIEN": "BE",
+	  "BELGIUM": "BE",
+	  "POLEN": "PL",
+	  "POLAND": "PL",
+	  "USA": "US",
+	  "UNITED STATES": "US",
+	  "JAPAN": "JP",
+	  "KOREA": "KR",
+	  "SÜDKOREA": "KR",
+	  "SOUTH KOREA": "KR",
+	  "MAROKKO": "MA",
+	  "MOROCCO": "MA",
+	  "ALBANIEN": "AL",
+	  "ALBANIA": "AL",
+	  "SERBIEN": "RS",
+	  "SERBIA": "RS",
+	  "BOSNIEN": "BA",
+	  "BOSNIA": "BA",
+	  "RUMÄNIEN": "RO",
+	  "ROMANIA": "RO",
+	  "UNGARN": "HU",
+	  "HUNGARY": "HU",
+	};
+	
+	// 3) nimmt "TR" oder "Türkei" oder "Turkey" und gibt Flagge zurück (oder Text)
+	function nationToFlagOrText(nationInput) {
+	  const raw = String(nationInput || "").trim();
+	  if (!raw) return "Nation";
+	
+	  // Wenn User "TR" eingibt
+	  const flagFromIso = iso2ToFlagEmoji(raw);
+	  if (flagFromIso) return flagFromIso;
+	
+	  // Wenn User "Türkei" eingibt
+	  const key = raw.toUpperCase();
+	  const iso2 = COUNTRY_NAME_TO_ISO2[key];
+	  if (iso2) {
+		const flag = iso2ToFlagEmoji(iso2);
+		if (flag) return flag;
 	  }
 	
-	  if (!code || code.length !== 2) return "";
-	
-	  // 3) ISO -> Flag Emoji
-	  const A = 0x1F1E6;
-	  const cc = code.toUpperCase();
-	  const first = cc.charCodeAt(0) - 65 + A;
-	  const second = cc.charCodeAt(1) - 65 + A;
-	  return String.fromCodePoint(first, second);
+	  // Fallback: zeig wie gehabt Text
+	  return raw;
 	}
 
 
@@ -990,7 +1026,7 @@
                 <div class="fut-pos">${escapeHtml(position || "POS")}</div>
               </div>
 			  <div class="fut-nation-club">
-			    ${getFlagEmoji(nation) ? `${getFlagEmoji(nation)}<br/>` : ""}
+			    ${escapeHtml(nationToFlagOrText(nation))}<br/>
 			    ${escapeHtml(team || "Verein")}
 			  </div>
             </div>
@@ -1275,4 +1311,3 @@
   </script>
 </body>
 </html>
-
