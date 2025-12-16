@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -796,6 +797,101 @@
       renderCards();
     });
 
+	// --- Flag Helper ---
+	function iso2ToFlag(iso2) {
+	  const code = String(iso2 || "").toUpperCase();
+	  if (!/^[A-Z]{2}$/.test(code)) return "";
+	  const A = 0x1F1E6;
+	  const first = code.charCodeAt(0) - 65 + A;
+	  const second = code.charCodeAt(1) - 65 + A;
+	  return String.fromCodePoint(first, second);
+	}
+	
+	function normalizeNationKey(s) {
+	  return String(s || "")
+		.trim()
+		.toLowerCase()
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")  // Umlaute/Accents entfernen
+		.replace(/\s+/g, " ");
+	}
+	
+	// Du kannst diese Liste jederzeit erweitern:
+	const NATION_TO_ISO2 = {
+	  "deutschland": "DE",
+	  "osterreich": "AT",
+	  "österreich": "AT",
+	  "schweiz": "CH",
+	  "turkei": "TR",
+	  "türkei": "TR",
+	  "italien": "IT",
+	  "spanien": "ES",
+	  "frankreich": "FR",
+	  "england": "GB",       // Flag ist UK (Emoji-Standard)
+	  "grossbritannien": "GB",
+	  "großbritannien": "GB",
+	  "portugal": "PT",
+	  "niederlande": "NL",
+	  "belgien": "BE",
+	  "kroatien": "HR",
+	  "serbien": "RS",
+	  "bosnien": "BA",
+	  "albanien": "AL",
+	  "griechenland": "GR",
+	  "polen": "PL",
+	  "tschechien": "CZ",
+	  "ungarn": "HU",
+	  "rumanien": "RO",
+	  "rumänien": "RO",
+	  "ukraine": "UA",
+	  "russland": "RU",
+	  "schweden": "SE",
+	  "norwegen": "NO",
+	  "dänemark": "DK",
+	  "danemark": "DK",
+	  "finnland": "FI",
+	  "island": "IS",
+	  
+	  "brasilien": "BR",
+	  "argentinien": "AR",
+	  "uruguay": "UY",
+	  "kolumbien": "CO",
+	  "chile": "CL",
+	  "mexiko": "MX",
+	  "usa": "US",
+	  "kanada": "CA",
+	  
+	  "marokko": "MA",
+	  "algerien": "DZ",
+	  "tunesien": "TN",
+	  "tunesien": "TN",
+	  "agypten": "EG",
+	  "ägypten": "EG",
+	  "senegal": "SN",
+	  "ghana": "GH",
+	  "nigeria": "NG",
+	  "kamerun": "CM",
+	  
+	  "japan": "JP",
+	  "korea": "KR",
+	  "sudkorea": "KR",
+	  "südkorea": "KR",
+	  "australien": "AU"
+	};
+	
+	function nationToFlag(nation) {
+	  const raw = String(nation || "").trim();
+	  if (!raw) return "";
+	
+	  // Wenn jemand direkt "DE" eintippt → geht auch
+	  if (/^[A-Za-z]{2}$/.test(raw)) return iso2ToFlag(raw);
+	
+	  const key = normalizeNationKey(raw);
+	  const iso2 = NATION_TO_ISO2[key];
+	  return iso2 ? iso2ToFlag(iso2) : "";
+	}
+
+
     function escapeHtml(str) {
       return String(str || "")
         .replace(/&/g, "&amp;")
@@ -939,10 +1035,13 @@
                 <div class="fut-ovr">${overall}</div>
                 <div class="fut-pos">${escapeHtml(position || "POS")}</div>
               </div>
-              <div class="fut-nation-club">
-                ${escapeHtml(nation || "Nation")}<br/>
-                ${escapeHtml(team || "Verein")}
-              </div>
+			  const flag = nationToFlag(nation);
+			  <div class="fut-nation-club">
+			    ${flag ? flag : escapeHtml(nation || "Nation")}<br/>
+			    ${escapeHtml(team || "Verein")}
+			  </div>
+
+
             </div>
             <div class="fut-photo-wrap">
               ${
