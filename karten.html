@@ -271,9 +271,6 @@
       letter-spacing: 0.12em;
       max-width: 90px;
       font-weight: 700;
-	  /* WICHTIG: Emoji-Unterstützung */
-      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji",
-                   system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     .fut-photo-wrap {
@@ -808,92 +805,6 @@
         .replace(/'/g, "&#039;");
     }
 
-	// === FLAGS (Emoji) ===
-	
-	// 1) ISO2-Code ("TR", "DE", "AT"...) -> 🇹🇷🇩🇪🇦🇹
-	function iso2ToFlagEmoji(iso2) {
-	  const code = String(iso2 || "").trim().toUpperCase();
-	  if (!/^[A-Z]{2}$/.test(code)) return "";
-	  const A = 0x1F1E6;
-	  const first = code.charCodeAt(0) - 65 + A;
-	  const second = code.charCodeAt(1) - 65 + A;
-	  return String.fromCodePoint(first, second);
-	}
-	
-	// 2) Ländername -> ISO2 (kleine Map für die häufigsten, erweiterbar)
-	const COUNTRY_NAME_TO_ISO2 = {
-	  "DEUTSCHLAND": "DE",
-	  "GERMANY": "DE",
-	  "ÖSTERREICH": "AT",
-	  "AUSTRIA": "AT",
-	  "SCHWEIZ": "CH",
-	  "SWITZERLAND": "CH",
-	  "TÜRKEI": "TR",
-	  "TURKEY": "TR",
-	  "FRANKREICH": "FR",
-	  "FRANCE": "FR",
-	  "ITALIEN": "IT",
-	  "ITALY": "IT",
-	  "SPANIEN": "ES",
-	  "SPAIN": "ES",
-	  "PORTUGAL": "PT",
-	  "BRASILIEN": "BR",
-	  "BRAZIL": "BR",
-	  "ARGENTINIEN": "AR",
-	  "ARGENTINA": "AR",
-	  "ENGLAND": "GB",      // FIFA zeigt England, Flag emoji ist UK-Flagge
-	  "UNITED KINGDOM": "GB",
-	  "GROSSBRITANNIEN": "GB",
-	  "KROATIEN": "HR",
-	  "CROATIA": "HR",
-	  "NIEDERLANDE": "NL",
-	  "NETHERLANDS": "NL",
-	  "BELGIEN": "BE",
-	  "BELGIUM": "BE",
-	  "POLEN": "PL",
-	  "POLAND": "PL",
-	  "USA": "US",
-	  "UNITED STATES": "US",
-	  "JAPAN": "JP",
-	  "KOREA": "KR",
-	  "SÜDKOREA": "KR",
-	  "SOUTH KOREA": "KR",
-	  "MAROKKO": "MA",
-	  "MOROCCO": "MA",
-	  "ALBANIEN": "AL",
-	  "ALBANIA": "AL",
-	  "SERBIEN": "RS",
-	  "SERBIA": "RS",
-	  "BOSNIEN": "BA",
-	  "BOSNIA": "BA",
-	  "RUMÄNIEN": "RO",
-	  "ROMANIA": "RO",
-	  "UNGARN": "HU",
-	  "HUNGARY": "HU",
-	};
-	
-	// 3) nimmt "TR" oder "Türkei" oder "Turkey" und gibt Flagge zurück (oder Text)
-	function nationToFlagOrText(nationInput) {
-	  const raw = String(nationInput || "").trim();
-	  if (!raw) return "Nation";
-	
-	  // Wenn User "TR" eingibt
-	  const flagFromIso = iso2ToFlagEmoji(raw);
-	  if (flagFromIso) return flagFromIso;
-	
-	  // Wenn User "Türkei" eingibt
-	  const key = raw.toUpperCase();
-	  const iso2 = COUNTRY_NAME_TO_ISO2[key];
-	  if (iso2) {
-		const flag = iso2ToFlagEmoji(iso2);
-		if (flag) return flag;
-	  }
-	
-	  // Fallback: zeig wie gehabt Text
-	  return raw;
-	}
-
-
     function calculateOverall(stats, position) {
       const s = {
         PAC: Number(stats.PAC) || 0,
@@ -1028,10 +939,10 @@
                 <div class="fut-ovr">${overall}</div>
                 <div class="fut-pos">${escapeHtml(position || "POS")}</div>
               </div>
-			  <div class="fut-nation-club">
-			    ${escapeHtml(nationToFlagOrText(nation))}<br/>
-			    ${escapeHtml(team || "Verein")}
-			  </div>
+              <div class="fut-nation-club">
+                ${escapeHtml(nation || "Nation")}<br/>
+                ${escapeHtml(team || "Verein")}
+              </div>
             </div>
             <div class="fut-photo-wrap">
               ${
