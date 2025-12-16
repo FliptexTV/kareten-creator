@@ -1013,6 +1013,7 @@
       const votesUp = data.votesUp || {};
       const votesDown = data.votesDown || {};
 	  const template = data.template || "fut-template.png";
+	  const flag = nationToFlag(nation);
 	  
 	  let themeClass = "";           // Standard-Gold
 	  if (template.includes("icon")) {
@@ -1035,7 +1036,6 @@
                 <div class="fut-ovr">${overall}</div>
                 <div class="fut-pos">${escapeHtml(position || "POS")}</div>
               </div>
-			  const flag = nationToFlag(nation);
 			  <div class="fut-nation-club">
 			    ${flag ? flag : escapeHtml(nation || "Nation")}<br/>
 			    ${escapeHtml(team || "Verein")}
@@ -1324,3 +1324,4 @@
   </script>
 </body>
 </html>
+
